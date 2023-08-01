@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import Cities from './_components/Cities';
 import FullCities from './_components/FullCities';
 import { Paw, PawQuery } from './_types';
-import Image from 'next/image';
+import Paws from './_components/Paws';
 
 const SERVICE_KEY = process.env.SERVICE_KEY;
 const ENDPOINT = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc';
@@ -54,7 +54,7 @@ const getShelters = async (cityCode: string, fullCityCode: string) => {
 
 const getPaws = async (pawQuery: PawQuery) => {
   const searchParams = new URLSearchParams();
-  searchParams.set('serviceKey', SERVICE_KEY);
+  searchParams.set('serviceKey', SERVICE_KEY as string);
   searchParams.set('_type', 'json');
 
   Object.entries(pawQuery).forEach(([key, val]) =>
@@ -98,47 +98,7 @@ export default async function Home() {
           <Cities cities={cities} />
           <FullCities fullCitiesParam={fullCities} />
         </div> */}
-        <ul
-          className={
-            'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
-          }>
-          {paws?.map((paw) => (
-            <li
-              key={paw.desertionNo}
-              className={
-                'flex flex-col gap-4 bg-white p-4 border rounded border-gray-400 cursor-pointer'
-              }>
-              <div className={'flex flex-col gap-2 font-normal text-sm'}>
-                <span>{paw.kindCd}</span>
-                <span>
-                  ({paw.sexCd} / {paw.age} / {paw.weight})
-                </span>
-                <span>{paw.noticeNo}</span>
-                <span>{paw.processState}</span>
-              </div>
-              <div
-                className={'h-[240px] rounded'}
-                style={{ position: 'relative' }}>
-                <Image
-                  src={paw.popfile}
-                  alt={`${paw.kindCd} 이미지`}
-                  // width={500}
-                  // height={500}
-                  className={'w-full h-full rounded'}
-                  fill
-                  style={{
-                    objectFit: 'cover',
-                  }}
-                />
-              </div>
-              <div className={'flex flex-col gap-2 font-normal text-sm'}>
-                <p>{paw.specialMark}</p>
-                <p>{paw.careNm}</p>
-                <p>{paw.careAddr}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Paws paws={paws} />
       </main>
     </Suspense>
   );

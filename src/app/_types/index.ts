@@ -12,6 +12,20 @@ export type PawQuery = {
   numOfRows?: number;
 };
 
+export type City = {
+  orgCd: string;
+  orgdownNm: string;
+};
+
+export type FullCity = City & {
+  uprCd: string;
+};
+
+export type SelectCity = {
+  cityCode?: string;
+  fullCityCode?: string;
+};
+
 export type Paw = {
   desertionNo: string;
   filename: string;

@@ -4,8 +4,9 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
 import { useEffect, useRef } from 'react';
 import { getFullCities } from '../page';
+import { City, FullCity } from '../_types';
 
-export default function Cities({ cities }: { cities: any }) {
+export default function Cities({ cities }: { cities?: City[] }) {
   const [selectCity, setSelectCity] = useRecoilState(selectCityState);
   const setFullCitiesState = useSetRecoilState(fullCitiesState);
 
@@ -19,8 +20,8 @@ export default function Cities({ cities }: { cities: any }) {
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     const fullCities = (
-      await getFullCities(value)
-    )?.response?.body?.items?.item?.filter((city) => city.orgCd !== '6119999');
+      (await getFullCities(value))?.response?.body?.items?.item as FullCity[]
+    )?.filter((city) => city.orgCd !== '6119999');
     console.log('selectCityCode ', selectCity);
     const firstFullCityCode = fullCities?.[0].orgCd;
 

@@ -3,11 +3,12 @@
 import { useRecoilState } from 'recoil';
 import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
 import { useEffect, useRef } from 'react';
+import { FullCity } from '../_types';
 
 export default function FullCities({
   fullCitiesParam,
 }: {
-  fullCitiesParam?: any;
+  fullCitiesParam?: FullCity[];
 }) {
   const isInitialRender = useRef(true);
   const [selectCity, setSelectCity] = useRecoilState(selectCityState);
