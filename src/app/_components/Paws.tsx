@@ -1,13 +1,13 @@
 'use client';
+import React from 'react';
 import Image from 'next/image';
-import React, { useState } from 'react';
 import { Paw } from '../_types';
 import Modal from './Modal';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { modalState, pawState } from '../_lib/recoil/atom';
 
 export default function Paws({ paws }: { paws: Paw[] }) {
-  const [selectedPaw, setSelectedPaw] = useRecoilState(pawState);
+  const setSelectedPaw = useSetRecoilState(pawState);
   const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
 
   const onPawClick = (paw: Paw) => {
