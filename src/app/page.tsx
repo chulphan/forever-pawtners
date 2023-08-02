@@ -98,7 +98,7 @@ export default async function Home() {
           <Cities cities={cities} />
           <FullCities fullCitiesParam={fullCities} />
         </div> */}
-        <Paws paws={paws} />
+        <Paws pawsParam={paws} />
       </main>
     </Suspense>
   );
