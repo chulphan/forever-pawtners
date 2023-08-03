@@ -52,9 +52,14 @@ const getShelters = async (cityCode: string, fullCityCode: string) => {
   return res.json();
 };
 
-const getPaws = async (pawQuery: PawQuery) => {
+export const getPaws = async (pawQuery: PawQuery) => {
   const searchParams = new URLSearchParams();
-  searchParams.set('serviceKey', SERVICE_KEY as string);
+  searchParams.set(
+    'serviceKey',
+    SERVICE_KEY
+      ? SERVICE_KEY
+      : '7PUJX40QgG/FDFVkVp5TeWjSPuAlnZqYj0qil5RGdQonw5vEQ0cSxywJSMJX9Q6eGjx5/i+rAScbcwVNN5X49A=='
+  );
   searchParams.set('_type', 'json');
 
   Object.entries(pawQuery).forEach(([key, val]) =>
@@ -86,8 +91,13 @@ export default async function Home() {
 
   // console.log(JSON.stringify(shelters));
 
-  const paws = (await getPaws({ pageNo: 1, numOfRows: 48 }))?.response?.body
-    ?.items?.item as Paw[];
+  const pawsResponseBody = (await getPaws({ pageNo: 1, numOfRows: 48 }))
+    ?.response?.body;
+
+  const paws = pawsResponseBody?.items?.item as Paw[];
+  const numOfRows = pawsResponseBody?.numOfRows;
+  const pageNo = pawsResponseBody?.pageNo;
+  const totalCount = pawsResponseBody?.totalCount;
 
   console.log(paws);
 
@@ -98,7 +108,12 @@ export default async function Home() {
           <Cities cities={cities} />
           <FullCities fullCitiesParam={fullCities} />
         </div> */}
-        <Paws pawsParam={paws} />
+        <Paws
+          pawsParam={paws}
+          numOfRowsParam={numOfRows}
+          pageNoParam={pageNo}
+          totalCountParam={totalCount}
+        />
       </main>
     </Suspense>
   );

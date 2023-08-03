@@ -1,17 +1,73 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Paw } from '../_types';
 import Modal from './Modal';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { modalState, pawState } from '../_lib/recoil/atom';
+import useIntersectionObserver from '../_lib/util/useIntersectionObserver';
+import { getPaws } from '../page';
 
-export default function Paws({ pawsParam }: { pawsParam: Paw[] }) {
+export default function Paws({
+  pawsParam,
+  numOfRowsParam,
+  pageNoParam,
+  totalCountParam,
+}: {
+  pawsParam: Paw[];
+  numOfRowsParam: number;
+  pageNoParam: number;
+  totalCountParam: number;
+}) {
   const [paws, setPaws] = useState(pawsParam || []);
   const setSelectedPaw = useSetRecoilState(pawState);
   const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
+  const [pagingInfo, setPagingInfo] = useState({
+    numOfRows: numOfRowsParam,
+    pageNo: pageNoParam,
+    totalCount: totalCountParam,
+  });
+  const loadMoreRef = useRef<HTMLLIElement>(null);
+
+  const totalPage =
+    pagingInfo.totalCount % pagingInfo.numOfRows === 0
+      ? Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows)
+      : Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows) + 1;
+
+  const hasNextPage = pagingInfo.pageNo < totalPage;
 
   useEffect(() => {}, [paws]);
+
+  useIntersectionObserver({
+    // root: rootRef,
+    target: loadMoreRef,
+    threshold: 0.9,
+    onIntersect: async () => {
+      console.log(pagingInfo);
+      const nextPagingState = {
+        ...pagingInfo,
+        pageNo: pagingInfo.pageNo + 1,
+      };
+      const response = await getPaws(nextPagingState);
+
+      const pawsResponseBody = response?.response?.body;
+      const newPaws = pawsResponseBody?.items?.item;
+      const numOfRows = pawsResponseBody?.numOfRows;
+      const pageNo = pawsResponseBody?.pageNo;
+      const totalCount = pawsResponseBody?.totalCount;
+
+      console.log('pageNo ', pageNo);
+
+      setPagingInfo((prevState) => ({
+        ...prevState,
+        numOfRows,
+        pageNo: nextPagingState.pageNo,
+        totalCount,
+      }));
+      setPaws((prevState) => [...prevState, ...newPaws]);
+    },
+    enabled: hasNextPage,
+  });
 
   const onPawClick = (paw: Paw) => {
     setIsPawModalOpen(true);
@@ -42,13 +98,8 @@ export default function Paws({ pawsParam }: { pawsParam: Paw[] }) {
             <Image
               src={paw.popfile}
               alt={`${paw.kindCd} 이미지`}
-              // width={500}
-              // height={500}
               className={'w-full h-full rounded'}
               fill
-              style={{
-                objectFit: 'cover',
-              }}
             />
           </div>
           <div className={'flex flex-col gap-2 font-normal text-sm'}>
@@ -58,6 +109,7 @@ export default function Paws({ pawsParam }: { pawsParam: Paw[] }) {
           </div>
         </li>
       ))}
+      <li ref={loadMoreRef} className={!hasNextPage ? 'hidden' : ''}></li>
       {isPawModalOpen && <Modal />}
     </ul>
   );
