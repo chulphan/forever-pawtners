@@ -1,3 +1,28 @@
+export type ResponseHeaderType = {
+  reqNo: string;
+  resultCode: string;
+  resultMsg: string;
+  errorMsg?: string;
+};
+
+export type ResponseItemType<T> = {
+  item: T[];
+};
+
+export type ResponseBodyType<T> = {
+  items: ResponseItemType<T>;
+  numOfRows: number;
+  pageNo: number;
+  totalCount: number;
+};
+
+export type ResponseType<T> = {
+  response: {
+    header: ResponseHeaderType;
+    body?: ResponseBodyType<T>;
+  };
+};
+
 export type PawQuery = {
   bgnde?: string;
   endde?: string;
