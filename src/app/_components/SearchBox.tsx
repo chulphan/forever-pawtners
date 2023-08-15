@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { City, FullCity } from '../_types';
 import { useRecoilState } from 'recoil';
-import { fullCitiesState } from '../_lib/recoil/atom';
+import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
 import { getFullCities } from '../page';
 
 type SearchBoxProps = {
@@ -15,30 +15,30 @@ export default function SearchBox({
   citiesParam,
   fullCitiesParam,
 }: SearchBoxProps) {
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedFullCity, setSelectedFullCity] = useState('');
+  const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
 
   useEffect(() => {
     const cityCode = citiesParam[0].orgCd;
-    setSelectedCity(cityCode);
-    setSelectedFullCity(fullCitiesParam[0]?.orgCd);
     setFullCities((prevState) => ({
       ...prevState,
       [cityCode]: fullCitiesParam,
     }));
+    setSelectedCity((prevState) => ({
+      ...prevState,
+      cityCode: cityCode,
+      fullCityCode: fullCitiesParam[0]?.orgCd,
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(fullCities);
-
   useEffect(() => {
-    if (selectedCity !== '' && !fullCities[selectedCity]) {
-      setFullCityByCityCode(selectedCity);
+    if (selectedCity.cityCode !== '' && !fullCities[selectedCity.cityCode]) {
+      setFullCityByCityCode(selectedCity.cityCode);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCity]);
+  }, [selectedCity.cityCode]);
 
   const setFullCityByCityCode = async (selectedCity: string) => {
     try {
@@ -63,14 +63,10 @@ export default function SearchBox({
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'city') {
-      setSelectedCity(value);
-    }
-
-    if (name === 'fullCity') {
-      setSelectedFullCity(value);
-    }
+    setSelectedCity((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -89,9 +85,9 @@ export default function SearchBox({
           isSearchBoxOpen ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0'
         }`}>
         <select
-          name={'city'}
+          name={'cityCode'}
           className={'border-2 border-blue-400 rounded'}
-          value={selectedCity}
+          value={selectedCity.cityCode}
           onChange={onSelectChange}>
           {citiesParam.map((city) => (
             <option key={city.orgCd} value={city.orgCd}>
@@ -99,13 +95,13 @@ export default function SearchBox({
             </option>
           ))}
         </select>
-        {fullCities[selectedCity] && (
+        {fullCities[selectedCity.cityCode] && (
           <select
-            name={'fullCity'}
+            name={'fullCityCode'}
             className={'border-2 border-blue-400 rounded'}
-            value={selectedFullCity}
+            value={selectedCity.fullCityCode}
             onChange={onSelectChange}>
-            {fullCities[selectedCity].map((city) => (
+            {fullCities[selectedCity.cityCode].map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
                 {city.orgdownNm}
               </option>

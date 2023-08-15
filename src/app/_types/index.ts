@@ -47,8 +47,8 @@ export type FullCity = City & {
 };
 
 export type SelectCity = {
-  cityCode?: string;
-  fullCityCode?: string;
+  cityCode: string;
+  fullCityCode: string;
 };
 
 export type Paw = {
