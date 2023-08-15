@@ -19,7 +19,7 @@ export const selectCityState = atom<SelectCity>({
   },
 });
 
-export const fullCitiesState = atom<FullCity[] | undefined>({
+export const fullCitiesState = atom<{ [key: string]: FullCity[] }>({
   key: 'fullCitiesState',
-  default: [],
+  default: {},
 });

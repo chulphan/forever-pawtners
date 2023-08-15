@@ -5,7 +5,9 @@ import { City, FullCity, Paw, PawQuery, ResponseType } from './_types';
 import Paws from './_components/Paws';
 import SearchBox from './_components/SearchBox';
 
-const SERVICE_KEY = process.env.SERVICE_KEY;
+const SERVICE_KEY = process.env.SERVICE_KEY
+  ? process.env.SERVICE_KEY
+  : '7PUJX40QgG%2FFDFVkVp5TeWjSPuAlnZqYj0qil5RGdQonw5vEQ0cSxywJSMJX9Q6eGjx5%2Fi%2BrAScbcwVNN5X49A%3D%3D';
 const ENDPOINT = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc';
 
 const getCities = async (): Promise<ResponseType<City>> => {
@@ -39,7 +41,6 @@ export const getFullCities = async (
 };
 
 const getShelters = async (cityCode: string, fullCityCode: string) => {
-  console.log(cityCode, fullCityCode);
   if (!cityCode || !fullCityCode) {
     return;
   }
@@ -57,39 +58,32 @@ const getShelters = async (cityCode: string, fullCityCode: string) => {
 
 export const getPaws = async (pawQuery: PawQuery) => {
   const searchParams = new URLSearchParams();
-  searchParams.set(
-    'serviceKey',
-    SERVICE_KEY
-      ? SERVICE_KEY
-      : '7PUJX40QgG/FDFVkVp5TeWjSPuAlnZqYj0qil5RGdQonw5vEQ0cSxywJSMJX9Q6eGjx5/i+rAScbcwVNN5X49A=='
-  );
+  searchParams.set('serviceKey', SERVICE_KEY);
   searchParams.set('_type', 'json');
 
   Object.entries(pawQuery).forEach(([key, val]) =>
     searchParams.set(key, val as any)
   );
 
-  console.log(searchParams.toString());
   const res = await fetch(
-    `${ENDPOINT}/abandonmentPublic?${searchParams.toString()}`
+    decodeURI(`${ENDPOINT}/abandonmentPublic?${searchParams.toString()}`)
   );
 
   if (!res.ok) {
     throw new Error(res.statusText);
   }
 
-  console.log(res);
-
   return res.json();
 };
 
 export default async function Home() {
-  const cities = (await getCities())?.response?.body?.items?.item;
+  const cities = (await getCities())?.response?.body?.items?.item ?? [];
   const orgCd = cities?.[0]?.orgCd;
-  const fullCities = (
-    await getFullCities(orgCd)
-  )?.response?.body?.items?.item?.filter((city) => city.orgCd !== '6119999');
-  const fullCityCode = fullCities?.[0]?.orgCd;
+  const fullCities =
+    (await getFullCities(orgCd))?.response?.body?.items?.item?.filter(
+      (city) => city.orgCd !== '6119999'
+    ) ?? [];
+  // const fullCityCode = fullCities?.[0]?.orgCd;
   // const shelters = await getShelters(orgCd, fullCityCode);
 
   // console.log(JSON.stringify(shelters));
@@ -102,8 +96,6 @@ export default async function Home() {
   const pageNo = pawsResponseBody?.pageNo;
   const totalCount = pawsResponseBody?.totalCount;
 
-  console.log(paws);
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className='flex min-h-screen flex-col items-center justify-between p-24 gap-4'>
@@ -111,7 +103,7 @@ export default async function Home() {
           <Cities cities={cities} />
           <FullCities fullCitiesParam={fullCities} />
         </div> */}
-        <SearchBox />
+        <SearchBox citiesParam={cities} fullCitiesParam={fullCities} />
         <Paws
           pawsParam={paws}
           numOfRowsParam={numOfRows}
