@@ -86,7 +86,7 @@ export default function SearchBox({
         }`}>
         <select
           name={'cityCode'}
-          className={'border-2 border-blue-400 rounded'}
+          className={'border-2 border-blue-400 rounded p-2'}
           value={selectedCity.cityCode}
           onChange={onSelectChange}>
           {citiesParam.map((city) => (
@@ -98,7 +98,7 @@ export default function SearchBox({
         {fullCities[selectedCity.cityCode] && (
           <select
             name={'fullCityCode'}
-            className={'border-2 border-blue-400 rounded'}
+            className={'border-2 border-blue-400 rounded p-2'}
             value={selectedCity.fullCityCode}
             onChange={onSelectChange}>
             {fullCities[selectedCity.cityCode].map((city) => (
@@ -108,6 +108,7 @@ export default function SearchBox({
             ))}
           </select>
         )}
+        <button className='border-2 border-blue-400 rounded p-2'>찾기</button>
       </div>
     </>
   );

@@ -36,14 +36,11 @@ export default function Paws({
 
   const hasNextPage = pagingInfo.pageNo < totalPage;
 
-  useEffect(() => {}, [paws]);
-
   useIntersectionObserver({
     // root: rootRef,
     target: loadMoreRef,
     threshold: 0.9,
     onIntersect: async () => {
-      console.log(pagingInfo);
       const nextPagingState = {
         ...pagingInfo,
         pageNo: pagingInfo.pageNo + 1,
@@ -56,12 +53,10 @@ export default function Paws({
       const pageNo = pawsResponseBody?.pageNo;
       const totalCount = pawsResponseBody?.totalCount;
 
-      console.log('pageNo ', pageNo);
-
       setPagingInfo((prevState) => ({
         ...prevState,
         numOfRows,
-        pageNo: nextPagingState.pageNo,
+        pageNo,
         totalCount,
       }));
       setPaws((prevState) => [...prevState, ...newPaws]);
