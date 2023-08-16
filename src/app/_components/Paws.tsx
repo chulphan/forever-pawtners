@@ -5,7 +5,7 @@ import { Paw } from '../_types';
 import Modal from './Modal';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { modalState, pawState } from '../_lib/recoil/atom';
-import useIntersectionObserver from '../_lib/util/useIntersectionObserver';
+import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 
 export default function Paws({
