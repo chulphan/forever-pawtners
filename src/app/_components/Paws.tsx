@@ -94,9 +94,8 @@ export default function Paws({
               alt={`${paw.kindCd} 이미지`}
               className={'w-full h-full rounded'}
               fill
-              objectFit='cover'
               priority
-              sizes={'100vw'}
+              sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
             />
           </div>
           <div className={'flex flex-col gap-2 font-normal text-sm'}>
