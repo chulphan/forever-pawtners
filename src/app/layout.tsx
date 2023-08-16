@@ -1,9 +1,9 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Noto_Sans } from 'next/font/google';
 import RecoilProvider from './_lib/Provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const notoSans = Noto_Sans({ weight: '400', preload: false });
 
 export const metadata: Metadata = {
   title: '유기동물, 내 평생 파트너',
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <body className={inter.className}>
+      <body className={notoSans.className}>
         <RecoilProvider>{children}</RecoilProvider>
       </body>
     </html>
