@@ -11,9 +11,9 @@ export type ResponseItemType<T> = {
 
 export type ResponseBodyType<T> = {
   items: ResponseItemType<T>;
-  numOfRows: number;
-  pageNo: number;
-  totalCount: number;
+  numOfRows?: number;
+  pageNo?: number;
+  totalCount?: number;
 };
 
 export type ResponseType<T> = {
@@ -44,6 +44,11 @@ export type City = {
 
 export type FullCity = City & {
   uprCd: string;
+};
+
+export type Shelter = {
+  careRegNo: string;
+  careNm: string;
 };
 
 export type SelectCity = {

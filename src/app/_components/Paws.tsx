@@ -45,13 +45,12 @@ export default function Paws({
         ...pagingInfo,
         pageNo: pagingInfo.pageNo + 1,
       };
-      const response = await getPaws(nextPagingState);
 
-      const pawsResponseBody = response?.response?.body;
+      const pawsResponseBody = await getPaws(nextPagingState);
       const newPaws = pawsResponseBody?.items?.item;
-      const numOfRows = pawsResponseBody?.numOfRows;
-      const pageNo = pawsResponseBody?.pageNo;
-      const totalCount = pawsResponseBody?.totalCount;
+      const numOfRows = pawsResponseBody?.numOfRows ?? 0;
+      const pageNo = pawsResponseBody?.pageNo ?? 0;
+      const totalCount = pawsResponseBody?.totalCount ?? 0;
 
       setPagingInfo((prevState) => ({
         ...prevState,

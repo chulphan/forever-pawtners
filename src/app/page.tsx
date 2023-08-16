@@ -1,108 +1,83 @@
 import { Suspense } from 'react';
-import Cities from './_components/Cities';
-import FullCities from './_components/FullCities';
-import { City, FullCity, Paw, PawQuery, ResponseType } from './_types';
+import {
+  City,
+  FullCity,
+  Paw,
+  PawQuery,
+  ResponseBodyType,
+  ResponseType,
+  Shelter,
+} from './_types';
 import Paws from './_components/Paws';
 import SearchBox from './_components/SearchBox';
+import { httpGet } from './_lib/util/http';
 
 const SERVICE_KEY = process.env.SERVICE_KEY
   ? process.env.SERVICE_KEY
   : '7PUJX40QgG%2FFDFVkVp5TeWjSPuAlnZqYj0qil5RGdQonw5vEQ0cSxywJSMJX9Q6eGjx5%2Fi%2BrAScbcwVNN5X49A%3D%3D';
 const ENDPOINT = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc';
 
-const getCities = async (): Promise<ResponseType<City>> => {
-  const res = await fetch(
-    `${ENDPOINT}/sido?serviceKey=${SERVICE_KEY}&numOfRows=17&_type=json`
-  );
+const getCities = async (): Promise<City[]> => {
+  const response = (await httpGet('sido', {
+    numOfRows: 17,
+  })) as ResponseBodyType<City>;
 
-  if (!res.ok) {
-    throw new Error(res.statusText);
-  }
-
-  return res.json();
+  return response.items.item;
 };
 
-export const getFullCities = async (
-  cityCode?: string
-): Promise<ResponseType<FullCity>> => {
+export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
   if (!cityCode) {
     throw new Error('시도코드 미제공');
   }
 
-  const res = await fetch(
-    `${ENDPOINT}/sigungu?serviceKey=${SERVICE_KEY}&upr_cd=${cityCode}&_type=json`
-  );
+  const response = (await httpGet('sigungu', {
+    upr_cd: cityCode,
+  })) as ResponseBodyType<FullCity>;
 
-  if (!res.ok) {
-    throw new Error(res.statusText);
-  }
-
-  return res.json();
+  return response.items.item.filter((fullCity) => fullCity.orgCd !== '6119999');
 };
 
-const getShelters = async (cityCode: string, fullCityCode: string) => {
+const getShelters = async (
+  cityCode: string,
+  fullCityCode: string
+): Promise<Shelter[]> => {
   if (!cityCode || !fullCityCode) {
-    return;
+    throw new Error('시도군구 코드 미제공');
   }
 
-  const res = await fetch(
-    `${ENDPOINT}/shelter?serviceKey=${SERVICE_KEY}&upr_cd=${cityCode}&org_cd=${fullCityCode}&_type=json`
-  );
+  const response = (await httpGet('shelter', {
+    upr_cd: cityCode,
+    org_cd: fullCityCode,
+  })) as ResponseBodyType<Shelter>;
 
-  if (!res.ok) {
-    throw new Error(res.statusText);
-  }
-
-  return res.json();
+  return response.items.item;
 };
 
-export const getPaws = async (pawQuery: PawQuery) => {
-  const searchParams = new URLSearchParams();
-  searchParams.set('serviceKey', SERVICE_KEY);
-  searchParams.set('_type', 'json');
+export const getPaws = async (
+  pawQuery: PawQuery
+): Promise<ResponseBodyType<Paw>> => {
+  const response = (await httpGet(
+    'abandonmentPublic',
+    pawQuery
+  )) as ResponseBodyType<Paw>;
 
-  Object.entries(pawQuery).forEach(([key, val]) =>
-    searchParams.set(key, val as any)
-  );
-
-  const res = await fetch(
-    decodeURI(`${ENDPOINT}/abandonmentPublic?${searchParams.toString()}`)
-  );
-
-  if (!res.ok) {
-    throw new Error(res.statusText);
-  }
-
-  return res.json();
+  return response;
 };
 
 export default async function Home() {
-  const cities = (await getCities())?.response?.body?.items?.item ?? [];
+  const cities = (await getCities()) ?? [];
   const orgCd = cities?.[0]?.orgCd;
-  const fullCities =
-    (await getFullCities(orgCd))?.response?.body?.items?.item?.filter(
-      (city) => city.orgCd !== '6119999'
-    ) ?? [];
-  // const fullCityCode = fullCities?.[0]?.orgCd;
-  // const shelters = await getShelters(orgCd, fullCityCode);
+  const fullCities = (await getFullCities(orgCd)) ?? [];
+  const pawsResponseBody = await getPaws({ pageNo: 1, numOfRows: 48 });
 
-  // console.log(JSON.stringify(shelters));
-
-  const pawsResponseBody = (await getPaws({ pageNo: 1, numOfRows: 48 }))
-    ?.response?.body;
-
-  const paws = pawsResponseBody?.items?.item as Paw[];
-  const numOfRows = pawsResponseBody?.numOfRows;
-  const pageNo = pawsResponseBody?.pageNo;
-  const totalCount = pawsResponseBody?.totalCount;
+  const paws = pawsResponseBody.items.item;
+  const numOfRows = pawsResponseBody.numOfRows ?? 0;
+  const pageNo = pawsResponseBody.pageNo ?? 0;
+  const totalCount = pawsResponseBody.totalCount ?? 0;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className='flex min-h-screen flex-col items-center justify-between p-24 gap-4'>
-        {/* <div className={'flex gap-4'}>
-          <Cities cities={cities} />
-          <FullCities fullCitiesParam={fullCities} />
-        </div> */}
         <SearchBox citiesParam={cities} fullCitiesParam={fullCities} />
         <Paws
           pawsParam={paws}

@@ -42,15 +42,7 @@ export default function SearchBox({
 
   const setFullCityByCityCode = async (selectedCity: string) => {
     try {
-      const fullCitiesResponse = (await getFullCities(selectedCity)).response;
-      const responseHeader = fullCitiesResponse.header;
-
-      if (responseHeader.errorMsg) {
-        throw new Error(responseHeader.errorMsg);
-      }
-
-      const responseBody = fullCitiesResponse?.body;
-      const _fullCities = responseBody?.items?.item ?? [];
+      const _fullCities = await getFullCities(selectedCity);
 
       setFullCities((prevState) => ({
         ...prevState,
