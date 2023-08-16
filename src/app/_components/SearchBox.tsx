@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { City, FullCity } from '../_types';
 import { useRecoilState } from 'recoil';
 import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
-import { getFullCities } from '../page';
 import Select from './Select';
+import { getFullCities } from '../_lib/api';
 
 type SearchBoxProps = {
   citiesParam: City[];
