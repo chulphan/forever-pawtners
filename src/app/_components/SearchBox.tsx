@@ -5,6 +5,7 @@ import { City, FullCity } from '../_types';
 import { useRecoilState } from 'recoil';
 import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
 import { getFullCities } from '../page';
+import Select from './Select';
 
 type SearchBoxProps = {
   citiesParam: City[];
@@ -76,29 +77,29 @@ export default function SearchBox({
         className={`flex flex-row gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
           isSearchBoxOpen ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0'
         }`}>
-        <select
-          name={'cityCode'}
+        <Select
           className={'border-2 border-blue-400 rounded p-2'}
+          name={'cityCode'}
           value={selectedCity.cityCode}
-          onChange={onSelectChange}>
+          onSelect={onSelectChange}>
           {citiesParam.map((city) => (
             <option key={city.orgCd} value={city.orgCd}>
               {city.orgdownNm}
             </option>
           ))}
-        </select>
+        </Select>
         {fullCities[selectedCity.cityCode] && (
-          <select
-            name={'fullCityCode'}
+          <Select
             className={'border-2 border-blue-400 rounded p-2'}
+            name={'fullCityCode'}
             value={selectedCity.fullCityCode}
-            onChange={onSelectChange}>
+            onSelect={onSelectChange}>
             {fullCities[selectedCity.cityCode].map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
                 {city.orgdownNm}
               </option>
             ))}
-          </select>
+          </Select>
         )}
         <button className='border-2 border-blue-400 rounded p-2'>찾기</button>
       </div>
