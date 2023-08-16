@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
 import Select from './Select';
 import { getFullCities } from '../_lib/api';
+import Button from './Button';
 
 type SearchBoxProps = {
   citiesParam: City[];
@@ -65,13 +66,13 @@ export default function SearchBox({
   return (
     <>
       <div className={'flex self-end'}>
-        <button
+        <Button
           className={
             'px-8 py-4  border-4 rounded-[4px] border-blue-400 hover:opacity-80'
           }
           onClick={() => setIsSearchBoxOpen(!isSearchBoxOpen)}>
           검색
-        </button>
+        </Button>
       </div>
       <div
         className={`flex flex-row gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
@@ -101,7 +102,11 @@ export default function SearchBox({
             ))}
           </Select>
         )}
-        <button className='border-2 border-blue-400 rounded p-2'>찾기</button>
+        <Button
+          className='border-2 border-blue-400 rounded p-2'
+          onClick={() => {}}>
+          찾기
+        </Button>
       </div>
     </>
   );
