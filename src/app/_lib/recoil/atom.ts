@@ -23,3 +23,8 @@ export const fullCitiesState = atom<{ [key: string]: FullCity[] }>({
   key: 'fullCitiesState',
   default: {},
 });
+
+export const pawListState = atom<Paw[]>({
+  key: 'pawListState',
+  default: [],
+});

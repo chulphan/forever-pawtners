@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Paw } from '../_types';
 import Modal from './Modal';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { modalState, pawState } from '../_lib/recoil/atom';
+import { modalState, pawListState, pawState } from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 
@@ -19,7 +19,7 @@ export default function Paws({
   pageNoParam: number;
   totalCountParam: number;
 }) {
-  const [paws, setPaws] = useState(pawsParam || []);
+  const [pawList, setPawList] = useRecoilState(pawListState);
   const setSelectedPaw = useSetRecoilState(pawState);
   const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
   const [pagingInfo, setPagingInfo] = useState({
@@ -35,6 +35,10 @@ export default function Paws({
       : Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows) + 1;
 
   const hasNextPage = pagingInfo.pageNo < totalPage;
+
+  useEffect(() => {
+    setPawList(pawsParam);
+  }, [pawsParam, setPawList]);
 
   useIntersectionObserver({
     // root: rootRef,
@@ -58,7 +62,7 @@ export default function Paws({
         pageNo,
         totalCount,
       }));
-      setPaws((prevState) => [...prevState, ...newPaws]);
+      setPawList((prevState) => [...prevState, ...newPaws]);
     },
     enabled: hasNextPage,
   });
@@ -73,7 +77,7 @@ export default function Paws({
       className={
         'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
       }>
-      {paws?.map((paw) => (
+      {pawList?.map((paw) => (
         <li
           key={paw.desertionNo}
           className={
