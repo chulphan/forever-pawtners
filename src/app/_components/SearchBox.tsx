@@ -22,6 +22,7 @@ export default function SearchBox({
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
 
   useEffect(() => {
+    console.log('...');
     const cityCode = citiesParam[0].orgCd;
     setFullCities((prevState) => ({
       ...prevState,
@@ -32,28 +33,26 @@ export default function SearchBox({
       cityCode: cityCode,
       fullCityCode: fullCitiesParam[0]?.orgCd,
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [citiesParam, fullCitiesParam, setFullCities, setSelectedCity]);
 
   useEffect(() => {
     if (selectedCity.cityCode !== '' && !fullCities[selectedCity.cityCode]) {
-      setFullCityByCityCode(selectedCity.cityCode);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCity.cityCode]);
+      const setFullCitiesByCode = async (cityCode: string) => {
+        try {
+          const _fullCities = await getFullCities(cityCode);
 
-  const setFullCityByCityCode = async (selectedCity: string) => {
-    try {
-      const _fullCities = await getFullCities(selectedCity);
+          setFullCities((prevState) => ({
+            ...prevState,
+            [cityCode]: _fullCities,
+          }));
+        } catch (e: any) {
+          alert(e.message);
+        }
+      };
 
-      setFullCities((prevState) => ({
-        ...prevState,
-        [selectedCity]: _fullCities,
-      }));
-    } catch (e: any) {
-      alert(e.message);
+      setFullCitiesByCode(selectedCity.cityCode);
     }
-  };
+  }, [selectedCity.cityCode, fullCities, setFullCities]);
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
