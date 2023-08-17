@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { City, FullCity } from '../_types';
-import { useRecoilState } from 'recoil';
-import { fullCitiesState, selectCityState } from '../_lib/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  fullCitiesState,
+  pawListState,
+  selectCityState,
+} from '../_lib/recoil/atom';
 import Select from './Select';
-import { getFullCities } from '../_lib/api';
+import { getFullCities, getPaws } from '../_lib/api';
 import Button from './Button';
 
 type SearchBoxProps = {
@@ -17,6 +21,7 @@ export default function SearchBox({
   citiesParam,
   fullCitiesParam,
 }: SearchBoxProps) {
+  const setPawList = useSetRecoilState(pawListState);
   const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
@@ -62,6 +67,22 @@ export default function SearchBox({
     }));
   };
 
+  const onSearchBtnClick = async () => {
+    try {
+      const pawListResponseBody = await getPaws({
+        pageNo: 1,
+        numOfRows: 48,
+        upr_cd: selectedCity.cityCode,
+        org_cd: selectedCity.fullCityCode,
+      });
+
+      const { items, numOfRows, pageNo, totalCount } = pawListResponseBody;
+      const { item } = items;
+
+      setPawList(item);
+    } catch (e) {}
+  };
+
   return (
     <>
       <div className={'flex self-end'}>
@@ -103,7 +124,7 @@ export default function SearchBox({
         )}
         <Button
           className='border-2 border-blue-400 rounded p-2'
-          onClick={() => {}}>
+          onClick={onSearchBtnClick}>
           찾기
         </Button>
       </div>

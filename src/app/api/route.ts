@@ -16,7 +16,10 @@ export async function POST(request: NextRequest) {
    */
   const requestJson = await request.json();
 
-  const response = await httpGet(requestJson.endpoint, requestJson.queryParam);
+  const response = await httpGet(
+    decodeURI(requestJson.endpoint),
+    requestJson.queryParam
+  );
 
   return NextResponse.json(response);
 }
