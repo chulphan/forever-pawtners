@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { City, FullCity } from '../_types';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   fullCitiesState,
   pawListState,
@@ -11,6 +11,7 @@ import {
 import Select from './Select';
 import { getFullCities, getPaws } from '../_lib/api';
 import Button from './Button';
+import usePawList from '../_lib/hooks/usePaws';
 
 type SearchBoxProps = {
   citiesParam: City[];
@@ -21,7 +22,7 @@ export default function SearchBox({
   citiesParam,
   fullCitiesParam,
 }: SearchBoxProps) {
-  const setPawList = useSetRecoilState(pawListState);
+  const [_, setPawList] = usePawList();
   const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);

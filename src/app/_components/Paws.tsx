@@ -7,6 +7,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { modalState, pawListState, pawState } from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
+import usePawList from '../_lib/hooks/usePaws';
 
 export default function Paws({
   pawsParam,
@@ -19,7 +20,7 @@ export default function Paws({
   pageNoParam: number;
   totalCountParam: number;
 }) {
-  const [pawList, setPawList] = useRecoilState(pawListState);
+  const [pawList, setPawList] = usePawList(pawsParam);
   const setSelectedPaw = useSetRecoilState(pawState);
   const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
   const [pagingInfo, setPagingInfo] = useState({
@@ -35,10 +36,6 @@ export default function Paws({
       : Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows) + 1;
 
   const hasNextPage = pagingInfo.pageNo < totalPage;
-
-  useEffect(() => {
-    setPawList(pawsParam);
-  }, [pawsParam, setPawList]);
 
   useIntersectionObserver({
     // root: rootRef,
