@@ -18,7 +18,10 @@ export default function Select<T>({
   className,
 }: SelectProps<T>) {
   return (
-    <select className={className} name={name} value={value} onChange={onSelect}>
+    <select className={className} value={value} name={name} onChange={onSelect}>
+      <option value={'placeholder'} disabled hidden>
+        선택해주세요
+      </option>
       {children}
     </select>
   );

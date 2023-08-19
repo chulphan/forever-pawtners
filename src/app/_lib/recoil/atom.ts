@@ -14,8 +14,8 @@ export const pawState = atom<Paw | undefined>({
 export const selectCityState = atom<SelectCity>({
   key: 'selectCityState',
   default: {
-    cityCode: '',
-    fullCityCode: '',
+    cityCode: 'placeholder',
+    fullCityCode: 'placeholder',
   },
 });
 

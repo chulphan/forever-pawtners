@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { City, FullCity } from '../_types';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { City, FullCity, PawQuery } from '../_types';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import {
   fullCitiesState,
   pawListState,
@@ -24,27 +29,21 @@ export default function SearchBox({
   fullCitiesParam,
 }: SearchBoxProps) {
   const [_, setPawList] = usePawList();
-  const setPawQuery = useSetRecoilState(pawQueryState);
+  const [setPawQuery, resetPawQuery] = [
+    useSetRecoilState(pawQueryState),
+    useResetRecoilState(pawQueryState),
+  ];
   const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
+  const resetSelectedCity = useResetRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
 
   useEffect(() => {
-    console.log('...');
-    const cityCode = citiesParam[0].orgCd;
-    setFullCities((prevState) => ({
-      ...prevState,
-      [cityCode]: fullCitiesParam,
-    }));
-    setSelectedCity((prevState) => ({
-      ...prevState,
-      cityCode: cityCode,
-      fullCityCode: fullCitiesParam[0]?.orgCd,
-    }));
-  }, [citiesParam, fullCitiesParam, setFullCities, setSelectedCity]);
-
-  useEffect(() => {
-    if (selectedCity.cityCode !== '' && !fullCities[selectedCity.cityCode]) {
+    if (
+      selectedCity.cityCode !== '' &&
+      selectedCity.cityCode !== 'placeholder' &&
+      !fullCities[selectedCity.cityCode]
+    ) {
       const setFullCitiesByCode = async (cityCode: string) => {
         try {
           const _fullCities = await getFullCities(cityCode);
@@ -78,7 +77,22 @@ export default function SearchBox({
         upr_cd: selectedCity.cityCode,
         org_cd: selectedCity.fullCityCode,
         totalCount: 0,
-      };
+      } as PawQuery;
+
+      if (
+        selectedCity.cityCode === '' ||
+        selectedCity.cityCode === 'placeholder'
+      ) {
+        delete pawQuery.upr_cd;
+      }
+
+      if (
+        selectedCity.fullCityCode === '' ||
+        selectedCity.fullCityCode === 'placeholder'
+      ) {
+        delete pawQuery.org_cd;
+      }
+
       const pawListResponseBody = await getPaws(pawQuery);
 
       const { items, numOfRows, pageNo, totalCount } = pawListResponseBody;
@@ -93,6 +107,12 @@ export default function SearchBox({
         totalCount: totalCount ?? 0,
       }));
     } catch (e) {}
+  };
+
+  const initialize = () => {
+    console.log(selectedCity);
+    resetPawQuery();
+    resetSelectedCity();
   };
 
   return (
@@ -138,6 +158,11 @@ export default function SearchBox({
           className='border-2 border-blue-400 rounded p-2'
           onClick={onSearchBtnClick}>
           찾기
+        </Button>
+        <Button
+          className='border-2 border-gray-400 rounded p-2'
+          onClick={initialize}>
+          초기화
         </Button>
       </div>
     </>
