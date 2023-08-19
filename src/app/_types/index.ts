@@ -33,9 +33,9 @@ export type PawQuery = {
   care_reg_no?: string;
   state?: string;
   neuter_yn?: string;
-  pageNo?: number;
-  numOfRows?: number;
-  totalCount?: number;
+  pageNo: number;
+  numOfRows: number;
+  totalCount: number;
 };
 
 export type City = {

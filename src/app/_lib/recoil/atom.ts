@@ -34,5 +34,6 @@ export const pawQueryState = atom<PawQuery>({
   default: {
     pageNo: 1,
     numOfRows: 48,
+    totalCount: 0,
   },
 });

@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   fullCitiesState,
   pawListState,
+  pawQueryState,
   selectCityState,
 } from '../_lib/recoil/atom';
 import Select from './Select';
@@ -23,6 +24,7 @@ export default function SearchBox({
   fullCitiesParam,
 }: SearchBoxProps) {
   const [_, setPawList] = usePawList();
+  const setPawQuery = useSetRecoilState(pawQueryState);
   const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
@@ -70,17 +72,26 @@ export default function SearchBox({
 
   const onSearchBtnClick = async () => {
     try {
-      const pawListResponseBody = await getPaws({
+      const pawQuery = {
         pageNo: 1,
         numOfRows: 48,
         upr_cd: selectedCity.cityCode,
         org_cd: selectedCity.fullCityCode,
-      });
+        totalCount: 0,
+      };
+      const pawListResponseBody = await getPaws(pawQuery);
 
       const { items, numOfRows, pageNo, totalCount } = pawListResponseBody;
       const { item } = items;
 
       setPawList(item);
+      setPawQuery((prevState) => ({
+        ...prevState,
+        ...pawQuery,
+        numOfRows: numOfRows ?? 0,
+        pageNo: pageNo ?? 0,
+        totalCount: totalCount ?? 0,
+      }));
     } catch (e) {}
   };
 

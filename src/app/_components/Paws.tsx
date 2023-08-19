@@ -4,7 +4,12 @@ import Image from 'next/image';
 import { Paw } from '../_types';
 import Modal from './Modal';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { modalState, pawListState, pawState } from '../_lib/recoil/atom';
+import {
+  modalState,
+  pawListState,
+  pawQueryState,
+  pawState,
+} from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 import usePawList from '../_lib/hooks/usePaws';
@@ -23,19 +28,24 @@ export default function Paws({
   const [pawList, setPawList] = usePawList(pawsParam);
   const setSelectedPaw = useSetRecoilState(pawState);
   const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
-  const [pagingInfo, setPagingInfo] = useState({
-    numOfRows: numOfRowsParam,
-    pageNo: pageNoParam,
-    totalCount: totalCountParam,
-  });
+  const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
   const loadMoreRef = useRef<HTMLLIElement>(null);
 
   const totalPage =
-    pagingInfo.totalCount % pagingInfo.numOfRows === 0
-      ? Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows)
-      : Math.floor(pagingInfo.totalCount / pagingInfo.numOfRows) + 1;
+    pawQuery.totalCount % pawQuery.numOfRows === 0
+      ? Math.floor(pawQuery.totalCount / pawQuery.numOfRows)
+      : Math.floor(pawQuery.totalCount / pawQuery.numOfRows) + 1;
 
-  const hasNextPage = pagingInfo.pageNo < totalPage;
+  const hasNextPage = pawQuery.pageNo < totalPage;
+
+  useEffect(() => {
+    setPawQuery((prevState) => ({
+      ...prevState,
+      numOfRows: numOfRowsParam,
+      pageNo: pageNoParam,
+      totalCount: totalCountParam,
+    }));
+  }, []);
 
   useIntersectionObserver({
     // root: rootRef,
@@ -43,8 +53,8 @@ export default function Paws({
     threshold: 0.9,
     onIntersect: async () => {
       const nextPagingState = {
-        ...pagingInfo,
-        pageNo: pagingInfo.pageNo + 1,
+        ...pawQuery,
+        pageNo: pawQuery.pageNo + 1,
       };
 
       const pawsResponseBody = await getPaws(nextPagingState);
@@ -53,7 +63,7 @@ export default function Paws({
       const pageNo = pawsResponseBody?.pageNo ?? 0;
       const totalCount = pawsResponseBody?.totalCount ?? 0;
 
-      setPagingInfo((prevState) => ({
+      setPawQuery((prevState) => ({
         ...prevState,
         numOfRows,
         pageNo,
