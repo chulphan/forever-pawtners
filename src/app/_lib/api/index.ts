@@ -5,6 +5,8 @@ import {
   Shelter,
   PawQuery,
   Paw,
+  ANIMAL_KIND_CODE,
+  Breed,
 } from '@/app/_types';
 
 const baseUrl = `${
@@ -77,6 +79,22 @@ export const getPaws = async (
       }),
     })
   ).json()) as ResponseBodyType<Paw>;
+
+  return response;
+};
+
+export const getBreed = async (animalCode: ANIMAL_KIND_CODE) => {
+  const response = (await (
+    await fetch(baseUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        endpoint: 'kind',
+        queryParam: {
+          up_kind_cd: animalCode,
+        },
+      }),
+    })
+  ).json()) as ResponseBodyType<Breed>;
 
   return response;
 };

@@ -81,3 +81,17 @@ export type Paw = {
   chargeNm: string;
   officetel: string;
 };
+
+export const ANIMAL_KIND_DOG = '417000' as const;
+export const ANIMAL_KIND_CAT = '422400' as const;
+export const ANIMAL_KIND_OTHERS = '429900' as const;
+
+export type ANIMAL_KIND_CODE =
+  | typeof ANIMAL_KIND_DOG
+  | typeof ANIMAL_KIND_CAT
+  | typeof ANIMAL_KIND_OTHERS;
+
+export type Breed = {
+  kindCd: string;
+  KNm: string;
+};

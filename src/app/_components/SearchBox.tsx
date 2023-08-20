@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { City, FullCity, PawQuery } from '../_types';
+import { ANIMAL_KIND_CODE, City, FullCity, PawQuery } from '../_types';
 import {
   useRecoilState,
   useRecoilValue,
@@ -18,11 +18,27 @@ import Select from './Select';
 import { getFullCities, getPaws } from '../_lib/api';
 import Button from './Button';
 import usePawList from '../_lib/hooks/usePaws';
+import useFullCities from '../_lib/hooks/useFullCities';
 
 type SearchBoxProps = {
   citiesParam: City[];
   fullCitiesParam: FullCity[];
 };
+
+const ANIMAL_KINDS: Array<{ upkind: ANIMAL_KIND_CODE; label: string }> = [
+  {
+    upkind: '417000',
+    label: '개',
+  },
+  {
+    upkind: '422400',
+    label: '고양이',
+  },
+  {
+    upkind: '429900',
+    label: '기타',
+  },
+];
 
 export default function SearchBox({
   citiesParam,
@@ -36,30 +52,8 @@ export default function SearchBox({
   const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
   const resetSelectedCity = useResetRecoilState(selectCityState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
-  const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
-
-  useEffect(() => {
-    if (
-      selectedCity.cityCode !== '' &&
-      selectedCity.cityCode !== 'placeholder' &&
-      !fullCities[selectedCity.cityCode]
-    ) {
-      const setFullCitiesByCode = async (cityCode: string) => {
-        try {
-          const _fullCities = await getFullCities(cityCode);
-
-          setFullCities((prevState) => ({
-            ...prevState,
-            [cityCode]: _fullCities,
-          }));
-        } catch (e: any) {
-          alert(e.message);
-        }
-      };
-
-      setFullCitiesByCode(selectedCity.cityCode);
-    }
-  }, [selectedCity.cityCode, fullCities, setFullCities]);
+  // const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
+  const fullCities = useFullCities(selectedCity.cityCode);
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -127,43 +121,57 @@ export default function SearchBox({
         </Button>
       </div>
       <div
-        className={`flex flex-row gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
+        className={`flex flex-col gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
           isSearchBoxOpen ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0'
         }`}>
-        <Select
-          className={'border-2 border-blue-400 rounded p-2'}
-          name={'cityCode'}
-          value={selectedCity.cityCode}
-          onSelect={onSelectChange}>
-          {citiesParam.map((city) => (
-            <option key={city.orgCd} value={city.orgCd}>
-              {city.orgdownNm}
-            </option>
-          ))}
-        </Select>
-        {fullCities[selectedCity.cityCode] && (
+        <div className={'flex flex-row gap-4'}>
           <Select
             className={'border-2 border-blue-400 rounded p-2'}
-            name={'fullCityCode'}
-            value={selectedCity.fullCityCode}
+            name={'cityCode'}
+            value={selectedCity.cityCode}
             onSelect={onSelectChange}>
-            {fullCities[selectedCity.cityCode].map((city) => (
+            {citiesParam.map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
                 {city.orgdownNm}
               </option>
             ))}
           </Select>
-        )}
-        <Button
-          className='border-2 border-blue-400 rounded p-2'
-          onClick={onSearchBtnClick}>
-          찾기
-        </Button>
-        <Button
-          className='border-2 border-gray-400 rounded p-2'
-          onClick={initialize}>
-          초기화
-        </Button>
+          {fullCities[selectedCity.cityCode] && (
+            <Select
+              className={'border-2 border-blue-400 rounded p-2'}
+              name={'fullCityCode'}
+              value={selectedCity.fullCityCode}
+              onSelect={onSelectChange}>
+              {fullCities[selectedCity.cityCode].map((city) => (
+                <option key={city.orgCd} value={city.orgCd}>
+                  {city.orgdownNm}
+                </option>
+              ))}
+            </Select>
+          )}
+        </div>
+        <div className={'flex gap-4'}>
+          {ANIMAL_KINDS.map((animalKind) => (
+            <Button
+              key={animalKind.upkind}
+              onClick={() => {}}
+              className={'bg-green-400 text-white rounded p-2'}>
+              <span className={'block w-[50px]'}>{animalKind.label}</span>
+            </Button>
+          ))}
+        </div>
+        <div className={'flex gap-4'}>
+          <Button
+            className='border-2 border-blue-400 rounded p-2'
+            onClick={onSearchBtnClick}>
+            찾기
+          </Button>
+          <Button
+            className='border-2 border-gray-400 rounded p-2'
+            onClick={initialize}>
+            초기화
+          </Button>
+        </div>
       </div>
     </>
   );
