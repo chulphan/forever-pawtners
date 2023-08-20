@@ -1,21 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ANIMAL_KIND_CODE, City, FullCity, PawQuery } from '../_types';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
-import {
-  fullCitiesState,
-  pawListState,
-  pawQueryState,
-  selectCityState,
-} from '../_lib/recoil/atom';
+import { useState } from 'react';
+import { ANIMAL_KIND_CODE, Breed, City, FullCity, PawQuery } from '../_types';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { pawQueryState } from '../_lib/recoil/atom';
 import Select from './Select';
-import { getFullCities, getPaws } from '../_lib/api';
+import { getBreed, getFullCities, getPaws } from '../_lib/api';
 import Button from './Button';
 import usePawList from '../_lib/hooks/usePaws';
 import useFullCities from '../_lib/hooks/useFullCities';
@@ -45,49 +35,48 @@ export default function SearchBox({
   fullCitiesParam,
 }: SearchBoxProps) {
   const [_, setPawList] = usePawList();
-  const [setPawQuery, resetPawQuery] = [
-    useSetRecoilState(pawQueryState),
-    useResetRecoilState(pawQueryState),
-  ];
-  const [selectedCity, setSelectedCity] = useRecoilState(selectCityState);
-  const resetSelectedCity = useResetRecoilState(selectCityState);
+  const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
+  const resetPawQuery = useResetRecoilState(pawQueryState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
-  // const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
-  const fullCities = useFullCities(selectedCity.cityCode);
+  const [selectedAnimal, setSelectedAnimal] = useState<ANIMAL_KIND_CODE>();
+  const [breed, setBreed] = useState<{
+    [key in ANIMAL_KIND_CODE]?: Array<Breed>;
+  }>({});
+  const fullCities = useFullCities(pawQuery.upr_cd);
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setSelectedCity((prevState) => ({
+
+    setPawQuery((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
+  const onAnimalKindChange = async (animalCode: ANIMAL_KIND_CODE) => {
+    try {
+      setSelectedAnimal(animalCode);
+      if (breed[animalCode]) {
+        return;
+      }
+      const breedResponseBody = await getBreed(animalCode);
+      setBreed((prevState) => ({
+        ...prevState,
+        [animalCode]: breedResponseBody.items.item ?? [],
+      }));
+    } catch (e) {}
+  };
+
   const onSearchBtnClick = async () => {
     try {
-      const pawQuery = {
+      const _pawQuery = {
+        ...pawQuery,
         pageNo: 1,
         numOfRows: 48,
-        upr_cd: selectedCity.cityCode,
-        org_cd: selectedCity.fullCityCode,
         totalCount: 0,
       } as PawQuery;
 
-      if (
-        selectedCity.cityCode === '' ||
-        selectedCity.cityCode === 'placeholder'
-      ) {
-        delete pawQuery.upr_cd;
-      }
-
-      if (
-        selectedCity.fullCityCode === '' ||
-        selectedCity.fullCityCode === 'placeholder'
-      ) {
-        delete pawQuery.org_cd;
-      }
-
-      const pawListResponseBody = await getPaws(pawQuery);
+      const pawListResponseBody = await getPaws(_pawQuery);
 
       const { items, numOfRows, pageNo, totalCount } = pawListResponseBody;
       const { item } = items;
@@ -104,9 +93,7 @@ export default function SearchBox({
   };
 
   const initialize = () => {
-    console.log(selectedCity);
     resetPawQuery();
-    resetSelectedCity();
   };
 
   return (
@@ -122,13 +109,13 @@ export default function SearchBox({
       </div>
       <div
         className={`flex flex-col gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
-          isSearchBoxOpen ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0'
+          isSearchBoxOpen ? 'opacity-100' : 'opacity-0 max-h-0'
         }`}>
         <div className={'flex flex-row gap-4'}>
           <Select
             className={'border-2 border-blue-400 rounded p-2'}
-            name={'cityCode'}
-            value={selectedCity.cityCode}
+            name={'upr_cd'}
+            value={pawQuery.upr_cd ?? ''}
             onSelect={onSelectChange}>
             {citiesParam.map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
@@ -136,13 +123,13 @@ export default function SearchBox({
               </option>
             ))}
           </Select>
-          {fullCities[selectedCity.cityCode] && (
+          {pawQuery.upr_cd && fullCities[pawQuery.upr_cd] && (
             <Select
               className={'border-2 border-blue-400 rounded p-2'}
-              name={'fullCityCode'}
-              value={selectedCity.fullCityCode}
+              name={'org_cd'}
+              value={pawQuery.org_cd ?? ''}
               onSelect={onSelectChange}>
-              {fullCities[selectedCity.cityCode].map((city) => (
+              {fullCities[pawQuery.upr_cd].map((city) => (
                 <option key={city.orgCd} value={city.orgCd}>
                   {city.orgdownNm}
                 </option>
@@ -154,12 +141,27 @@ export default function SearchBox({
           {ANIMAL_KINDS.map((animalKind) => (
             <Button
               key={animalKind.upkind}
-              onClick={() => {}}
+              onClick={() => onAnimalKindChange(animalKind.upkind)}
               className={'bg-green-400 text-white rounded p-2'}>
               <span className={'block w-[50px]'}>{animalKind.label}</span>
             </Button>
           ))}
         </div>
+        {selectedAnimal && breed[selectedAnimal] && (
+          <div>
+            <Select
+              name={'kind'}
+              value={pawQuery.kind ?? ''}
+              className='border border-green-500 rounded p-2'
+              onSelect={onSelectChange}>
+              {breed[selectedAnimal]?.map((breed) => (
+                <option key={breed.kindCd} value={breed.kindCd}>
+                  {breed.knm}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
         <div className={'flex gap-4'}>
           <Button
             className='border-2 border-blue-400 rounded p-2'

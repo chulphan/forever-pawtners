@@ -1,4 +1,4 @@
-import { FullCity, Paw, PawQuery, SelectCity } from '@/app/_types';
+import { FullCity, Paw, PawQuery } from '@/app/_types';
 import { atom } from 'recoil';
 
 export const modalState = atom({
@@ -9,14 +9,6 @@ export const modalState = atom({
 export const pawState = atom<Paw | undefined>({
   key: 'pawState',
   default: undefined,
-});
-
-export const selectCityState = atom<SelectCity>({
-  key: 'selectCityState',
-  default: {
-    cityCode: 'placeholder',
-    fullCityCode: 'placeholder',
-  },
 });
 
 export const fullCitiesState = atom<{ [key: string]: FullCity[] }>({

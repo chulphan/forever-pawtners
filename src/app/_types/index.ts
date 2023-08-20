@@ -52,11 +52,6 @@ export type Shelter = {
   careNm: string;
 };
 
-export type SelectCity = {
-  cityCode: string;
-  fullCityCode: string;
-};
-
 export type Paw = {
   desertionNo: string;
   filename: string;
@@ -93,5 +88,5 @@ export type ANIMAL_KIND_CODE =
 
 export type Breed = {
   kindCd: string;
-  KNm: string;
+  knm: string;
 };
