@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { ANIMAL_KIND_CODE, Breed, City, FullCity, PawQuery } from '../_types';
+import {
+  ANIMAL_KIND_CODE,
+  Breed,
+  City,
+  FullCity,
+  PawQuery,
+  SearchState,
+} from '../_types';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { pawQueryState } from '../_lib/recoil/atom';
 import Select from './Select';
@@ -35,6 +42,7 @@ export default function SearchBox({
   fullCitiesParam,
 }: SearchBoxProps) {
   const [_, setPawList] = usePawList();
+  const [searchState, setSearchState] = useState<SearchState>({});
   const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
   const resetPawQuery = useResetRecoilState(pawQueryState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
@@ -42,12 +50,12 @@ export default function SearchBox({
   const [breed, setBreed] = useState<{
     [key in ANIMAL_KIND_CODE]?: Array<Breed>;
   }>({});
-  const fullCities = useFullCities(pawQuery.upr_cd);
+  const fullCities = useFullCities(searchState.upr_cd);
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    setPawQuery((prevState) => ({
+    setSearchState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -70,7 +78,7 @@ export default function SearchBox({
   const onSearchBtnClick = async () => {
     try {
       const _pawQuery = {
-        ...pawQuery,
+        ...searchState,
         pageNo: 1,
         numOfRows: 48,
         totalCount: 0,
@@ -101,7 +109,7 @@ export default function SearchBox({
       <div className={'flex self-end'}>
         <Button
           className={
-            'px-8 py-4  border-4 rounded-[4px] border-blue-400 hover:opacity-80'
+            'px-8 py-2 rounded bg-[#03A678] hover:opacity-80 text-white'
           }
           onClick={() => setIsSearchBoxOpen(!isSearchBoxOpen)}>
           검색
@@ -113,9 +121,9 @@ export default function SearchBox({
         }`}>
         <div className={'flex flex-row gap-4'}>
           <Select
-            className={'border-2 border-blue-400 rounded p-2'}
+            className={'border-2 border-[#03A678] rounded p-2'}
             name={'upr_cd'}
-            value={pawQuery.upr_cd ?? ''}
+            value={searchState.upr_cd ?? ''}
             onSelect={onSelectChange}>
             {citiesParam.map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
@@ -123,13 +131,13 @@ export default function SearchBox({
               </option>
             ))}
           </Select>
-          {pawQuery.upr_cd && fullCities[pawQuery.upr_cd] && (
+          {searchState.upr_cd && fullCities[searchState.upr_cd] && (
             <Select
-              className={'border-2 border-blue-400 rounded p-2'}
+              className={'border-2 border-[#03A678] rounded p-2'}
               name={'org_cd'}
-              value={pawQuery.org_cd ?? ''}
+              value={searchState.org_cd ?? ''}
               onSelect={onSelectChange}>
-              {fullCities[pawQuery.upr_cd].map((city) => (
+              {fullCities[searchState.upr_cd].map((city) => (
                 <option key={city.orgCd} value={city.orgCd}>
                   {city.orgdownNm}
                 </option>
@@ -142,7 +150,9 @@ export default function SearchBox({
             <Button
               key={animalKind.upkind}
               onClick={() => onAnimalKindChange(animalKind.upkind)}
-              className={'bg-green-400 text-white rounded p-2'}>
+              className={
+                'bg-[#03A678] hover:opacity-80 text-white rounded p-2'
+              }>
               <span className={'block w-[50px]'}>{animalKind.label}</span>
             </Button>
           ))}
@@ -151,7 +161,7 @@ export default function SearchBox({
           <div>
             <Select
               name={'kind'}
-              value={pawQuery.kind ?? ''}
+              value={searchState.kind ?? ''}
               className='border border-green-500 rounded p-2'
               onSelect={onSelectChange}>
               {breed[selectedAnimal]?.map((breed) => (
@@ -164,14 +174,12 @@ export default function SearchBox({
         )}
         <div className={'flex gap-4'}>
           <Button
-            className='border-2 border-blue-400 rounded p-2'
+            className='rounded bg-[#03A678] p-2 text-white'
             onClick={onSearchBtnClick}>
-            찾기
+            <span className='block w-12'>찾기</span>
           </Button>
-          <Button
-            className='border-2 border-gray-400 rounded p-2'
-            onClick={initialize}>
-            초기화
+          <Button className='rounded bg-gray-200 p-2' onClick={initialize}>
+            <span className={'block w-12'}>초기화</span>
           </Button>
         </div>
       </div>
