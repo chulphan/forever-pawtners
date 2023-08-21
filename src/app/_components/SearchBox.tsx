@@ -9,7 +9,7 @@ import {
   PawQuery,
   SearchState,
 } from '../_types';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { pawQueryState } from '../_lib/recoil/atom';
 import Select from './Select';
 import { getBreed, getFullCities, getPaws } from '../_lib/api';
@@ -43,7 +43,7 @@ export default function SearchBox({
 }: SearchBoxProps) {
   const [_, setPawList] = usePawList();
   const [searchState, setSearchState] = useState<SearchState>({});
-  const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
+  const setPawQuery = useSetRecoilState(pawQueryState);
   const resetPawQuery = useResetRecoilState(pawQueryState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState<ANIMAL_KIND_CODE>();
@@ -101,6 +101,7 @@ export default function SearchBox({
   };
 
   const initialize = () => {
+    setSearchState({});
     resetPawQuery();
   };
 
