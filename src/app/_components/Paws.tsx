@@ -14,6 +14,12 @@ import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 import usePawList from '../_lib/hooks/usePaws';
 
+const labelColorVariants = {
+  protect: 'bg-[#03A678]',
+  end: 'bg-[#1E3859]',
+  notice: 'bg-[#048ABF]',
+};
+
 export default function Paws({
   pawsParam,
   numOfRowsParam,
@@ -79,6 +85,22 @@ export default function Paws({
     setSelectedPaw(paw);
   };
 
+  const getColorBy = (processState: string) => {
+    if (processState.includes('종료')) {
+      return labelColorVariants.end;
+    }
+
+    if (processState.includes('보호')) {
+      return labelColorVariants.protect;
+    }
+
+    if (processState.includes('공고')) {
+      return labelColorVariants.notice;
+    }
+
+    return '';
+  };
+
   return (
     <ul
       className={
@@ -88,16 +110,16 @@ export default function Paws({
         <li
           key={paw.desertionNo}
           className={
-            'flex flex-col gap-4 bg-white p-4 border rounded border-gray-400 cursor-pointer'
+            'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
           }
           onClick={() => onPawClick(paw)}>
-          <div className={'flex flex-col gap-2 font-normal text-sm'}>
-            <span>{paw.kindCd}</span>
+          <div
+            className={`flex flex-col gap-2 font-bold text-md ${getColorBy(
+              paw.processState
+            )} text-white p-2`}>
             <span>
-              ({paw.sexCd} / {paw.age} / {paw.weight})
+              {paw.kindCd} / {paw.processState}
             </span>
-            <span>{paw.noticeNo}</span>
-            <span>{paw.processState}</span>
           </div>
           <div className={'h-[200px] rounded'} style={{ position: 'relative' }}>
             <Image
@@ -109,10 +131,11 @@ export default function Paws({
               sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
             />
           </div>
-          <div className={'flex flex-col gap-2 font-normal text-sm'}>
-            <p>{paw.specialMark}</p>
+          <div className={'flex flex-col gap-2 font-normal text-md'}>
+            <p>
+              {paw.sexCd} / {paw.age} / {paw.weight}
+            </p>
             <p>{paw.careNm}</p>
-            <p>{paw.careAddr}</p>
           </div>
         </li>
       ))}
