@@ -92,7 +92,7 @@ export default function SearchBox({
       setPawList(item);
       setPawQuery((prevState) => ({
         ...prevState,
-        ...pawQuery,
+        ..._pawQuery,
         numOfRows: numOfRows ?? 0,
         pageNo: pageNo ?? 0,
         totalCount: totalCount ?? 0,
