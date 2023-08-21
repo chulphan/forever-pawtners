@@ -72,6 +72,7 @@ export const getPaws = async (
 ): Promise<ResponseBodyType<Paw>> => {
   const response = (await (
     await fetch(baseUrl, {
+      cache: 'no-store',
       method: 'POST',
       body: JSON.stringify({
         endpoint: 'abandonmentPublic',

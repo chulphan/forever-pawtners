@@ -26,7 +26,7 @@ export type ResponseType<T> = {
 export type PawQuery = {
   bgnde?: string;
   endde?: string;
-  upkind?: string;
+  upkind?: ANIMAL_KIND_CODE;
   kind?: string;
   upr_cd?: string;
   org_cd?: string;

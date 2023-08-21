@@ -46,7 +46,6 @@ export default function SearchBox({
   const setPawQuery = useSetRecoilState(pawQueryState);
   const resetPawQuery = useResetRecoilState(pawQueryState);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
-  const [selectedAnimal, setSelectedAnimal] = useState<ANIMAL_KIND_CODE>();
   const [breed, setBreed] = useState<{
     [key in ANIMAL_KIND_CODE]?: Array<Breed>;
   }>({});
@@ -63,7 +62,11 @@ export default function SearchBox({
 
   const onAnimalKindChange = async (animalCode: ANIMAL_KIND_CODE) => {
     try {
-      setSelectedAnimal(animalCode);
+      setSearchState((prevState) => ({
+        ...prevState,
+        upkind: animalCode,
+        kind: '',
+      }));
       if (breed[animalCode]) {
         return;
       }
@@ -76,6 +79,7 @@ export default function SearchBox({
   };
 
   const onSearchBtnClick = async () => {
+    console.log(searchState);
     try {
       const _pawQuery = {
         ...searchState,
@@ -158,14 +162,14 @@ export default function SearchBox({
             </Button>
           ))}
         </div>
-        {selectedAnimal && breed[selectedAnimal] && (
+        {searchState.upkind && breed[searchState.upkind] && (
           <div>
             <Select
               name={'kind'}
               value={searchState.kind ?? ''}
               className='border border-green-500 rounded p-2'
               onSelect={onSelectChange}>
-              {breed[selectedAnimal]?.map((breed) => (
+              {breed[searchState.upkind]?.map((breed) => (
                 <option key={breed.kindCd} value={breed.kindCd}>
                   {breed.knm}
                 </option>
