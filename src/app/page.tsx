@@ -1,13 +1,4 @@
 import { Suspense } from 'react';
-import {
-  City,
-  FullCity,
-  Paw,
-  PawQuery,
-  ResponseBodyType,
-  ResponseType,
-  Shelter,
-} from './_types';
 import Paws from './_components/Paws';
 import SearchBox from './_components/SearchBox';
 import { getCities, getFullCities, getPaws } from './_lib/api';
@@ -30,13 +21,13 @@ export default async function Home() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className='flex min-h-screen flex-col items-center justify-between p-6 gap-4'>
-        {/* <SearchBox citiesParam={cities} fullCitiesParam={fullCities} />
+        <SearchBox citiesParam={cities} fullCitiesParam={fullCities} />
         <Paws
           pawsParam={paws}
           numOfRowsParam={numOfRows}
           pageNoParam={pageNo}
           totalCountParam={totalCount}
-        /> */}
+        />
       </main>
     </Suspense>
   );
