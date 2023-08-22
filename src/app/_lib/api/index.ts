@@ -9,8 +9,15 @@ import {
   Breed,
 } from '@/app/_types';
 
+/**
+ * 서버사이드는 호출이 잘 되는데 클라이언트 사이드에서 호출이 안된다..
+ * url/undefined/api..
+ * 왜지??
+ */
 const baseUrl = `${
-  typeof window === undefined ? '/api' : `${process.env.BASE_URL}/api`
+  typeof window === undefined
+    ? '/api'
+    : `${process.env.NEXT_PUBLIC_SITE_URL}/api`
 }`;
 
 export const getCities = async (): Promise<City[]> => {
