@@ -135,7 +135,9 @@ export default function Paws({
             <p>
               {paw.sexCd} / {paw.age} / {paw.weight}
             </p>
-            <p>{paw.careNm}</p>
+            <p>
+              {paw.orgNm} {paw.careNm}
+            </p>
           </div>
         </li>
       ))}
