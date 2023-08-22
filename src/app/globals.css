@@ -25,3 +25,8 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+
+.react-calendar {
+  position: fixed;
+  z-index: 10;
+}

@@ -16,6 +16,14 @@ import { getBreed, getFullCities, getPaws } from '../_lib/api';
 import Button from './Button';
 import usePawList from '../_lib/hooks/usePaws';
 import useFullCities from '../_lib/hooks/useFullCities';
+import dateFormat from 'dateformat';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+
+type ValuePiece = Date | null | undefined;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 type SearchBoxProps = {
   citiesParam: City[];
@@ -37,10 +45,40 @@ const ANIMAL_KINDS: Array<{ upkind: ANIMAL_KIND_CODE; label: string }> = [
   },
 ];
 
+const STATES = [
+  {
+    state: 'notice',
+    label: '공고중',
+  },
+  {
+    state: 'protect',
+    label: '보호중',
+  },
+];
+
+const NEUTERS = [
+  {
+    state: 'Y',
+    label: '중성화 ✅',
+  },
+  {
+    state: 'N',
+    label: '중성화 ❌',
+  },
+  {
+    state: 'U',
+    label: '중성화 ❓',
+  },
+];
+
 export default function SearchBox({
   citiesParam,
   fullCitiesParam,
 }: SearchBoxProps) {
+  const [dateValue, onDateValueChange] = useState<Value>([
+    undefined,
+    undefined,
+  ]);
   const [_, setPawList] = usePawList();
   const [searchState, setSearchState] = useState<SearchState>({});
   const setPawQuery = useSetRecoilState(pawQueryState);
@@ -62,11 +100,14 @@ export default function SearchBox({
 
   const onAnimalKindChange = async (animalCode: ANIMAL_KIND_CODE) => {
     try {
-      setSearchState((prevState) => ({
-        ...prevState,
-        upkind: animalCode,
-        kind: '',
-      }));
+      const nextSearchState = { ...searchState };
+      delete nextSearchState.kind;
+      if (animalCode === searchState.upkind) {
+        delete nextSearchState.upkind;
+      } else {
+        nextSearchState.upkind = animalCode;
+      }
+      setSearchState(nextSearchState);
       if (breed[animalCode]) {
         return;
       }
@@ -78,15 +119,34 @@ export default function SearchBox({
     } catch (e) {}
   };
 
+  const convertDate = (date?: ValuePiece) => {
+    if (!date) {
+      return;
+    }
+
+    return dateFormat(date, 'yyyymmdd');
+  };
+
   const onSearchBtnClick = async () => {
-    console.log(searchState);
+    console.log(dateValue);
+    const [bgnde, endde] = (dateValue as Array<ValuePiece>) ?? [];
     try {
       const _pawQuery = {
         ...searchState,
         pageNo: 1,
         numOfRows: 48,
         totalCount: 0,
+        bgnde: convertDate(bgnde),
+        endde: convertDate(endde),
       } as PawQuery;
+
+      if (!bgnde) {
+        delete _pawQuery.bgnde;
+      }
+
+      if (!endde) {
+        delete _pawQuery.endde;
+      }
 
       const pawListResponseBody = await getPaws(_pawQuery);
 
@@ -107,6 +167,7 @@ export default function SearchBox({
   const initialize = () => {
     setSearchState({});
     resetPawQuery();
+    onDateValueChange([undefined, undefined]);
   };
 
   return (
@@ -155,10 +216,17 @@ export default function SearchBox({
             <Button
               key={animalKind.upkind}
               onClick={() => onAnimalKindChange(animalKind.upkind)}
-              className={
-                'bg-[#03A678] hover:opacity-80 text-white rounded p-2'
-              }>
-              <span className={'block w-[50px]'}>{animalKind.label}</span>
+              className={`bg-[#03A678] hover:opacity-80 text-white rounded p-2 ${
+                animalKind.upkind === searchState.upkind
+                  ? 'border-4 border-green-700'
+                  : ''
+              }`}>
+              <span
+                className={`block w-[50px] ${
+                  animalKind.upkind === searchState.upkind ? 'font-bold' : ''
+                }`}>
+                {animalKind.label}
+              </span>
             </Button>
           ))}
         </div>
@@ -177,6 +245,37 @@ export default function SearchBox({
             </Select>
           </div>
         )}
+        <div className={'flex gap-4'}>
+          <Select
+            name={'state'}
+            value={searchState.state ?? ''}
+            className='border border-green-500 rounded p-2'
+            onSelect={onSelectChange}>
+            {STATES.map((state) => (
+              <option key={state.state} value={state.state}>
+                {state.label}
+              </option>
+            ))}
+          </Select>
+          <Select
+            name={'neuter_yn'}
+            value={searchState.neuter_yn ?? ''}
+            className='border border-green-500 rounded p-2'
+            onSelect={onSelectChange}>
+            {NEUTERS.map((neuter) => (
+              <option key={neuter.state} value={neuter.state}>
+                {neuter.label}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className={'z-10'}>
+          <DateRangePicker
+            value={dateValue as unknown as null}
+            onChange={onDateValueChange}
+            format='yyyyMMdd'
+          />
+        </div>
         <div className={'flex gap-4'}>
           <Button
             className='rounded bg-[#03A678] p-2 text-white'

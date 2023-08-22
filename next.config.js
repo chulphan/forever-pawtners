@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     domains: ['www.animal.go.kr'],
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 module.exports = nextConfig;
