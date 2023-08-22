@@ -10,7 +10,7 @@ import {
 } from '@/app/_types';
 
 const baseUrl = `${
-  typeof window === undefined ? '/api' : `${process.env.BASE_URL}/api`
+  typeof window === undefined ? '/api' : `${process.env.VERCEL_URL}/api`
 }`;
 
 export const getCities = async (): Promise<City[]> => {
