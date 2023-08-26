@@ -22,7 +22,7 @@ export const httpGet = async <T>(
   }
 
   try {
-    const response = await fetch(url, { method: 'GET', keepalive: true });
+    const response = await fetch(url, { method: 'GET' });
 
     if (response.ok) {
       const responseJson: ResponseType<T> = await response.json();

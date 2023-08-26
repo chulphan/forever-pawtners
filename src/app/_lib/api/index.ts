@@ -91,7 +91,7 @@ export const getPaws = async (
   return response;
 };
 
-export const getBreed = async (animalCode: ANIMAL_KIND_CODE) => {
+export const getBreed = async (animalCode?: ANIMAL_KIND_CODE) => {
   const response = (await (
     await fetch(baseUrl, {
       method: 'POST',

@@ -20,6 +20,7 @@ import dateFormat from 'dateformat';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import { useQuery } from 'react-query';
 
 type ValuePiece = Date | null | undefined;
 
@@ -89,6 +90,22 @@ export default function SearchBox({
   }>({});
   const fullCities = useFullCities(searchState.upr_cd);
 
+  const {} = useQuery(
+    ['breeds', searchState.upkind],
+    () => getBreed(searchState.upkind),
+    {
+      onSuccess: (data) => {
+        setBreed((prevState) => ({
+          ...prevState,
+          [searchState.upkind as ANIMAL_KIND_CODE]: data.items.item ?? [],
+        }));
+      },
+      enabled: !!searchState.upkind && !breed[searchState.upkind],
+      refetchOnWindowFocus: false,
+      retry: false,
+    }
+  );
+
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -102,20 +119,14 @@ export default function SearchBox({
     try {
       const nextSearchState = { ...searchState };
       delete nextSearchState.kind;
+
       if (animalCode === searchState.upkind) {
         delete nextSearchState.upkind;
       } else {
         nextSearchState.upkind = animalCode;
       }
+
       setSearchState(nextSearchState);
-      if (breed[animalCode]) {
-        return;
-      }
-      const breedResponseBody = await getBreed(animalCode);
-      setBreed((prevState) => ({
-        ...prevState,
-        [animalCode]: breedResponseBody.items.item ?? [],
-      }));
     } catch (e) {}
   };
 
@@ -128,7 +139,6 @@ export default function SearchBox({
   };
 
   const onSearchBtnClick = async () => {
-    console.log(dateValue);
     const [bgnde, endde] = (dateValue as Array<ValuePiece>) ?? [];
     try {
       const _pawQuery = {

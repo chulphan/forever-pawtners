@@ -1,8 +1,9 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
-import RecoilProvider from './_lib/Provider';
+import RecoilProvider from './_lib/providers/RecoilProvider';
 import Script from 'next/script';
+import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
 
 const notoSans = Noto_Sans({ weight: '400', preload: false });
 
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className={notoSans.className}>
-        <RecoilProvider>{children}</RecoilProvider>
+        <ReactQueryProvider>
+          <RecoilProvider>{children}</RecoilProvider>
+        </ReactQueryProvider>
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_KAKAO_APP_KEY}&libraries=services,clusterer&autoload=false`}
         />
