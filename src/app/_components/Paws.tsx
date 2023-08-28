@@ -3,7 +3,7 @@ import React, {useRef} from 'react';
 import Image from 'next/image';
 import {Paw, ResponseBodyType} from '../_types';
 import Modal from './Modal';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {modalState, pawQueryState, pawState,} from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import {getPaws} from '../_lib/api';
@@ -26,7 +26,7 @@ export default function Paws({
     pageNoParam: number;
     totalCountParam: number;
 }) {
-    const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
+    const pawQuery = useRecoilValue(pawQueryState);
     const setSelectedPaw = useSetRecoilState(pawState);
     const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
     const loadMoreRef = useRef<HTMLLIElement>(null);
@@ -53,7 +53,7 @@ export default function Paws({
                         ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 0))
                         : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 0)) + 1;
 
-                const hasNextPage = (lastPage.pageNo ?? 1) < totalPage;
+                const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
                 if (hasNextPage) {
                     return {
                         ...lastPage,
@@ -100,6 +100,8 @@ export default function Paws({
         },
         enabled: !!hasPawsNextPage,
     });
+
+    console.log(hasPawsNextPage);
 
     const onPawClick = (paw: Paw) => {
         setIsPawModalOpen(true);

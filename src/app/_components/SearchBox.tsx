@@ -1,19 +1,18 @@
 'use client';
 
 import {useState} from 'react';
-import {ANIMAL_KIND_CODE, Breed, City, FullCity, PawQuery, SearchState,} from '../_types';
-import {useResetRecoilState, useSetRecoilState} from 'recoil';
+import {ANIMAL_KIND_CODE, Breed, City, PawQuery, SearchState,} from '../_types';
+import {useSetRecoilState} from 'recoil';
 import {pawQueryState} from '../_lib/recoil/atom';
 import Select from './Select';
 import {getBreed} from '../_lib/api';
 import Button from './Button';
-import usePawList from '../_lib/hooks/usePaws';
 import useFullCities from '../_lib/hooks/useFullCities';
 import dateFormat from 'dateformat';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import {QueryClient, useQuery} from 'react-query';
+import {useQuery} from 'react-query';
 
 type ValuePiece = Date | null | undefined;
 
@@ -21,7 +20,6 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 type SearchBoxProps = {
     citiesParam: City[];
-    fullCitiesParam: FullCity[];
 };
 
 const ANIMAL_KINDS: Array<{ upkind: ANIMAL_KIND_CODE; label: string }> = [
@@ -67,22 +65,18 @@ const NEUTERS = [
 
 export default function SearchBox({
                                       citiesParam,
-                                      fullCitiesParam,
                                   }: SearchBoxProps) {
     const [dateValue, onDateValueChange] = useState<Value>([
         undefined,
         undefined,
     ]);
-    const [_, setPawList] = usePawList();
     const [searchState, setSearchState] = useState<SearchState>({});
     const setPawQuery = useSetRecoilState(pawQueryState);
-    const resetPawQuery = useResetRecoilState(pawQueryState);
     const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
     const [breed, setBreed] = useState<{
         [key in ANIMAL_KIND_CODE]?: Array<Breed>;
     }>({});
     const fullCities = useFullCities(searchState.upr_cd);
-    const queryClient = new QueryClient();
 
     const {} = useQuery(
         ['breeds', searchState.upkind],
@@ -160,7 +154,6 @@ export default function SearchBox({
 
     const initialize = () => {
         setSearchState({});
-        resetPawQuery();
         onDateValueChange([undefined, undefined]);
     };
 
