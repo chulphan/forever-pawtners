@@ -4,7 +4,7 @@ import Image from 'next/image';
 import {Paw, ResponseBodyType} from '../_types';
 import Modal from './Modal';
 import {useRecoilState, useSetRecoilState} from 'recoil';
-import {modalState, pawState,} from '../_lib/recoil/atom';
+import {modalState, pawQueryState, pawState,} from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import {getPaws} from '../_lib/api';
 import {useInfiniteQuery} from 'react-query';
@@ -26,6 +26,7 @@ export default function Paws({
     pageNoParam: number;
     totalCountParam: number;
 }) {
+    const [pawQuery, setPawQuery] = useRecoilState(pawQueryState);
     const setSelectedPaw = useSetRecoilState(pawState);
     const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
     const loadMoreRef = useRef<HTMLLIElement>(null);
@@ -37,9 +38,12 @@ export default function Paws({
         fetchNextPage,
         hasNextPage: hasPawsNextPage,
     } = useInfiniteQuery<ResponseBodyType<Paw>>(
-        ['pawList'],
+        ['pawList', pawQuery],
         async ({pageParam}) => {
-            return await getPaws(pageParam);
+            return await getPaws({
+                ...pawQuery,
+                ...pageParam,
+            });
         },
         {
             getNextPageParam: (lastPage) => {
@@ -77,6 +81,7 @@ export default function Paws({
                     totalCount: totalCountParam
                 }],
             }),
+            keepPreviousData: true,
             refetchOnWindowFocus: false,
             retry: false,
         }
