@@ -135,12 +135,12 @@ export default function Paws({
                         className={`flex justify-between font-bold text-md ${getColorBy(
                             paw.processState
                         )} text-white p-2`}>
-            <span>
-              {paw.kindCd} / {paw.processState}
-            </span>
+                        <span>
+                          {paw.kindCd} / {paw.processState}
+                        </span>
                         <span className={'font-bold text-md'}>
-              {paw.sexCd === 'F' ? '♀' : '♂'}
-            </span>
+                          {paw.sexCd === 'F' ? '♀' : '♂'}
+                        </span>
                     </div>
                     <div className={'h-[200px] rounded'} style={{position: 'relative'}}>
                         <Image
