@@ -34,7 +34,7 @@ export default function Paws({
 
     const {
         data,
-        isLoading: isFetchingPaws,
+        isFetching: isFetchingPaws,
         fetchNextPage,
         hasNextPage: hasPawsNextPage,
     } = useInfiniteQuery<ResponseBodyType<Paw>>(
@@ -47,7 +47,6 @@ export default function Paws({
         },
         {
             getNextPageParam: (lastPage) => {
-                console.log('lastpage ', lastPage);
                 const totalPage =
                     lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 0) === 0
                         ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 0))
@@ -81,10 +80,11 @@ export default function Paws({
             keepPreviousData: true,
             refetchOnWindowFocus: false,
             retry: false,
+            staleTime: 60 * 1000,
         }
     );
 
-    console.log(data);
+    console.log('isFetchingPaws ', isFetchingPaws);
 
     useIntersectionObserver({
         // root: rootRef,
@@ -95,10 +95,8 @@ export default function Paws({
                 await fetchNextPage();
             }
         },
-        enabled: !!hasPawsNextPage,
+        enabled: !isFetchingPaws && !!hasPawsNextPage,
     });
-
-    console.log(hasPawsNextPage);
 
     const onPawClick = (paw: Paw) => {
         setIsPawModalOpen(true);
