@@ -63,24 +63,21 @@ export default function Paws({
 
                 return undefined;
             },
-            initialData: () => ({
-                pages: [{
+            initialData: () => {
+                const initialData = {
                     items: {
                         item: pawsParam
                     },
                     numOfRows: numOfRowsParam,
                     pageNo: pageNoParam,
                     totalCount: totalCountParam
-                }],
-                pageParams: [{
-                    items: {
-                        item: pawsParam
-                    },
-                    numOfRows: numOfRowsParam,
-                    pageNo: pageNoParam,
-                    totalCount: totalCountParam
-                }],
-            }),
+                };
+
+                return {
+                    pages: [initialData],
+                    pageParams: [initialData],
+                };
+            },
             keepPreviousData: true,
             refetchOnWindowFocus: false,
             retry: false,
