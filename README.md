@@ -48,6 +48,6 @@
 - recoil atom과 타입을 분리할 수 있을지 고민해보기
 - react-query 적용하기
     - ~~paws > initialData 중복 코드 제거~~
-    - searchBox > 견종 데이터를 state 가 아닌 useQuery 가 반환한 데이터 사용하도록 처리
+    - ~~searchBox > 견종 데이터를 state 가 아닌 useQuery 가 반환한 데이터 사용하도록 처리~~
     - 결과 없을 시 분기를 통한 UI 표시 처리
 - ~~api route 적용 (이제 SERVICE_KEY 를 외부에 노출하지 않을 수 있게 됨!)~~

@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import {ANIMAL_KIND_CODE, Breed, City, PawQuery, SearchState,} from '../_types';
+import {ANIMAL_KIND_CODE, City, PawQuery, SearchState,} from '../_types';
 import {useSetRecoilState} from 'recoil';
 import {pawQueryState} from '../_lib/recoil/atom';
 import Select from './Select';
@@ -73,24 +73,16 @@ export default function SearchBox({
     const [searchState, setSearchState] = useState<SearchState>({});
     const setPawQuery = useSetRecoilState(pawQueryState);
     const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
-    const [breed, setBreed] = useState<{
-        [key in ANIMAL_KIND_CODE]?: Array<Breed>;
-    }>({});
     const fullCities = useFullCities(searchState.upr_cd);
 
-    const {} = useQuery(
+    const {data: breeds, isLoading: isFetchBreedLoading} = useQuery(
         ['breeds', searchState.upkind],
         () => getBreed(searchState.upkind),
         {
-            onSuccess: (data) => {
-                setBreed((prevState) => ({
-                    ...prevState,
-                    [searchState.upkind as ANIMAL_KIND_CODE]: data.items.item ?? [],
-                }));
-            },
-            enabled: !!searchState.upkind && !breed[searchState.upkind],
+            enabled: !!searchState.upkind,
             refetchOnWindowFocus: false,
             retry: false,
+            staleTime: 60 * 1000
         }
     );
 
@@ -217,21 +209,23 @@ export default function SearchBox({
                         </Button>
                     ))}
                 </div>
-                {searchState.upkind && breed[searchState.upkind] && (
-                    <div>
-                        <Select
-                            name={'kind'}
-                            value={searchState.kind ?? ''}
-                            className='border border-green-500 rounded p-2'
-                            onSelect={onSelectChange}>
-                            {breed[searchState.upkind]?.map((breed) => (
-                                <option key={breed.kindCd} value={breed.kindCd}>
-                                    {breed.knm}
-                                </option>
-                            ))}
-                        </Select>
-                    </div>
-                )}
+                {
+                    breeds?.items?.item && breeds?.items?.item?.length > 0 && (
+                        <div>
+                            <Select
+                                name={'kind'}
+                                value={searchState.kind ?? ''}
+                                className='border border-green-500 rounded p-2'
+                                onSelect={onSelectChange}>
+                                {breeds?.items?.item?.map((breed) => (
+                                    <option key={breed.kindCd} value={breed.kindCd}>
+                                        {breed.knm}
+                                    </option>
+                                ))}
+                            </Select>
+                        </div>
+                    )
+                }
                 <div className={'flex gap-4'}>
                     <Select
                         name={'state'}
