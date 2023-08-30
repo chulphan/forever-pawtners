@@ -117,8 +117,6 @@ export default function Paws({
         return '';
     };
 
-    console.log('pawListItem ', pawListItem);
-
     return (
         <ul
             className={
@@ -154,7 +152,7 @@ export default function Paws({
                     </div>
                     <div className={'flex flex-col gap-2 font-normal text-md'}>
                         <p>
-                            {paw.sexCd} / {paw.age} / {paw.weight}
+                            {paw.age} / {paw.weight}
                         </p>
                         <p>
                             {paw.orgNm} {paw.careNm}
