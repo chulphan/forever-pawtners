@@ -120,8 +120,8 @@ export default function SearchBox({
     };
 
     const onSearchBtnClick = async () => {
-        const [bgnde, endde] = (dateValue as Array<ValuePiece>) ?? [];
         try {
+            const [bgnde, endde] = (dateValue as Array<ValuePiece>) ?? [];
             const _pawQuery = {
                 ...searchState,
                 pageNo: 1,
@@ -141,6 +141,7 @@ export default function SearchBox({
 
             setPawQuery(_pawQuery);
         } catch (e) {
+            console.log(e);
         }
     };
 

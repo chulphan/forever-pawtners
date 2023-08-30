@@ -31,7 +31,6 @@ export default function Paws({
     const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
     const loadMoreRef = useRef<HTMLLIElement>(null);
 
-
     const {
         data,
         isFetching: isFetchingPaws,
@@ -48,9 +47,9 @@ export default function Paws({
         {
             getNextPageParam: (lastPage) => {
                 const totalPage =
-                    lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 0) === 0
-                        ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 0))
-                        : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 0)) + 1;
+                    lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0
+                        ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
+                        : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)) + 1;
 
                 const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
                 if (hasNextPage) {
@@ -78,13 +77,12 @@ export default function Paws({
                 };
             },
             keepPreviousData: true,
-            refetchOnWindowFocus: false,
             retry: false,
-            staleTime: 60 * 1000,
+            // staleTime 이 있으니까... 찾기 버튼이 동작하지 않는다ㅠㅠ
         }
     );
 
-    console.log('isFetchingPaws ', isFetchingPaws);
+    const pawListItem = data?.pages.map(page => page.items).flatMap(item => item.item).filter(item => item);
 
     useIntersectionObserver({
         // root: rootRef,
@@ -95,7 +93,7 @@ export default function Paws({
                 await fetchNextPage();
             }
         },
-        enabled: !isFetchingPaws && !!hasPawsNextPage,
+        enabled: !!hasPawsNextPage,
     });
 
     const onPawClick = (paw: Paw) => {
@@ -119,12 +117,14 @@ export default function Paws({
         return '';
     };
 
+    console.log('pawListItem ', pawListItem);
+
     return (
         <ul
             className={
                 'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
             }>
-            {data?.pages.map(page => page.items).flatMap(item => item.item).map((paw) => (
+            {pawListItem && pawListItem.length > 0 ? pawListItem.map((paw) => (
                 <li
                     key={paw.desertionNo}
                     className={
@@ -161,7 +161,9 @@ export default function Paws({
                         </p>
                     </div>
                 </li>
-            ))}
+            )) : <div className={'w-full h-full'}>
+                찾으시는 유기동물이 없어요
+            </div>}
             <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''}></li>
             {isPawModalOpen && <Modal/>}
         </ul>
