@@ -18,7 +18,7 @@ export default async function Home() {
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <main className='flex min-h-screen flex-col items-center justify-between p-6 gap-4'>
+            <main className='flex min-h-screen flex-col items-center p-6 gap-4'>
                 <SearchBox citiesParam={cities}/>
                 <Paws
                     pawsParam={paws}

@@ -78,7 +78,9 @@ export default function Paws({
             },
             keepPreviousData: true,
             retry: false,
+            refetchOnWindowFocus: false,
             // staleTime 이 있으니까... 찾기 버튼이 동작하지 않는다ㅠㅠ
+            cacheTime: 3600
         }
     );
 
@@ -117,53 +119,69 @@ export default function Paws({
         return '';
     };
 
-    return (
-        <ul
-            className={
-                'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
-            }>
-            {pawListItem && pawListItem.length > 0 ? pawListItem.map((paw) => (
-                <li
-                    key={paw.desertionNo}
+    const renderPawsConditionally = () => {
+        if (pawListItem && pawListItem.length > 0) {
+            return (
+                <ul
                     className={
-                        'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
-                    }
-                    onClick={() => onPawClick(paw)}>
-                    <div
-                        className={`flex justify-between font-bold text-md ${getColorBy(
-                            paw.processState
-                        )} text-white p-2`}>
+                        'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
+                    }>
+                    {pawListItem.map((paw) => (
+                        <li
+                            key={paw.desertionNo}
+                            className={
+                                'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
+                            }
+                            onClick={() => onPawClick(paw)}>
+                            <div
+                                className={`flex justify-between font-bold text-md ${getColorBy(
+                                    paw.processState
+                                )} text-white p-2`}>
                         <span>
                           {paw.kindCd} / {paw.processState}
                         </span>
-                        <span className={'font-bold text-md'}>
+                                <span className={'font-bold text-md'}>
                           {paw.sexCd === 'F' ? '♀' : '♂'}
                         </span>
-                    </div>
-                    <div className={'h-[200px] rounded'} style={{position: 'relative'}}>
-                        <Image
-                            src={paw.popfile}
-                            alt={`${paw.kindCd} 이미지`}
-                            className={'w-full h-full rounded'}
-                            fill
-                            priority
-                            sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-                        />
-                    </div>
-                    <div className={'flex flex-col gap-2 font-normal text-md'}>
-                        <p>
-                            {paw.age} / {paw.weight}
-                        </p>
-                        <p>
-                            {paw.orgNm} {paw.careNm}
-                        </p>
-                    </div>
-                </li>
-            )) : <div className={'w-full h-full'}>
-                찾으시는 유기동물이 없어요
-            </div>}
-            <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''}></li>
+                            </div>
+                            <div className={'h-[200px] rounded'} style={{position: 'relative'}}>
+                                <Image
+                                    src={paw.popfile}
+                                    alt={`${paw.kindCd} 이미지`}
+                                    className={'w-full h-full rounded'}
+                                    fill
+                                    priority
+                                    sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+                                />
+                            </div>
+                            <div className={'flex flex-col gap-2 font-normal text-md'}>
+                                <p>
+                                    {paw.age} / {paw.weight}
+                                </p>
+                                <p>
+                                    {paw.orgNm} {paw.careNm}
+                                </p>
+                            </div>
+                        </li>
+                    ))}
+                    <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''}></li>
+                </ul>
+            )
+        }
+
+        return (
+            <div className={'flex justify-center items-center w-full min-h-[300px]'}>
+                <span className={'font-bold text-5xl'}>
+                    찾으시는 유기동물이 없어요ㅠㅠ
+                </span>
+            </div>
+        )
+    }
+
+    return (
+        <>
+            {renderPawsConditionally()}
             {isPawModalOpen && <Modal/>}
-        </ul>
+        </>
     );
 }
