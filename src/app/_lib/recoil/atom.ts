@@ -1,28 +1,28 @@
-import { FullCity, Paw, PawQuery } from '@/app/_types';
-import { atom } from 'recoil';
+import { FullCity, Paw, PawQuery } from "@/app/_types";
+import { atom } from "recoil";
 
 export const modalState = atom({
-  key: 'modalState',
+  key: "modalState",
   default: false,
 });
 
 export const pawState = atom<Paw | undefined>({
-  key: 'pawState',
+  key: "pawState",
   default: undefined,
 });
 
 export const fullCitiesState = atom<{ [key: string]: FullCity[] }>({
-  key: 'fullCitiesState',
+  key: "fullCitiesState",
   default: {},
 });
 
 export const pawListState = atom<Paw[]>({
-  key: 'pawListState',
+  key: "pawListState",
   default: [],
 });
 
 export const pawQueryState = atom<PawQuery>({
-  key: 'pawQueryState',
+  key: "pawQueryState",
   default: {
     pageNo: 1,
     numOfRows: 48,

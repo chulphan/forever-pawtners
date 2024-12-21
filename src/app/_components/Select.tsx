@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 type SelectProps<T> = {
   name: string;
@@ -19,7 +19,7 @@ export default function Select<T>({
 }: SelectProps<T>) {
   return (
     <select className={className} value={value} name={name} onChange={onSelect}>
-      <option value={''}>전체</option>
+      <option value={""}>전체</option>
       {children}
     </select>
   );

@@ -1,7 +1,7 @@
-import { Paw } from '@/app/_types';
-import { useRecoilState } from 'recoil';
-import { pawListState } from '../recoil/atom';
-import { useEffect } from 'react';
+import { Paw } from "@/app/_types";
+import { useRecoilState } from "recoil";
+import { pawListState } from "../recoil/atom";
+import { useEffect } from "react";
 
 type UsePawListProps = Paw[];
 export default function usePawList(initial?: UsePawListProps) {

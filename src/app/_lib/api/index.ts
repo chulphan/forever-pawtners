@@ -7,7 +7,7 @@ import {
   Paw,
   ANIMAL_KIND_CODE,
   Breed,
-} from '@/app/_types';
+} from "@/app/_types";
 
 /**
  * 서버사이드는 호출이 잘 되는데 클라이언트 사이드에서 호출이 안된다..
@@ -16,15 +16,15 @@ import {
  */
 const baseUrl = `${
   typeof window === undefined
-    ? '/api'
+    ? "/api"
     : `${process.env.NEXT_PUBLIC_SITE_URL}/api`
 }`;
 
 export const getCities = async (): Promise<City[]> => {
   const response = (await (
     await fetch(baseUrl, {
-      method: 'POST',
-      body: JSON.stringify({ endpoint: 'sido', queryParam: { numOfRows: 17 } }),
+      method: "POST",
+      body: JSON.stringify({ endpoint: "sido", queryParam: { numOfRows: 17 } }),
     })
   ).json()) as ResponseBodyType<City>;
 
@@ -33,13 +33,13 @@ export const getCities = async (): Promise<City[]> => {
 
 export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
   if (!cityCode) {
-    throw new Error('시도코드 미제공');
+    throw new Error("시도코드 미제공");
   }
   const response = (await (
     await fetch(baseUrl, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
-        endpoint: 'sigungu',
+        endpoint: "sigungu",
         queryParam: {
           upr_cd: cityCode,
         },
@@ -47,22 +47,22 @@ export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
     })
   ).json()) as ResponseBodyType<FullCity>;
 
-  return response.items.item.filter((fullCity) => fullCity.orgCd !== '6119999');
+  return response.items.item.filter((fullCity) => fullCity.orgCd !== "6119999");
 };
 
 export const getShelters = async (
   cityCode: string,
-  fullCityCode: string
+  fullCityCode: string,
 ): Promise<Shelter[]> => {
   if (!cityCode || !fullCityCode) {
-    throw new Error('시도군구 코드 미제공');
+    throw new Error("시도군구 코드 미제공");
   }
 
   const response = (await (
     await fetch(baseUrl, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
-        endpoint: 'shelter',
+        endpoint: "shelter",
         queryParam: {
           upr_cd: cityCode,
           org_cd: fullCityCode,
@@ -75,14 +75,14 @@ export const getShelters = async (
 };
 
 export const getPaws = async (
-  pawQuery: PawQuery
+  pawQuery: PawQuery,
 ): Promise<ResponseBodyType<Paw>> => {
   const response = (await (
     await fetch(baseUrl, {
-      cache: 'no-store',
-      method: 'POST',
+      cache: "no-store",
+      method: "POST",
       body: JSON.stringify({
-        endpoint: 'abandonmentPublic',
+        endpoint: "abandonmentPublic",
         queryParam: pawQuery,
       }),
     })
@@ -94,9 +94,9 @@ export const getPaws = async (
 export const getBreed = async (animalCode?: ANIMAL_KIND_CODE) => {
   const response = (await (
     await fetch(baseUrl, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
-        endpoint: 'kind',
+        endpoint: "kind",
         queryParam: {
           up_kind_cd: animalCode,
         },

@@ -1,15 +1,15 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { Noto_Sans } from 'next/font/google';
-import RecoilProvider from './_lib/providers/RecoilProvider';
-import Script from 'next/script';
-import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
+import "./globals.css";
+import type { Metadata } from "next";
+import { Noto_Sans } from "next/font/google";
+import RecoilProvider from "./_lib/providers/RecoilProvider";
+import Script from "next/script";
+import ReactQueryProvider from "./_lib/providers/ReactQueryProvider";
 
-const notoSans = Noto_Sans({ weight: '400', preload: false });
+const notoSans = Noto_Sans({ weight: "400", preload: false });
 
 export const metadata: Metadata = {
-  title: '유기동물, 내 평생 파트너',
-  description: '유기견/유기묘, 사지말고 입양하세요',
+  title: "유기동물, 내 평생 파트너",
+  description: "유기견/유기묘, 사지말고 입양하세요",
 };
 
 declare global {
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko'>
+    <html lang="ko">
       <body className={notoSans.className}>
         <ReactQueryProvider>
           <RecoilProvider>{children}</RecoilProvider>

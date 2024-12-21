@@ -1,8 +1,8 @@
-import { NextResponse, type NextRequest } from 'next/server';
-import { httpGet } from '../_lib/util/http';
+import { NextResponse, type NextRequest } from "next/server";
+import { httpGet } from "../_lib/util/http";
 
 export async function GET(request: NextRequest) {
-  return new Response('Hello api route~~');
+  return new Response("Hello api route~~");
 }
 
 export async function POST(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   const response = await httpGet(
     decodeURI(requestJson.endpoint),
-    requestJson.queryParam
+    requestJson.queryParam,
   );
 
   return NextResponse.json(response);
