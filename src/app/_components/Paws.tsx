@@ -10,9 +10,9 @@ import {getPaws} from '../_lib/api';
 import {useInfiniteQuery} from 'react-query';
 
 const labelColorVariants = {
-    protect: 'bg-[#03A678]',
-    end: 'bg-[#1E3859]',
-    notice: 'bg-[#048ABF]',
+    protect: 'bg-protect',
+    end: 'bg-end',
+    notice: 'bg-notice',
 };
 
 export default function Paws({
