@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@types/dateformat": "^5.0.0",
+    "kakao.maps.d.ts": "^0.1.40",
     "prettier": "^3.4.2"
   }
 }
