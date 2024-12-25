@@ -12,8 +12,8 @@ import {
 import { modalState, pawQueryState, pawState } from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
-import { useInfiniteQuery } from 'react-query';
 import { Dialog, DialogTrigger } from '@/shadcn/components/Dialog';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -43,57 +43,58 @@ export default function Paws({
     isFetching: isFetchingPaws,
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
-  } = useInfiniteQuery<ResponseBodyType<Paw>>(
-    ['pawList', pawQuery],
-    async ({ pageParam }) => {
+  } = useInfiniteQuery<ResponseBodyType<Paw>>({
+    queryKey: ['pawList', pawQuery],
+    queryFn: async ({ pageParam }) => {
       return await getPaws({
         ...pawQuery,
         ...pageParam,
       });
     },
-    {
-      getNextPageParam: (lastPage) => {
-        const totalPage =
-          (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
-            ? Math.floor(
-                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
-              )
-            : Math.floor(
-                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
-              ) + 1;
-
-        const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
-        if (hasNextPage) {
-          return {
-            ...lastPage,
-            pageNo: (lastPage.pageNo ?? 1) + 1,
-          };
-        }
-
-        return undefined;
+    initialPageParam: [
+      {
+        items: {
+          item: pawsParam,
+        },
+        numOfRows: numOfRowsParam,
+        pageNo: pageNoParam,
+        totalCount: totalCountParam,
       },
-      initialData: () => {
-        const initialData = {
-          items: {
-            item: pawsParam,
-          },
-          numOfRows: numOfRowsParam,
-          pageNo: pageNoParam,
-          totalCount: totalCountParam,
-        };
+    ],
+    getNextPageParam: (lastPage) => {
+      const totalPage =
+        (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
+          ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
+          : Math.floor(
+              (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
+            ) + 1;
 
+      const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
+      if (hasNextPage) {
         return {
-          pages: [initialData],
-          pageParams: [initialData],
+          ...lastPage,
+          pageNo: (lastPage.pageNo ?? 1) + 1,
         };
-      },
-      keepPreviousData: true,
-      retry: false,
-      refetchOnWindowFocus: false,
-      // staleTime 이 있으니까... 찾기 버튼이 동작하지 않는다ㅠㅠ
-      cacheTime: 3600,
-    }
-  );
+      }
+
+      return undefined;
+    },
+    initialData: () => {
+      const initialData = {
+        items: {
+          item: pawsParam,
+        },
+        numOfRows: numOfRowsParam,
+        pageNo: pageNoParam,
+        totalCount: totalCountParam,
+      };
+
+      return {
+        pages: [initialData],
+        pageParams: [initialData],
+      };
+    },
+  });
 
   const pawListItem = data?.pages
     .map((page) => page.items)

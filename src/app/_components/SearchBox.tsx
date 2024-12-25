@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ANIMAL_KIND_CODE, City, PawQuery, SearchState } from "../_types";
-import { useSetRecoilState } from "recoil";
-import { pawQueryState } from "../_lib/recoil/atom";
-import Select from "./Select";
-import { getBreed } from "../_lib/api";
-import useFullCities from "../_lib/hooks/useFullCities";
-import dateFormat from "dateformat";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
-import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
-import "react-calendar/dist/Calendar.css";
-import { useQuery } from "react-query";
-import { Button } from "@/shadcn/components/Button";
+import { useState } from 'react';
+import { ANIMAL_KIND_CODE, City, PawQuery, SearchState } from '../_types';
+import { useSetRecoilState } from 'recoil';
+import { pawQueryState } from '../_lib/recoil/atom';
+import Select from './Select';
+import { getBreed } from '../_lib/api';
+import useFullCities from '../_lib/hooks/useFullCities';
+import dateFormat from 'dateformat';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import { Button } from '@/shadcn/components/Button';
 
 type ValuePiece = Date | null | undefined;
 
@@ -24,42 +23,42 @@ type SearchBoxProps = {
 
 const ANIMAL_KINDS: Array<{ upkind: ANIMAL_KIND_CODE; label: string }> = [
   {
-    upkind: "417000",
-    label: "개",
+    upkind: '417000',
+    label: '개',
   },
   {
-    upkind: "422400",
-    label: "고양이",
+    upkind: '422400',
+    label: '고양이',
   },
   {
-    upkind: "429900",
-    label: "기타",
+    upkind: '429900',
+    label: '기타',
   },
 ];
 
 const STATES = [
   {
-    state: "notice",
-    label: "공고중",
+    state: 'notice',
+    label: '공고중',
   },
   {
-    state: "protect",
-    label: "보호중",
+    state: 'protect',
+    label: '보호중',
   },
 ];
 
 const NEUTERS = [
   {
-    state: "Y",
-    label: "중성화 ✅",
+    state: 'Y',
+    label: '중성화 ✅',
   },
   {
-    state: "N",
-    label: "중성화 ❌",
+    state: 'N',
+    label: '중성화 ❌',
   },
   {
-    state: "U",
-    label: "중성화 ❓",
+    state: 'U',
+    label: '중성화 ❓',
   },
 ];
 
@@ -74,14 +73,14 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
   const fullCities = useFullCities(searchState.upr_cd);
 
   const { data: breeds, isLoading: isFetchBreedLoading } = useQuery(
-    ["breeds", searchState.upkind],
+    ['breeds', searchState.upkind],
     () => getBreed(searchState.upkind),
     {
       enabled: !!searchState.upkind,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 60 * 1000,
-    },
+    }
   );
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -113,7 +112,7 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
       return;
     }
 
-    return dateFormat(date, "yyyymmdd");
+    return dateFormat(date, 'yyyymmdd');
   };
 
   const onSearchBtnClick = async () => {
@@ -149,28 +148,25 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
 
   return (
     <>
-      <div className={"flex self-end"}>
+      <div className={'flex self-end'}>
         <Button
           className={
-            "px-8 py-2 rounded bg-[#03A678] hover:opacity-80 text-white"
+            'px-8 py-2 rounded bg-[#03A678] hover:opacity-80 text-white'
           }
-          onClick={() => setIsSearchBoxOpen(!isSearchBoxOpen)}
-        >
+          onClick={() => setIsSearchBoxOpen(!isSearchBoxOpen)}>
           검색
         </Button>
       </div>
       <div
         className={`flex flex-col gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
-          isSearchBoxOpen ? "opacity-100" : "opacity-0 max-h-0"
-        }`}
-      >
-        <div className={"flex flex-row gap-4"}>
+          isSearchBoxOpen ? 'opacity-100' : 'opacity-0 max-h-0'
+        }`}>
+        <div className={'flex flex-row gap-4'}>
           <Select
-            className={"border-2 border-[#03A678] rounded p-2"}
-            name={"upr_cd"}
-            value={searchState.upr_cd ?? ""}
-            onSelect={onSelectChange}
-          >
+            className={'border-2 border-[#03A678] rounded p-2'}
+            name={'upr_cd'}
+            value={searchState.upr_cd ?? ''}
+            onSelect={onSelectChange}>
             {citiesParam.map((city) => (
               <option key={city.orgCd} value={city.orgCd}>
                 {city.orgdownNm}
@@ -179,11 +175,10 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
           </Select>
           {searchState.upr_cd && fullCities[searchState.upr_cd] && (
             <Select
-              className={"border-2 border-[#03A678] rounded p-2"}
-              name={"org_cd"}
-              value={searchState.org_cd ?? ""}
-              onSelect={onSelectChange}
-            >
+              className={'border-2 border-[#03A678] rounded p-2'}
+              name={'org_cd'}
+              value={searchState.org_cd ?? ''}
+              onSelect={onSelectChange}>
               {fullCities[searchState.upr_cd].map((city) => (
                 <option key={city.orgCd} value={city.orgCd}>
                   {city.orgdownNm}
@@ -192,22 +187,20 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             </Select>
           )}
         </div>
-        <div className={"flex gap-4"}>
+        <div className={'flex gap-4'}>
           {ANIMAL_KINDS.map((animalKind) => (
             <Button
               key={animalKind.upkind}
               onClick={() => onAnimalKindChange(animalKind.upkind)}
               className={`bg-[#03A678] hover:opacity-80 text-white rounded p-2 ${
                 animalKind.upkind === searchState.upkind
-                  ? "border-4 border-green-700"
-                  : ""
-              }`}
-            >
+                  ? 'border-4 border-green-700'
+                  : ''
+              }`}>
               <span
                 className={`block w-[50px] ${
-                  animalKind.upkind === searchState.upkind ? "font-bold" : ""
-                }`}
-              >
+                  animalKind.upkind === searchState.upkind ? 'font-bold' : ''
+                }`}>
                 {animalKind.label}
               </span>
             </Button>
@@ -216,11 +209,10 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
         {breeds?.items?.item && breeds?.items?.item?.length > 0 && (
           <div>
             <Select
-              name={"kind"}
-              value={searchState.kind ?? ""}
-              className="border border-green-500 rounded p-2"
-              onSelect={onSelectChange}
-            >
+              name={'kind'}
+              value={searchState.kind ?? ''}
+              className='border border-green-500 rounded p-2'
+              onSelect={onSelectChange}>
               {breeds?.items?.item?.map((breed) => (
                 <option key={breed.kindCd} value={breed.kindCd}>
                   {breed.knm}
@@ -229,13 +221,12 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             </Select>
           </div>
         )}
-        <div className={"flex gap-4"}>
+        <div className={'flex gap-4'}>
           <Select
-            name={"state"}
-            value={searchState.state ?? ""}
-            className="border border-green-500 rounded p-2"
-            onSelect={onSelectChange}
-          >
+            name={'state'}
+            value={searchState.state ?? ''}
+            className='border border-green-500 rounded p-2'
+            onSelect={onSelectChange}>
             {STATES.map((state) => (
               <option key={state.state} value={state.state}>
                 {state.label}
@@ -243,11 +234,10 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             ))}
           </Select>
           <Select
-            name={"neuter_yn"}
-            value={searchState.neuter_yn ?? ""}
-            className="border border-green-500 rounded p-2"
-            onSelect={onSelectChange}
-          >
+            name={'neuter_yn'}
+            value={searchState.neuter_yn ?? ''}
+            className='border border-green-500 rounded p-2'
+            onSelect={onSelectChange}>
             {NEUTERS.map((neuter) => (
               <option key={neuter.state} value={neuter.state}>
                 {neuter.label}
@@ -255,22 +245,21 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             ))}
           </Select>
         </div>
-        <div className={"z-10"}>
+        <div className={'z-10'}>
           <DateRangePicker
             value={dateValue as unknown as null}
             onChange={onDateValueChange}
-            format="yyyyMMdd"
+            format='yyyyMMdd'
           />
         </div>
-        <div className={"flex gap-4"}>
+        <div className={'flex gap-4'}>
           <Button
-            className="rounded bg-[#03A678] p-2 text-white"
-            onClick={onSearchBtnClick}
-          >
-            <span className="block w-12">찾기</span>
+            className='rounded bg-[#03A678] p-2 text-white'
+            onClick={onSearchBtnClick}>
+            <span className='block w-12'>찾기</span>
           </Button>
-          <Button className="rounded bg-gray-200 p-2" onClick={initialize}>
-            <span className={"block w-12"}>초기화</span>
+          <Button className='rounded bg-gray-200 p-2' onClick={initialize}>
+            <span className={'block w-12'}>초기화</span>
           </Button>
         </div>
       </div>
