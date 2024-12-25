@@ -1,7 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { modalState, pawState } from '../_lib/recoil/atom';
 import Image from 'next/image';
 import {
   DialogClose,
@@ -11,9 +9,10 @@ import {
   DialogTitle,
 } from '@/shadcn/components/Dialog';
 import { Button } from '@/shadcn/components/Button';
+import { usePawStore } from '../_lib/stores';
 
 export default function Modal(props: any) {
-  const paw = useRecoilValue(pawState);
+  const paw = usePawStore((state) => state.paw);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

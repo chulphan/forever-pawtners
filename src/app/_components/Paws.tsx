@@ -3,17 +3,11 @@ import React, { useRef } from 'react';
 import Image from 'next/image';
 import { Paw, ResponseBodyType } from '../_types';
 import Modal from './Modal';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
-import { modalState, pawQueryState, pawState } from '../_lib/recoil/atom';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 import { Dialog, DialogTrigger } from '@/shadcn/components/Dialog';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { usePawQueryStore, usePawStore } from '../_lib/stores';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -32,10 +26,10 @@ export default function Paws({
   pageNoParam: number;
   totalCountParam: number;
 }) {
-  const pawQuery = useRecoilValue(pawQueryState);
-  const selectedPaw = useRecoilValue(pawState);
-  const setSelectedPaw = useSetRecoilState(pawState);
-  const resetPawState = useResetRecoilState(pawState);
+  const pawQuery = usePawQueryStore((state) => state.query);
+  const selectedPaw = usePawStore((state) => state.paw);
+  const setSelectedPaw = usePawStore((state) => state.setPaw);
+  const resetPawState = usePawStore((state) => state.reset);
   const loadMoreRef = useRef<HTMLLIElement>(null);
 
   const {

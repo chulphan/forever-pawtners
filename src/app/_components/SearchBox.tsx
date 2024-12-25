@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { ANIMAL_KIND_CODE, City, PawQuery, SearchState } from '../_types';
-import { useSetRecoilState } from 'recoil';
-import { pawQueryState } from '../_lib/recoil/atom';
 import Select from './Select';
 import { getBreed } from '../_lib/api';
 import useFullCities from '../_lib/hooks/useFullCities';
@@ -13,6 +11,7 @@ import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { Button } from '@/shadcn/components/Button';
 import { useQuery } from '@tanstack/react-query';
+import { usePawQueryStore } from '../_lib/stores';
 
 type ValuePiece = Date | null | undefined;
 
@@ -69,7 +68,7 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
     undefined,
   ]);
   const [searchState, setSearchState] = useState<SearchState>({});
-  const setPawQuery = useSetRecoilState(pawQueryState);
+  const setPawQuery = usePawQueryStore((state) => state.setQuery);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const fullCities = useFullCities(searchState.upr_cd);
 

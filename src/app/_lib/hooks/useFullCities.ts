@@ -1,13 +1,13 @@
-import { useRecoilState } from "recoil";
-import { fullCitiesState } from "../recoil/atom";
-import { useEffect } from "react";
-import { getFullCities } from "../api";
+import { useEffect } from 'react';
+import { getFullCities } from '../api';
+import { useFullCityStore } from '../stores';
 
 export default function useFullCities(cityCode?: string) {
-  const [fullCities, setFullCities] = useRecoilState(fullCitiesState);
+  const fullCities = useFullCityStore((state) => state.fullCities);
+  const setFullCities = useFullCityStore((state) => state.setFullCities);
 
   useEffect(() => {
-    if (!cityCode || cityCode === "" || fullCities[cityCode]) {
+    if (!cityCode || cityCode === '' || fullCities[cityCode]) {
       return;
     }
 
@@ -15,10 +15,7 @@ export default function useFullCities(cityCode?: string) {
       try {
         const _fullCities = await getFullCities(cityCode);
 
-        setFullCities((prevState) => ({
-          ...prevState,
-          [cityCode]: _fullCities,
-        }));
+        setFullCities(cityCode, _fullCities);
       } catch (e: any) {
         alert(e.message);
       }
