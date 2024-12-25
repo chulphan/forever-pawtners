@@ -145,9 +145,12 @@ export default function Paws({
           className={
             'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
           }>
-          {pawListItem.map((paw) => (
-            <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
-              <DialogTrigger asChild onClick={() => onPawClick(paw)}>
+          <Dialog onOpenChange={onOpenChange}>
+            {pawListItem.map((paw) => (
+              <DialogTrigger
+                key={paw.desertionNo}
+                asChild
+                onClick={() => onPawClick(paw)}>
                 <li
                   key={paw.desertionNo}
                   className={
@@ -189,9 +192,9 @@ export default function Paws({
                   </div>
                 </li>
               </DialogTrigger>
-              {paw.desertionNo === selectedPaw?.desertionNo && <Modal />}
-            </Dialog>
-          ))}
+            ))}
+            {selectedPaw && <Modal />}
+          </Dialog>
           <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
         </ul>
       );
