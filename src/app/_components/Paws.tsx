@@ -1,18 +1,24 @@
-"use client";
-import React, { useRef } from "react";
-import Image from "next/image";
-import { Paw, ResponseBodyType } from "../_types";
-import Modal from "./Modal";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { modalState, pawQueryState, pawState } from "../_lib/recoil/atom";
-import useIntersectionObserver from "../_lib/hooks/useIntersectionObserver";
-import { getPaws } from "../_lib/api";
-import { useInfiniteQuery } from "react-query";
+'use client';
+import React, { useRef } from 'react';
+import Image from 'next/image';
+import { Paw, ResponseBodyType } from '../_types';
+import Modal from './Modal';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
+import { modalState, pawQueryState, pawState } from '../_lib/recoil/atom';
+import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
+import { getPaws } from '../_lib/api';
+import { useInfiniteQuery } from 'react-query';
+import { Dialog, DialogTrigger } from '@/shadcn/components/Dialog';
 
 const labelColorVariants = {
-  protect: "bg-protect",
-  end: "bg-end",
-  notice: "bg-notice",
+  protect: 'bg-protect',
+  end: 'bg-end',
+  notice: 'bg-notice',
 };
 
 export default function Paws({
@@ -27,8 +33,9 @@ export default function Paws({
   totalCountParam: number;
 }) {
   const pawQuery = useRecoilValue(pawQueryState);
+  const selectedPaw = useRecoilValue(pawState);
   const setSelectedPaw = useSetRecoilState(pawState);
-  const [isPawModalOpen, setIsPawModalOpen] = useRecoilState(modalState);
+  const resetPawState = useResetRecoilState(pawState);
   const loadMoreRef = useRef<HTMLLIElement>(null);
 
   const {
@@ -37,7 +44,7 @@ export default function Paws({
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
   } = useInfiniteQuery<ResponseBodyType<Paw>>(
-    ["pawList", pawQuery],
+    ['pawList', pawQuery],
     async ({ pageParam }) => {
       return await getPaws({
         ...pawQuery,
@@ -49,10 +56,10 @@ export default function Paws({
         const totalPage =
           (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
             ? Math.floor(
-                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48),
+                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
               )
             : Math.floor(
-                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48),
+                (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
               ) + 1;
 
         const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
@@ -85,7 +92,7 @@ export default function Paws({
       refetchOnWindowFocus: false,
       // staleTime 이 있으니까... 찾기 버튼이 동작하지 않는다ㅠㅠ
       cacheTime: 3600,
-    },
+    }
   );
 
   const pawListItem = data?.pages
@@ -106,24 +113,29 @@ export default function Paws({
   });
 
   const onPawClick = (paw: Paw) => {
-    setIsPawModalOpen(true);
     setSelectedPaw(paw);
   };
 
   const getColorBy = (processState: string) => {
-    if (processState.includes("종료")) {
+    if (processState.includes('종료')) {
       return labelColorVariants.end;
     }
 
-    if (processState.includes("보호")) {
+    if (processState.includes('보호')) {
       return labelColorVariants.protect;
     }
 
-    if (processState.includes("공고")) {
+    if (processState.includes('공고')) {
       return labelColorVariants.notice;
     }
 
-    return "";
+    return '';
+  };
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      resetPawState();
+    }
   };
 
   const renderPawsConditionally = () => {
@@ -131,76 +143,68 @@ export default function Paws({
       return (
         <ul
           className={
-            "grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full"
-          }
-        >
+            'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
+          }>
           {pawListItem.map((paw) => (
-            <li
-              key={paw.desertionNo}
-              className={
-                "flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer"
-              }
-              onClick={() => onPawClick(paw)}
-            >
-              <div
-                className={`flex justify-between font-bold text-md ${getColorBy(
-                  paw.processState,
-                )} text-white p-2`}
-              >
-                <span>
-                  {paw.kindCd} / {paw.processState}
-                </span>
-                <span className={"font-bold text-md"}>
-                  {paw.sexCd === "F" ? "♀" : "♂"}
-                </span>
-              </div>
+            <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
+              <DialogTrigger asChild onClick={() => onPawClick(paw)}>
+                <li
+                  key={paw.desertionNo}
+                  className={
+                    'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
+                  }>
+                  <div
+                    className={`flex justify-between font-bold text-md ${getColorBy(
+                      paw.processState
+                    )} text-white p-2`}>
+                    <span>
+                      {paw.kindCd} / {paw.processState}
+                    </span>
+                    <span className={'font-bold text-md'}>
+                      {paw.sexCd === 'F' ? '♀' : '♂'}
+                    </span>
+                  </div>
 
-              <div
-                className={"h-[200px] rounded"}
-                style={{ position: "relative" }}
-              >
-                <Image
-                  src={paw.popfile}
-                  alt={`${paw.kindCd} 이미지`}
-                  className={"w-full h-full rounded"}
-                  fill
-                  priority
-                  sizes={
-                    "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  }
-                />
-              </div>
-              <div className={"flex flex-col gap-2 font-normal text-md"}>
-                <p>
-                  {paw.age} / {paw.weight}
-                </p>
-                <p>
-                  {paw.orgNm} {paw.careNm}
-                </p>
-              </div>
-            </li>
+                  <div
+                    className={'h-[200px] rounded'}
+                    style={{ position: 'relative' }}>
+                    <Image
+                      src={paw.popfile}
+                      alt={`${paw.kindCd} 이미지`}
+                      className={'w-full h-full rounded'}
+                      fill
+                      priority
+                      sizes={
+                        '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                      }
+                    />
+                  </div>
+                  <div className={'flex flex-col gap-2 font-normal text-md'}>
+                    <p>
+                      {paw.age} / {paw.weight}
+                    </p>
+                    <p>
+                      {paw.orgNm} {paw.careNm}
+                    </p>
+                  </div>
+                </li>
+              </DialogTrigger>
+              {paw.desertionNo === selectedPaw?.desertionNo && <Modal />}
+            </Dialog>
           ))}
-          <li
-            ref={loadMoreRef}
-            className={!hasPawsNextPage ? "hidden" : ""}
-          ></li>
+          <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
         </ul>
       );
     }
 
     return (
-      <div className={"flex justify-center items-center w-full min-h-[300px]"}>
-        <span className={"font-bold text-5xl"}>
+      <div className={'flex justify-center items-center w-full min-h-[300px]'}>
+        <span className={'font-bold text-5xl'}>
           찾으시는 유기동물이 없어요ㅠㅠ
         </span>
       </div>
     );
   };
 
-  return (
-    <>
-      {renderPawsConditionally()}
-      {isPawModalOpen && <Modal />}
-    </>
-  );
+  return <>{renderPawsConditionally()}</>;
 }
