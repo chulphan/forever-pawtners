@@ -12,6 +12,7 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { Button } from '@/shadcn/components/Button';
+import { useQuery } from '@tanstack/react-query';
 
 type ValuePiece = Date | null | undefined;
 
@@ -72,16 +73,14 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
   const fullCities = useFullCities(searchState.upr_cd);
 
-  const { data: breeds, isLoading: isFetchBreedLoading } = useQuery(
-    ['breeds', searchState.upkind],
-    () => getBreed(searchState.upkind),
-    {
-      enabled: !!searchState.upkind,
-      refetchOnWindowFocus: false,
-      retry: false,
-      staleTime: 60 * 1000,
-    }
-  );
+  const { data: breeds, isLoading: isFetchBreedLoading } = useQuery({
+    queryKey: ['breeds', searchState.upkind],
+    queryFn: () => getBreed(searchState.upkind),
+    enabled: !!searchState.upkind,
+    refetchOnWindowFocus: false,
+    retry: false,
+    staleTime: 60 * 1000,
+  });
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
