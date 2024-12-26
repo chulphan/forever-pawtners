@@ -1,4 +1,4 @@
-import { FullCity, Paw } from '@/app/_types';
+import { FullCity, Paw, ResponseBodyType } from '@/app/_types';
 import { create } from 'zustand';
 
 interface PawState {
@@ -29,24 +29,21 @@ const useFullCityStore = create<FullCityState>((set) => ({
     })),
 }));
 
-type PawQuery = {
-  pageNo: number;
-  numOfRows: number;
-  totalCount: number;
-};
-
 interface PawQueryState {
-  query: PawQuery;
-  setQuery: (query: PawQuery) => void;
+  query: ResponseBodyType<Paw>;
+  setQuery: (query: ResponseBodyType<Paw>) => void;
 }
 
 const usePawQueryStore = create<PawQueryState>((set) => ({
   query: {
+    items: {
+      item: [],
+    },
     pageNo: 1,
     numOfRows: 48,
     totalCount: 0,
   },
-  setQuery: (query: PawQuery) => set(() => ({ query })),
+  setQuery: (query: ResponseBodyType<Paw>) => set(() => ({ query })),
 }));
 
-export { usePawStore, useFullCityStore, usePawQueryStore };
+export { type PawQueryState, usePawStore, useFullCityStore, usePawQueryStore };

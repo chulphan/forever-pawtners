@@ -37,24 +37,26 @@ export default function Paws({
     isFetching: isFetchingPaws,
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
-  } = useInfiniteQuery<ResponseBodyType<Paw>>({
+  } = useInfiniteQuery({
     queryKey: ['pawList', pawQuery],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam }: { pageParam: ResponseBodyType<Paw> }) => {
+      console.log('pageParam ', pageParam);
+      const { numOfRows, pageNo, totalCount } = pageParam;
       return await getPaws({
         ...pawQuery,
-        ...pageParam,
+        numOfRows,
+        pageNo,
+        totalCount,
       });
     },
-    initialPageParam: [
-      {
-        items: {
-          item: pawsParam,
-        },
-        numOfRows: numOfRowsParam,
-        pageNo: pageNoParam,
-        totalCount: totalCountParam,
+    initialPageParam: {
+      items: {
+        item: pawsParam,
       },
-    ],
+      numOfRows: numOfRowsParam,
+      pageNo: pageNoParam,
+      totalCount: totalCountParam,
+    },
     getNextPageParam: (lastPage) => {
       const totalPage =
         (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)

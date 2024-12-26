@@ -11,9 +11,9 @@ export type ResponseItemType<T> = {
 
 export type ResponseBodyType<T> = {
   items: ResponseItemType<T>;
-  numOfRows?: number;
-  pageNo?: number;
-  totalCount?: number;
+  numOfRows: number;
+  pageNo: number;
+  totalCount: number;
 };
 
 export type ResponseType<T> = {
@@ -38,7 +38,7 @@ export type PawQuery = {
   totalCount: number;
 };
 
-export type SearchState = Omit<PawQuery, "pageNo" | "numOfRows" | "totalCount">;
+export type SearchState = Omit<PawQuery, 'pageNo' | 'numOfRows' | 'totalCount'>;
 
 export type City = {
   orgCd: string;
@@ -79,9 +79,9 @@ export type Paw = {
   officetel: string;
 };
 
-export const ANIMAL_KIND_DOG = "417000" as const;
-export const ANIMAL_KIND_CAT = "422400" as const;
-export const ANIMAL_KIND_OTHERS = "429900" as const;
+export const ANIMAL_KIND_DOG = '417000' as const;
+export const ANIMAL_KIND_CAT = '422400' as const;
+export const ANIMAL_KIND_OTHERS = '429900' as const;
 
 export type ANIMAL_KIND_CODE =
   | typeof ANIMAL_KIND_DOG
