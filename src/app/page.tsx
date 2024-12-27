@@ -1,7 +1,7 @@
-import { Suspense } from "react";
-import Paws from "./_components/Paws";
-import SearchBox from "./_components/SearchBox";
-import { getCities, getPaws } from "./_lib/api";
+import { Suspense } from 'react';
+import Paws from './_components/Paws';
+import SearchBox from './_components/SearchBox';
+import { getCities, getPaws } from './_lib/api';
 
 export default async function Home() {
   const cities = (await getCities()) ?? [];
@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <main className="flex min-h-screen flex-col items-center p-6 gap-4">
+      <main className='flex min-h-screen flex-col items-center p-6 gap-4'>
         <SearchBox citiesParam={cities} />
         <Paws
           pawsParam={paws}

@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { Paw, ResponseBodyType } from '../_types';
 import Modal from './Modal';
@@ -37,6 +37,7 @@ export default function Paws({
     isFetching: isFetchingPaws,
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
+    dataUpdatedAt,
   } = useInfiniteQuery({
     queryKey: ['pawList', pawQuery],
     queryFn: async ({ pageParam }: { pageParam: ResponseBodyType<Paw> }) => {
@@ -92,10 +93,14 @@ export default function Paws({
     },
   });
 
-  const pawListItem = data?.pages
-    .map((page) => page.items)
-    .flatMap((item) => item.item)
-    .filter((item) => item);
+  const pawListItem = useMemo(
+    () =>
+      data?.pages
+        .map((page) => page.items)
+        .flatMap((item) => item.item)
+        .filter((item) => item),
+    [dataUpdatedAt]
+  );
 
   useIntersectionObserver({
     // root: rootRef,

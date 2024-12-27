@@ -36,9 +36,15 @@ export type PawQuery = {
   pageNo: number;
   numOfRows: number;
   totalCount: number;
+  items: {
+    item: Paw[];
+  };
 };
 
-export type SearchState = Omit<PawQuery, 'pageNo' | 'numOfRows' | 'totalCount'>;
+export type SearchState = Omit<
+  PawQuery,
+  'pageNo' | 'numOfRows' | 'totalCount' | 'items'
+>;
 
 export type City = {
   orgCd: string;

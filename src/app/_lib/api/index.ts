@@ -84,7 +84,7 @@ export const getShelters = async (
 };
 
 export const getPaws = async (
-  pawQuery: PawQuery
+  pawQuery: Omit<PawQuery, 'items'>
 ): Promise<ResponseBodyType<Paw>> => {
   const response = (await (
     await fetch(baseUrl, {
