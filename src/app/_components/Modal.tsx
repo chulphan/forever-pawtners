@@ -17,10 +17,7 @@ export default function Modal(props: any) {
 
   useEffect(() => {
     // TODO: custom hook 으로 만들기
-    if (paw && window.kakao && mapContainerRef.current) {
-      console.log('paw... ', paw);
-      console.log('window.kakao ', window.kakao);
-      console.log('mapContainerRef ', mapContainerRef);
+    if (window.kakao && mapContainerRef.current) {
       window.kakao.maps.load(() => {
         const markerPosition = new window.kakao.maps.LatLng(
           33.450701,
@@ -57,10 +54,10 @@ export default function Modal(props: any) {
         );
       });
     }
-  }, [paw]);
+  }, [paw, mapContainerRef]);
 
   return (
-    <DialogContent className='xm:max-w-md overflow-y-auto max-h-[550px] bg-white'>
+    <>
       <div className='flex justify-center'>
         <div className='flex flex-col w-full mt-3 text-left overflow-y-auto'>
           <DialogTitle className='text-base font-semibold leading-6 text-gray-900'>
@@ -158,6 +155,6 @@ export default function Modal(props: any) {
           </Button>
         </DialogClose>
       </DialogFooter>
-    </DialogContent>
+    </>
   );
 }

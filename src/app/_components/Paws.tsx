@@ -5,7 +5,11 @@ import { Paw, ResponseBodyType } from '../_types';
 import Modal from './Modal';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
-import { Dialog, DialogTrigger } from '@/shadcn/components/Dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from '@/shadcn/components/Dialog';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { usePawQueryStore, usePawStore } from '../_lib/stores';
 
@@ -147,14 +151,10 @@ export default function Paws({
           className={
             'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
           }>
-          <Dialog onOpenChange={onOpenChange}>
-            {pawListItem.map((paw) => (
-              <DialogTrigger
-                key={paw.desertionNo}
-                asChild
-                onClick={() => onPawClick(paw)}>
+          {pawListItem.map((paw) => (
+            <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
+              <DialogTrigger asChild onClick={() => onPawClick(paw)}>
                 <li
-                  key={paw.desertionNo}
                   className={
                     'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
                   }>
@@ -194,9 +194,11 @@ export default function Paws({
                   </div>
                 </li>
               </DialogTrigger>
-            ))}
-            {selectedPaw && <Modal />}
-          </Dialog>
+              <DialogContent className='xm:max-w-md overflow-y-auto max-h-[550px] bg-white'>
+                {selectedPaw && <Modal />}
+              </DialogContent>
+            </Dialog>
+          ))}
           <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
         </ul>
       );
