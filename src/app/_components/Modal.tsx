@@ -2,79 +2,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
+  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
+  DialogTrigger,
 } from '@/shadcn/components/Dialog';
 import { Button } from '@/shadcn/components/Button';
 import { usePawStore } from '../_lib/stores';
+import SearchDialogContent from './SearchDialogContent';
 
 export default function Modal(props: any) {
   const paw = usePawStore((state) => state.paw);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // TODO: custom hook 으로 만들기
-    if (window.kakao && mapContainerRef.current) {
-      window.kakao.maps.load(() => {
-        const markerPosition = new window.kakao.maps.LatLng(
-          33.450701,
-          126.570667
-        );
-        const map = new window.kakao.maps.Map(
-          mapContainerRef.current as HTMLDivElement,
-          {
-            center: markerPosition,
-            level: 3,
-          }
-        );
-
-        const geocoder = new window.kakao.maps.services.Geocoder();
-
-        geocoder.addressSearch(
-          `${paw?.careAddr}`,
-          (result: any, status: any) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const coords = new window.kakao.maps.LatLng(
-                +result[0].y,
-                +result[0].x
-              );
-
-              const marker = new window.kakao.maps.Marker({
-                map,
-                position: coords,
-              });
-
-              map.setCenter(coords);
-              marker.setMap(map);
-            }
-          }
-        );
-
-        geocoder.addressSearch(
-          paw?.happenPlace!,
-          (result: any, status: any) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const coords = new window.kakao.maps.LatLng(
-                +result[0].y,
-                +result[0].x
-              );
-
-              const marker = new window.kakao.maps.Marker({
-                map,
-                position: coords,
-              });
-
-              map.setCenter(coords);
-              marker.setMap(map);
-            }
-          }
-        );
-      });
-    }
-  }, [paw, mapContainerRef]);
 
   const convertDate = (dateStr: string) => {
     const years = dateStr.slice(0, 4);
@@ -116,6 +57,17 @@ export default function Modal(props: any) {
               <span>
                 {paw?.orgNm} {paw?.happenPlace}
               </span>
+              <Dialog>
+                <DialogTrigger className='ml-4'>지도보기</DialogTrigger>
+                <DialogContent className='bg-white'>
+                  <DialogTitle>
+                    {paw?.orgNm} {paw?.happenPlace}
+                  </DialogTitle>
+                  <SearchDialogContent
+                    address={`${paw?.orgNm} ${paw?.happenPlace!}`}
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
           <div className='mt-2'>
@@ -164,6 +116,13 @@ export default function Modal(props: any) {
           <div className='mt-2'>
             <span className='font-bold'>보호 장소</span>:
             <span>{paw?.careAddr}</span>
+            <Dialog>
+              <DialogTrigger className='ml-4'>지도보기</DialogTrigger>
+              <DialogContent className='bg-white'>
+                <DialogTitle>{paw?.careAddr}</DialogTitle>
+                <SearchDialogContent address={paw?.careAddr!} />
+              </DialogContent>
+            </Dialog>
           </div>
           <div className='flex gap-4 mt-2'>
             <div>
@@ -177,7 +136,6 @@ export default function Modal(props: any) {
           </div>
         </div>
       </div>
-      <div ref={mapContainerRef} className={'w-full h-[400px]'} />
       <DialogFooter>
         <DialogClose asChild>
           <Button
