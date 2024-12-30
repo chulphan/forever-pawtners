@@ -129,7 +129,8 @@ export default function Modal(props: any) {
             <span>{convertDate(paw?.noticeEdt!)}</span>
           </div>
           <div className='flex mt-2'>
-            <span className='font-bold'>특징</span>:<p>{paw?.specialMark}</p>
+            <span className='font-bold'>특징: </span>
+            <p>{paw?.specialMark}</p>
           </div>
           <div className='flex gap-4 mt-2'></div>
           <div className='mt-2'>
