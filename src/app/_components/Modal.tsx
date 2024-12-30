@@ -56,12 +56,23 @@ export default function Modal(props: any) {
     }
   }, [paw, mapContainerRef]);
 
+  const convertDate = (dateStr: string) => {
+    const years = dateStr.slice(0, 4);
+    const month = dateStr.slice(4, 6);
+    const days = dateStr.slice(6);
+
+    return `${years}.${month}.${days}`;
+  };
+
   return (
     <>
       <div className='flex justify-center'>
         <div className='flex flex-col w-full mt-3 text-left overflow-y-auto'>
           <DialogTitle className='text-base font-semibold leading-6 text-gray-900'>
-            {paw?.kindCd} {paw?.sexCd === 'F' ? '♀' : '♂'}
+            {paw?.kindCd}{' '}
+            <span className='font-bold'>
+              {paw?.sexCd === 'F' ? '♀' : '♂'}
+            </span>
           </DialogTitle>
           <DialogDescription />
           <div className='mt-2 relative h-[400px] xl:h-[500px]'>
@@ -111,11 +122,11 @@ export default function Modal(props: any) {
           </div>
           <div className='mt-2'>
             <span className='font-bold'>공고 시작일</span>:
-            <span>{paw?.noticeSdt}</span>
+            <span>{convertDate(paw?.noticeSdt!)}</span>
           </div>
           <div className='mt-2'>
             <span className='font-bold'>공고 종료일</span>:
-            <span>{paw?.noticeEdt}</span>
+            <span>{convertDate(paw?.noticeEdt!)}</span>
           </div>
           <div className='flex mt-2'>
             <span className='font-bold'>특징</span>:<p>{paw?.specialMark}</p>
