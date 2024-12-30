@@ -52,6 +52,26 @@ export default function Modal(props: any) {
             }
           }
         );
+
+        geocoder.addressSearch(
+          paw?.happenPlace!,
+          (result: any, status: any) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const coords = new window.kakao.maps.LatLng(
+                +result[0].y,
+                +result[0].x
+              );
+
+              const marker = new window.kakao.maps.Marker({
+                map,
+                position: coords,
+              });
+
+              map.setCenter(coords);
+              marker.setMap(map);
+            }
+          }
+        );
       });
     }
   }, [paw, mapContainerRef]);
