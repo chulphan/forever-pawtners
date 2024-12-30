@@ -194,7 +194,7 @@ export default function Paws({
                   </div>
                 </li>
               </DialogTrigger>
-              <DialogContent className='xm:max-w-md overflow-y-auto max-h-[550px] bg-white'>
+              <DialogContent className='sm:max-w-lg overflow-y-auto max-h-[550px] bg-white'>
                 {selectedPaw && <Modal />}
               </DialogContent>
             </Dialog>
