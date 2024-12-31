@@ -43,14 +43,12 @@ function MapContainer({ address }: MapDialogProps) {
             map.setCenter(coords);
             marker.setMap(map);
           } else {
-            mapContainerRef.current?.setHTMLUnsafe(
-              `
+            mapContainerRef.current!.innerHTML = `
                   <div class="flex flex-col h-full justify-center items-center">
                     <h2 class="font-bold">주소가 올바르지 않습니다</h2>
                     <h2 class="font-bold">보호소로 연락해주세요</h2>
                   </div>
-                `
-            );
+                `;
           }
         });
       });
