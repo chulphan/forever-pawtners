@@ -1,18 +1,15 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import {
-  Dialog,
   DialogClose,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
-  DialogTrigger,
 } from '@/shadcn/components/Dialog';
 import { Button } from '@/shadcn/components/Button';
 import { usePawStore } from '../_lib/stores';
-import SearchDialogContent from './SearchDialogContent';
+import MapDialog from './MapDialog';
 
 export default function Modal(props: any) {
   const paw = usePawStore((state) => state.paw);
@@ -57,9 +54,7 @@ export default function Modal(props: any) {
               <span>
                 {paw?.orgNm} {paw?.happenPlace}
               </span>
-              <SearchDialogContent
-                address={`${paw?.orgNm} ${paw?.happenPlace}`}
-              />
+              <MapDialog address={`${paw?.orgNm} ${paw?.happenPlace}`} />
             </div>
           </div>
           <div className='mt-2'>
@@ -108,7 +103,7 @@ export default function Modal(props: any) {
           <div className='mt-2'>
             <span className='font-bold'>보호 장소</span>:
             <span>{paw?.careAddr}</span>
-            <SearchDialogContent address={paw?.careAddr!} />
+            <MapDialog address={paw?.careAddr!} />
           </div>
           <div className='flex gap-4 mt-2'>
             <div>
