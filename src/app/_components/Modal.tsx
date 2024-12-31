@@ -57,17 +57,9 @@ export default function Modal(props: any) {
               <span>
                 {paw?.orgNm} {paw?.happenPlace}
               </span>
-              <Dialog>
-                <DialogTrigger className='ml-4'>지도보기</DialogTrigger>
-                <DialogContent className='bg-white'>
-                  <DialogTitle>
-                    {paw?.orgNm} {paw?.happenPlace}
-                  </DialogTitle>
-                  <SearchDialogContent
-                    address={`${paw?.orgNm} ${paw?.happenPlace!}`}
-                  />
-                </DialogContent>
-              </Dialog>
+              <SearchDialogContent
+                address={`${paw?.orgNm} ${paw?.happenPlace}`}
+              />
             </div>
           </div>
           <div className='mt-2'>
@@ -116,13 +108,7 @@ export default function Modal(props: any) {
           <div className='mt-2'>
             <span className='font-bold'>보호 장소</span>:
             <span>{paw?.careAddr}</span>
-            <Dialog>
-              <DialogTrigger className='ml-4'>지도보기</DialogTrigger>
-              <DialogContent className='bg-white'>
-                <DialogTitle>{paw?.careAddr}</DialogTitle>
-                <SearchDialogContent address={paw?.careAddr!} />
-              </DialogContent>
-            </Dialog>
+            <SearchDialogContent address={paw?.careAddr!} />
           </div>
           <div className='flex gap-4 mt-2'>
             <div>
