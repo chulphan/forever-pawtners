@@ -32,10 +32,11 @@ export const getCities = async (): Promise<City[]> => {
       })
     ).json()) as ResponseBodyType<City>;
 
+    console.log('response ', response);
+
     return response.items.item;
   } catch (e) {
     console.log('getCities ', e);
-  } finally {
     return [];
   }
 };
