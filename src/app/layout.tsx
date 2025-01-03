@@ -1,11 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Noto_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
-
-const notoSans = Noto_Sans({ weight: '400', preload: false });
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
