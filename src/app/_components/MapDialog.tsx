@@ -61,7 +61,9 @@ function MapContainer({ address }: MapDialogProps) {
 export default function MapDialog({ address }: MapDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger className='ml-4'>지도보기</DialogTrigger>
+      <DialogTrigger className='ml-4 bg-protect text-white px-2 py-1'>
+        지도보기
+      </DialogTrigger>
       <DialogContent className='bg-white'>
         <DialogDescription />
         <DialogTitle>{address}</DialogTitle>
