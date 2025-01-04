@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shadcn/components/Select';
+import { Loader } from 'lucide-react';
 
 type ValuePiece = Date | null | undefined;
 
@@ -167,8 +168,10 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
         <div className={'flex flex-row gap-4'}>
           <Select
             name='upr_cd'
+            value={searchState.upr_cd}
             onValueChange={(value) => {
               onSelectChange('upr_cd', value);
+              console.log('???');
               onSelectChange('org_cd', '');
             }}>
             <SelectTrigger className='w-[180px] border-2 border-[#03A678] rounded'>
@@ -222,25 +225,31 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             </Button>
           ))}
         </div>
-        {breeds?.items?.item && breeds?.items?.item?.length > 0 && (
-          <div>
-            <Select
-              name='kind'
-              onValueChange={(value) => onSelectChange('kind', value)}>
-              <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
-                <SelectValue placeholder='전체' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {breeds?.items?.item?.map((breed) => (
-                    <SelectItem key={breed.kindCd} value={breed.kindCd}>
-                      {breed.knm}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+        {isFetchBreedLoading ? (
+          <Loader className='animate-spin' />
+        ) : (
+          breeds?.items?.item &&
+          breeds?.items?.item?.length > 0 && (
+            <div>
+              <Select
+                name='kind'
+                value={searchState.kind}
+                onValueChange={(value) => onSelectChange('kind', value)}>
+                <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
+                  <SelectValue placeholder='전체' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {breeds?.items?.item?.map((breed) => (
+                      <SelectItem key={breed.kindCd} value={breed.kindCd}>
+                        {breed.knm}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          )
         )}
         <div className={'flex gap-4'}>
           <Select

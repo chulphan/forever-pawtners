@@ -12,6 +12,7 @@ import {
 } from '@/shadcn/components/Dialog';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { usePawQueryStore, usePawStore } from '../_lib/stores';
+import { Loader } from 'lucide-react';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -147,60 +148,71 @@ export default function Paws({
   const renderPawsConditionally = () => {
     if (pawListItem && pawListItem.length > 0) {
       return (
-        <ul
-          className={
-            'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
-          }>
-          {pawListItem.map((paw) => (
-            <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
-              <DialogTrigger asChild onClick={() => onPawClick(paw)}>
-                <li
-                  className={
-                    'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
-                  }>
-                  <div
-                    className={`flex justify-between font-bold text-md ${getColorBy(
-                      paw.processState
-                    )} text-white p-2`}>
-                    <span>
-                      {paw.kindCd} / {paw.processState}
-                    </span>
-                    <span className={'font-bold text-md'}>
-                      {paw.sexCd === 'F' ? '♀' : '♂'}
-                    </span>
-                  </div>
+        <>
+          <ul
+            className={
+              'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
+            }>
+            {pawListItem.map((paw) => (
+              <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
+                <DialogTrigger asChild onClick={() => onPawClick(paw)}>
+                  <li
+                    className={
+                      'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
+                    }>
+                    <div
+                      className={`flex justify-between font-bold text-md ${getColorBy(
+                        paw.processState
+                      )} text-white p-2`}>
+                      <span>
+                        {paw.kindCd} / {paw.processState}
+                      </span>
+                      <span className={'font-bold text-md'}>
+                        {paw.sexCd === 'F' ? '♀' : '♂'}
+                      </span>
+                    </div>
 
-                  <div
-                    className={'h-[200px] rounded'}
-                    style={{ position: 'relative' }}>
-                    <Image
-                      src={paw.popfile}
-                      alt={`${paw.kindCd} 이미지`}
-                      className={'w-full h-full rounded'}
-                      fill
-                      priority
-                      sizes={
-                        '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                      }
-                    />
-                  </div>
-                  <div className={'flex flex-col gap-2 font-normal text-md'}>
-                    <p>
-                      {paw.age} / {paw.weight}
-                    </p>
-                    <p>
-                      {paw.orgNm} {paw.careNm}
-                    </p>
-                  </div>
-                </li>
-              </DialogTrigger>
-              <DialogContent className='sm:max-w-[70%] xl:max-w-[60%] overflow-y-auto max-h-[550px] bg-white'>
-                {selectedPaw && <Modal />}
-              </DialogContent>
-            </Dialog>
-          ))}
-          <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
-        </ul>
+                    <div
+                      className={'h-[200px] rounded'}
+                      style={{ position: 'relative' }}>
+                      <Image
+                        src={paw.popfile}
+                        alt={`${paw.kindCd} 이미지`}
+                        className={'w-full h-full rounded'}
+                        fill
+                        priority
+                        sizes={
+                          '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                        }
+                      />
+                    </div>
+                    <div className={'flex flex-col gap-2 font-normal text-md'}>
+                      <p>
+                        {paw.age} / {paw.weight}
+                      </p>
+                      <p>
+                        {paw.orgNm} {paw.careNm}
+                      </p>
+                    </div>
+                  </li>
+                </DialogTrigger>
+                <DialogContent className='sm:max-w-[70%] xl:max-w-[60%] overflow-y-auto max-h-[550px] bg-white'>
+                  {selectedPaw && <Modal />}
+                </DialogContent>
+              </Dialog>
+            ))}
+
+            <li
+              ref={loadMoreRef}
+              className={!hasPawsNextPage ? 'hidden' : ''}
+            />
+          </ul>
+          {isFetchingPaws && (
+            <div className='w-full flex justify-center'>
+              <Loader className='animate-spin' />
+            </div>
+          )}
+        </>
       );
     }
 
