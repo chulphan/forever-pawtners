@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
@@ -35,6 +36,7 @@ export default function RootLayout({
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_KAKAO_APP_KEY}&libraries=services,clusterer&autoload=false`}
         />
       </body>
+      <GoogleAnalytics gaId='G-GY6905JE57' />
     </html>
   );
 }
