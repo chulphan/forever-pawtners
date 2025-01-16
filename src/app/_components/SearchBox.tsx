@@ -171,7 +171,6 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
             value={searchState.upr_cd}
             onValueChange={(value) => {
               onSelectChange('upr_cd', value);
-              console.log('???');
               onSelectChange('org_cd', '');
             }}>
             <SelectTrigger className='w-[180px] border-2 border-[#03A678] rounded'>
