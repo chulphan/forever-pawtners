@@ -244,6 +244,7 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
                     onValueChange={field.onChange}>
                     {ANIMAL_KINDS.map((animalKind) => (
                       <ToggleGroupItem
+                        className='w-14'
                         key={animalKind.upkind}
                         value={animalKind.upkind}>
                         {animalKind.label}
