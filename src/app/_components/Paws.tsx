@@ -13,6 +13,7 @@ import {
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { usePawQueryStore, usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -156,7 +157,10 @@ export default function Paws({
             {pawListItem.map((paw) => (
               <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
                 <DialogTrigger asChild onClick={() => onPawClick(paw)}>
-                  <li
+                  <motion.li
+                    whileHover={{
+                      y: -10,
+                    }}
                     className={
                       'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
                     }>
@@ -194,7 +198,7 @@ export default function Paws({
                         {paw.orgNm} {paw.careNm}
                       </p>
                     </div>
-                  </li>
+                  </motion.li>
                 </DialogTrigger>
                 <DialogContent className='sm:max-w-[70%] xl:max-w-[60%] overflow-y-auto max-h-[550px] bg-white'>
                   {selectedPaw && <Modal />}
