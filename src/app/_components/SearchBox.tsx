@@ -20,9 +20,9 @@ import {
   SelectValue,
 } from '@/shadcn/components/Select';
 import { useForm } from 'react-hook-form';
-import { Loader } from 'lucide-react';
 import { Form, FormField, FormItem } from '@/shadcn/components/Form';
 import { ToggleGroup, ToggleGroupItem } from '@/shadcn/components/ToggleGroup';
+import { AnimatePresence, motion } from 'motion/react';
 
 type ValuePiece = Date | null | undefined;
 
@@ -171,191 +171,203 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
           검색
         </Button>
       </div>
-      <Form {...form}>
-        <form
-          className={`flex flex-col gap-4 w-full transition-opacity ease-out duration-500 overflow-hidden ${
-            isSearchBoxOpen ? 'opacity-100' : 'opacity-0 max-h-0'
-          }`}
-          onSubmit={form.handleSubmit(onSearchBtnClick)}>
-          <div className={'flex flex-row gap-4'}>
-            <FormField
-              control={form.control}
-              name='upr_cd'
-              render={({ field }) => (
-                <FormItem>
-                  <Select
-                    value={field.value ?? ''}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      form.setValue('org_cd', '');
-                    }}>
-                    <SelectTrigger className='w-[180px] border-2 border-[#03A678] rounded'>
-                      <SelectValue placeholder='광역시/도' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {citiesParam.map((city) => (
-                          <SelectItem key={city.orgCd} value={city.orgCd}>
-                            {city.orgdownNm}
-                          </SelectItem>
+
+      <AnimatePresence initial={false}>
+        {isSearchBoxOpen ? (
+          <Form {...form}>
+            <motion.form
+              initial={{ opacity: 0, scaleY: 0 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              exit={{ opacity: 0, scaleY: 0 }}
+              key='search-form'
+              className={`flex flex-col gap-4 w-full  overflow-hidden`}
+              onSubmit={form.handleSubmit(onSearchBtnClick)}>
+              <div className={'flex flex-row gap-4'}>
+                <FormField
+                  control={form.control}
+                  name='upr_cd'
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        value={field.value ?? ''}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          form.setValue('org_cd', '');
+                        }}>
+                        <SelectTrigger className='w-[180px] border-2 border-[#03A678] rounded'>
+                          <SelectValue placeholder='광역시/도' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {citiesParam.map((city) => (
+                              <SelectItem key={city.orgCd} value={city.orgCd}>
+                                {city.orgdownNm}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                {upr_cd && fullCities[upr_cd] && (
+                  <FormField
+                    control={form.control}
+                    name='org_cd'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          value={field.value ?? ''}
+                          onValueChange={field.onChange}>
+                          <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
+                            <SelectValue placeholder='시/군/구' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {fullCities[upr_cd].map((city) => (
+                                <SelectItem key={city.orgCd} value={city.orgCd}>
+                                  {city.orgdownNm}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+              <div className={'flex gap-4'}>
+                <FormField
+                  control={form.control}
+                  name='upkind'
+                  render={({ field }) => (
+                    <FormItem>
+                      <ToggleGroup
+                        type='single'
+                        value={field.value ?? ''}
+                        onValueChange={field.onChange}>
+                        {ANIMAL_KINDS.map((animalKind) => (
+                          <ToggleGroupItem
+                            className='w-14'
+                            key={animalKind.upkind}
+                            value={animalKind.upkind}>
+                            {animalKind.label}
+                          </ToggleGroupItem>
                         ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
+                      </ToggleGroup>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {isFetchBreedLoading ? (
+                // <Loader className='animate-spin' />
+                <div className='animate-pulse w-[180px] h-9 bg-gray-400' />
+              ) : (
+                breeds?.items?.item &&
+                breeds?.items?.item?.length > 0 && (
+                  <FormField
+                    control={form.control}
+                    name='kind'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          value={field.value ?? ''}
+                          onValueChange={field.onChange}>
+                          <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
+                            <SelectValue placeholder='전체' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {breeds?.items?.item?.map((breed) => (
+                                <SelectItem
+                                  key={breed.kindCd}
+                                  value={breed.kindCd}>
+                                  {breed.knm}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                )
               )}
-            />
-            {upr_cd && fullCities[upr_cd] && (
-              <FormField
-                control={form.control}
-                name='org_cd'
-                render={({ field }) => (
-                  <FormItem>
+              <div className={'flex gap-4'}>
+                <FormField
+                  control={form.control}
+                  name='state'
+                  render={({ field }) => (
                     <Select
                       value={field.value ?? ''}
                       onValueChange={field.onChange}>
-                      <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
-                        <SelectValue placeholder='시/군/구' />
+                      <SelectTrigger className='border-2 border-[#03A678] rounded w-[100px]'>
+                        <SelectValue placeholder='공고여부' />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {fullCities[upr_cd].map((city) => (
-                            <SelectItem key={city.orgCd} value={city.orgCd}>
-                              {city.orgdownNm}
+                          {STATES.map((state) => (
+                            <SelectItem key={state.state} value={state.state}>
+                              {state.label}
                             </SelectItem>
                           ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                  </FormItem>
-                )}
-              />
-            )}
-          </div>
-          <div className={'flex gap-4'}>
-            <FormField
-              control={form.control}
-              name='upkind'
-              render={({ field }) => (
-                <FormItem>
-                  <ToggleGroup
-                    type='single'
-                    value={field.value ?? ''}
-                    onValueChange={field.onChange}>
-                    {ANIMAL_KINDS.map((animalKind) => (
-                      <ToggleGroupItem
-                        className='w-14'
-                        key={animalKind.upkind}
-                        value={animalKind.upkind}>
-                        {animalKind.label}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-                </FormItem>
-              )}
-            />
-          </div>
-          {isFetchBreedLoading ? (
-            <Loader className='animate-spin' />
-          ) : (
-            breeds?.items?.item &&
-            breeds?.items?.item?.length > 0 && (
-              <FormField
-                control={form.control}
-                name='kind'
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      value={field.value ?? ''}
-                      onValueChange={field.onChange}>
-                      <SelectTrigger className='border-2 border-[#03A678] rounded w-[180px]'>
-                        <SelectValue placeholder='전체' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {breeds?.items?.item?.map((breed) => (
-                            <SelectItem key={breed.kindCd} value={breed.kindCd}>
-                              {breed.knm}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            )
-          )}
-          <div className={'flex gap-4'}>
-            <FormField
-              control={form.control}
-              name='state'
-              render={({ field }) => (
-                <Select
-                  value={field.value ?? ''}
-                  onValueChange={field.onChange}>
-                  <SelectTrigger className='border-2 border-[#03A678] rounded w-[100px]'>
-                    <SelectValue placeholder='공고여부' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {STATES.map((state) => (
-                        <SelectItem key={state.state} value={state.state}>
-                          {state.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='neuter_yn'
-              render={({ field }) => (
-                <FormItem>
-                  <Select
-                    value={field.value ?? ''}
-                    onValueChange={field.onChange}>
-                    <SelectTrigger className='border-2 border-[#03A678] rounded w-[120px]'>
-                      <SelectValue placeholder='중성화여부' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {NEUTERS.map((neuter) => (
-                          <SelectItem key={neuter.state} value={neuter.state}>
-                            {neuter.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={'z-10'}>
-            <DateRangePicker
-              value={dateValue as unknown as null}
-              onChange={onDateValueChange}
-              format='yyyyMMdd'
-            />
-          </div>
-          <div className={'flex gap-4'}>
-            <Button
-              type='submit'
-              className='rounded bg-[#03A678] p-2 text-white'>
-              <span className='block w-12'>찾기</span>
-            </Button>
-            <Button
-              type='reset'
-              className='rounded bg-gray-200 p-2'
-              onClick={initialize}>
-              <span className={'block w-12'}>초기화</span>
-            </Button>
-          </div>
-        </form>
-      </Form>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='neuter_yn'
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        value={field.value ?? ''}
+                        onValueChange={field.onChange}>
+                        <SelectTrigger className='border-2 border-[#03A678] rounded w-[120px]'>
+                          <SelectValue placeholder='중성화여부' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {NEUTERS.map((neuter) => (
+                              <SelectItem
+                                key={neuter.state}
+                                value={neuter.state}>
+                                {neuter.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className={'z-10'}>
+                <DateRangePicker
+                  value={dateValue as unknown as null}
+                  onChange={onDateValueChange}
+                  format='yyyyMMdd'
+                />
+              </div>
+              <div className={'flex gap-4'}>
+                <Button
+                  type='submit'
+                  className='rounded bg-[#03A678] p-2 text-white'>
+                  <span className='block w-12'>찾기</span>
+                </Button>
+                <Button
+                  type='reset'
+                  className='rounded bg-gray-200 p-2'
+                  onClick={initialize}>
+                  <span className={'block w-12'}>초기화</span>
+                </Button>
+              </div>
+            </motion.form>
+          </Form>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }
