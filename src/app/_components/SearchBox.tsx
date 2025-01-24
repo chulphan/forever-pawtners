@@ -97,28 +97,6 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
     staleTime: 60 * 1000,
   });
 
-  const onSelectChange = (name: string, value: string) => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const onAnimalKindChange = async (animalCode: ANIMAL_KIND_CODE) => {
-    try {
-      const nextSearchState = { ...searchState };
-      delete nextSearchState.kind;
-
-      if (animalCode === searchState.upkind) {
-        delete nextSearchState.upkind;
-      } else {
-        nextSearchState.upkind = animalCode;
-      }
-
-      setSearchState(nextSearchState);
-    } catch (e) {}
-  };
-
   const convertDate = (date?: ValuePiece) => {
     if (!date) {
       return;
