@@ -14,6 +14,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { usePawQueryStore, usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -32,8 +33,8 @@ export default function Paws({
   pageNoParam: number;
   totalCountParam: number;
 }) {
+  const router = useRouter();
   const pawQuery = usePawQueryStore((state) => state.query);
-  const selectedPaw = usePawStore((state) => state.paw);
   const setSelectedPaw = usePawStore((state) => state.setPaw);
   const resetPawState = usePawStore((state) => state.reset);
   const loadMoreRef = useRef<HTMLLIElement>(null);
@@ -120,10 +121,6 @@ export default function Paws({
     enabled: !!hasPawsNextPage,
   });
 
-  const onPawClick = (paw: Paw) => {
-    setSelectedPaw(paw);
-  };
-
   const getColorBy = (processState: string) => {
     if (processState.includes('종료')) {
       return labelColorVariants.end;
@@ -140,12 +137,6 @@ export default function Paws({
     return '';
   };
 
-  const onOpenChange = (open: boolean) => {
-    if (!open) {
-      resetPawState();
-    }
-  };
-
   const renderPawsConditionally = () => {
     if (pawListItem && pawListItem.length > 0) {
       return (
@@ -155,55 +146,53 @@ export default function Paws({
               'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
             }>
             {pawListItem.map((paw) => (
-              <Dialog key={paw.desertionNo} onOpenChange={onOpenChange}>
-                <DialogTrigger asChild onClick={() => onPawClick(paw)}>
-                  <motion.li
-                    whileHover={{
-                      y: -10,
-                    }}
-                    className={
-                      'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
-                    }>
-                    <div
-                      className={`flex justify-between font-bold text-md ${getColorBy(
-                        paw.processState
-                      )} text-white p-2`}>
-                      <span>
-                        {paw.kindCd} / {paw.processState}
-                      </span>
-                      <span className={'font-bold text-md'}>
-                        {paw.sexCd === 'F' ? '♀' : '♂'}
-                      </span>
-                    </div>
+              <motion.li
+                key={paw.desertionNo}
+                whileHover={{
+                  y: -10,
+                }}
+                onClick={() => {
+                  setSelectedPaw(paw);
+                  router.push(`/paws/${paw.desertionNo}`);
+                }}
+                className={
+                  'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
+                }>
+                <div
+                  className={`flex justify-between font-bold text-md ${getColorBy(
+                    paw.processState
+                  )} text-white p-2`}>
+                  <span>
+                    {paw.kindCd} / {paw.processState}
+                  </span>
+                  <span className={'font-bold text-md'}>
+                    {paw.sexCd === 'F' ? '♀' : '♂'}
+                  </span>
+                </div>
 
-                    <div
-                      className={'h-[200px] rounded'}
-                      style={{ position: 'relative' }}>
-                      <Image
-                        src={paw.popfile}
-                        alt={`${paw.kindCd} 이미지`}
-                        className={'w-full h-full rounded'}
-                        fill
-                        priority
-                        sizes={
-                          '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                        }
-                      />
-                    </div>
-                    <div className={'flex flex-col gap-2 font-normal text-md'}>
-                      <p>
-                        {paw.age} / {paw.weight}
-                      </p>
-                      <p>
-                        {paw.orgNm} {paw.careNm}
-                      </p>
-                    </div>
-                  </motion.li>
-                </DialogTrigger>
-                <DialogContent className='sm:max-w-[70%] xl:max-w-[60%] overflow-y-auto max-h-[550px] bg-white'>
-                  {selectedPaw && <Modal />}
-                </DialogContent>
-              </Dialog>
+                <div
+                  className={'h-[200px] rounded'}
+                  style={{ position: 'relative' }}>
+                  <Image
+                    src={paw.popfile}
+                    alt={`${paw.kindCd} 이미지`}
+                    className={'w-full h-full rounded'}
+                    fill
+                    priority
+                    sizes={
+                      '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                    }
+                  />
+                </div>
+                <div className={'flex flex-col gap-2 font-normal text-md'}>
+                  <p>
+                    {paw.age} / {paw.weight}
+                  </p>
+                  <p>
+                    {paw.orgNm} {paw.careNm}
+                  </p>
+                </div>
+              </motion.li>
             ))}
 
             <li

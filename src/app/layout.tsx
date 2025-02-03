@@ -25,13 +25,18 @@ declare global {
 
 export default function RootLayout({
   children,
+  pawDialog,
 }: {
   children: React.ReactNode;
+  pawDialog: React.ReactNode;
 }) {
   return (
     <html lang='ko' className={pretendard.variable}>
       <body className={pretendard.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          {children}
+          {pawDialog}
+        </ReactQueryProvider>
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_KAKAO_APP_KEY}&libraries=services,clusterer&autoload=false`}
         />
