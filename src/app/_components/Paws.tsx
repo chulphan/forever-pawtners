@@ -48,7 +48,6 @@ export default function Paws({
   } = useInfiniteQuery({
     queryKey: ['pawList', pawQuery],
     queryFn: async ({ pageParam }: { pageParam: ResponseBodyType<Paw> }) => {
-      console.log('pageParam ', pageParam);
       const { numOfRows, pageNo, totalCount } = pageParam;
       return await getPaws({
         ...pawQuery,

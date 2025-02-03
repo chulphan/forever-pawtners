@@ -19,8 +19,6 @@ export default function Modal() {
   const paw = usePawStore((state) => state.paw);
   const reset = usePawStore((state) => state.reset);
 
-  console.log('!!!!');
-
   const convertDate = (dateStr: string) => {
     const years = dateStr.slice(0, 4);
     const month = dateStr.slice(4, 6);

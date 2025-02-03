@@ -106,7 +106,6 @@ export default function SearchBox({ citiesParam }: SearchBoxProps) {
   };
 
   const onSearchBtnClick = async (searchState: SearchState) => {
-    console.log('searchState ', searchState);
     try {
       const [bgnde, endde] = (dateValue as Array<ValuePiece>) ?? [];
       const _pawQuery = {
