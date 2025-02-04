@@ -4,6 +4,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
+import Link from 'next/link';
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -34,6 +35,9 @@ export default function RootLayout({
     <html lang='ko' className={pretendard.variable}>
       <body className={pretendard.className}>
         <ReactQueryProvider>
+          <Link href='/' className='w-full p-6 flex items-center'>
+            <span className='text-2xl font-bold'>Forever Pawtners</span>
+          </Link>
           {children}
           {pawDialog}
         </ReactQueryProvider>
