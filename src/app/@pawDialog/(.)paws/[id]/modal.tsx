@@ -17,7 +17,6 @@ import { useRouter } from 'next/navigation';
 export default function Modal() {
   const { back } = useRouter();
   const paw = usePawStore((state) => state.paw);
-  const reset = usePawStore((state) => state.reset);
 
   const convertDate = (dateStr: string) => {
     const years = dateStr.slice(0, 4);
@@ -32,7 +31,6 @@ export default function Modal() {
       defaultOpen={true}
       onOpenChange={(open) => {
         if (!open) {
-          reset();
           back();
         }
       }}>
