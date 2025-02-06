@@ -35,7 +35,7 @@ export default function RootLayout({
     <html lang='ko' className={pretendard.variable}>
       <body className={pretendard.className}>
         <ReactQueryProvider>
-          <Link href='/' className='w-full p-6 flex items-center'>
+          <Link href='/' className='p-6 w-fit flex items-center'>
             <span className='text-2xl font-bold'>Forever Pawtners</span>
           </Link>
           {children}
