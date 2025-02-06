@@ -13,10 +13,23 @@ import {
   DialogTitle,
 } from '@/shadcn/components/Dialog';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Modal() {
   const { back } = useRouter();
   const paw = usePawStore((state) => state.paw);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`http://localhost:3000/api/paws`, {
+      method: 'POST',
+      body: JSON.stringify(paw),
+      signal: controller.signal,
+    });
+
+    return () => controller.abort();
+  }, []);
 
   const convertDate = (dateStr: string) => {
     const years = dateStr.slice(0, 4);
