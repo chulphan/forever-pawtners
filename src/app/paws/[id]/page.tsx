@@ -29,17 +29,16 @@ export default async function PawsPage({
   return (
     <div className='flex flex-col p-6 w-full items-center'>
       <div className='grid lg:grid-cols-2 gap-2 lg:max-w-[900px]'>
-        <div className='relative aspect-video w-full'>
+        <div className='relative size-full'>
           <Image
             src={paw.popfile}
-            width={900}
-            height={400}
-            className='object-fit aspect-video lg:h-[400px] lg:w-full'
+            fill
+            className='object-fit lg:w-full relative'
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
             alt={`${paw?.kindCd} 이미지`}
           />
         </div>
-        <div>
+        <div className='flex flex-col gap-2'>
           <h2 className='text-lg font-semibold leading-6 text-gray-900 self-start'>
             {paw.kindCd}
           </h2>
