@@ -39,6 +39,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.66.0",
     "@types/dateformat": "^5.0.0",
     "@types/node": "20.4.4",
     "@types/react": "18.2.16",
