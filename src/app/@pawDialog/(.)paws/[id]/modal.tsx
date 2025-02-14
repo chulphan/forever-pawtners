@@ -13,18 +13,10 @@ import {
   DialogTitle,
 } from '@/shadcn/components/Dialog';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
 
 export default function Modal() {
   const { back } = useRouter();
   const paw = usePawStore((state) => state.paw);
-  const { mutate } = useMutation({
-    mutationFn: () =>
-      fetch(`http://localhost:3000/api/paws`, {
-        method: 'POST',
-        body: JSON.stringify(paw),
-      }),
-  });
 
   const convertDate = (dateStr: string) => {
     const years = dateStr.slice(0, 4);
@@ -38,9 +30,6 @@ export default function Modal() {
     <Dialog
       defaultOpen={true}
       onOpenChange={(open) => {
-        if (open) {
-          mutate();
-        }
         if (!open) {
           back();
         }
