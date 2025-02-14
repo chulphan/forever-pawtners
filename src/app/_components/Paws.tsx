@@ -15,6 +15,7 @@ import { usePawQueryStore, usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
+import { useWritePaw } from '../_lib/hooks/usePaw';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -38,6 +39,8 @@ export default function Paws({
   const setSelectedPaw = usePawStore((state) => state.setPaw);
   const resetPawState = usePawStore((state) => state.reset);
   const loadMoreRef = useRef<HTMLLIElement>(null);
+
+  const { mutate } = useWritePaw();
 
   const {
     data,
@@ -152,6 +155,7 @@ export default function Paws({
                 }}
                 onClick={() => {
                   setSelectedPaw(paw);
+                  mutate({ paw });
                   router.push(`/paws/${paw.desertionNo}`);
                 }}
                 className={
