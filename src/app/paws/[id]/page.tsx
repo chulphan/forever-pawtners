@@ -1,4 +1,5 @@
 import MapDialog from '@/app/_components/MapDialog';
+import { fetchPawById } from '@/app/_lib/hooks/usePaw';
 import { Paw } from '@/app/_types';
 import { createClient } from '@/lib/supabase/server';
 import Image from 'next/image';
@@ -13,8 +14,7 @@ export default async function PawsPage({
 }) {
   const id = (await params).id;
   console.log('id', id);
-  const supabase = await createClient();
-  const result = await supabase.from('paw').select(`*`).eq('desertionNo', id);
+  const result = await fetchPawById(id);
 
   if (!result) {
     notFound();
@@ -24,7 +24,7 @@ export default async function PawsPage({
     notFound();
   }
 
-  const paw = result.data[0] as Paw;
+  const paw = result as Paw;
 
   return (
     <div className='flex flex-col p-6 w-full items-center'>
