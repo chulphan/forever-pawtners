@@ -2,14 +2,8 @@
 import React, { useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { Paw, ResponseBodyType } from '../_types';
-import Modal from './Modal';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/shadcn/components/Dialog';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { usePawQueryStore, usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
