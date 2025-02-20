@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       await supabase.from('paw').update([paw]);
       return NextResponse.json({
         result: 'ok',
-        message: 'upserted',
+        message: 'updated',
         data: paw,
       });
     }
