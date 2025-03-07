@@ -62,6 +62,7 @@
 
 - [x] intercept router(next.js) 적용 (url 접속 시 dialog 대신 페이지로 보이게
 - [x] 상세 페이지 저장을 위해 supabase 적용
+- [x] 상세 페이지 SEO 추가
 - 공유하기
   - [ ] 카카오 공유
   - [ ] web api 공유
