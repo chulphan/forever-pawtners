@@ -5,6 +5,29 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import PawComponent from './_components/pawComponent';
+import { Metadata, ResolvingMetadata } from 'next';
+import { Paw } from '@/app/_types';
+
+type PawPageMetadataProps = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata(
+  { params }: PawPageMetadataProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { id } = await params;
+
+  const paw = (await fetchPawById(id)) as Paw;
+
+  return {
+    title: `유기동물, 내 평생 파트너 - ${paw.kindCd}`,
+    description: `유기견/유기묘, 사지말고 입양하세요. 상태: ${paw.processState} 발견 장소: ${paw.orgNm} ${paw.happenPlace} 접수일자: ${paw.happenDt}`,
+    openGraph: {
+      images: [paw.filename],
+    },
+  };
+}
 
 export default async function PawsPage({
   params,
