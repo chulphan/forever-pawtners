@@ -15,7 +15,7 @@ export default function PawComponent({ id }: { id: string }) {
   return (
     <div className='flex flex-col p-6 w-full items-center'>
       <div className='grid lg:grid-cols-2 gap-2 lg:max-w-[900px]'>
-        <div className='relative size-full'>
+        <div className='relative h-[250px] lg:h-full'>
           <Image
             src={paw.popfile}
             fill
