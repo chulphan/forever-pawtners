@@ -4,8 +4,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import PawComponent from './_components/pawComponent';
-import { Metadata, ResolvingMetadata } from 'next';
+import PawDetail from './_components/PawDetail';
+import { Metadata } from 'next';
 import { Paw } from '@/app/_types';
 
 type PawPageMetadataProps = {
@@ -14,7 +14,6 @@ type PawPageMetadataProps = {
 
 export async function generateMetadata(
   { params }: PawPageMetadataProps,
-  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { id } = await params;
 
@@ -46,7 +45,7 @@ export default async function PawsPage({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PawComponent id={id} />
+      <PawDetail id={id} />
     </HydrationBoundary>
   );
 }

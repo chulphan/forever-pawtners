@@ -17,7 +17,7 @@ export default async function Home() {
   const totalCount = pawsResponseBody.totalCount ?? 0;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <main className='flex min-h-screen flex-col items-center p-6 gap-4'>
         <SearchBox citiesParam={cities} />
         <Paws

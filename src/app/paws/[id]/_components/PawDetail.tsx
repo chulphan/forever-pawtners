@@ -5,7 +5,7 @@ import { useFetchPawById } from '@/app/_lib/hooks/usePaw';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-export default function PawComponent({ id }: { id: string }) {
+export default function PawDetail({ id }: { id: string }) {
   const { data: paw, error } = useFetchPawById(id);
 
   if (error || paw.error) {
