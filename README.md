@@ -65,4 +65,4 @@
 - [x] 상세 페이지 SEO 추가
 - 공유하기
   - [ ] 카카오 공유
-  - [ ] web api 공유
+  - [x] web api 공유 (window.navigator.share)
