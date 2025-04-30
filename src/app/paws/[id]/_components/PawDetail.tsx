@@ -3,6 +3,7 @@
 import MapDialog from '@/app/_components/MapDialog';
 import WebApiShareButton from '@/app/_components/WebApiShareButton';
 import { useFetchPawById } from '@/app/_lib/hooks/usePaw';
+import { navigateShareContentGenerator } from '@/lib/navigateShareUtil';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -13,9 +14,13 @@ export default function PawDetail({ id }: { id: string }) {
     return notFound();
   }
 
-  const title = `${paw?.kindCd}-${paw?.sexCd} 유기동물, 내 평생 파트너`;
-  const text = `발견장소: ${paw?.orgNm} ${paw?.happenPlace}`;
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/paws/${paw?.desertionNo}`;
+  const { title, text, url } = navigateShareContentGenerator({
+    kindCd: paw.kindCd,
+    sexCd: paw.sexCd,
+    orgNm: paw.orgNm,
+    happenPlace: paw.happenPlace,
+    desertionNo: paw.desertionNo,
+  });
 
   return (
     <div className="flex flex-col p-6 w-full items-center">

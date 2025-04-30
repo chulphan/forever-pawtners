@@ -14,6 +14,7 @@ import {
 } from '@/shadcn/components/Dialog';
 import { useRouter } from 'next/navigation';
 import WebApiShareButton from '@/app/_components/WebApiShareButton';
+import { navigateShareContentGenerator } from '@/lib/navigateShareUtil';
 
 export default function Modal() {
   const { back } = useRouter();
@@ -27,9 +28,13 @@ export default function Modal() {
     return `${years}.${month}.${days}`;
   };
 
-  const title = `${paw?.kindCd}-${paw?.sexCd} 유기동물, 내 평생 파트너`;
-  const text = `발견장소: ${paw?.orgNm} ${paw?.happenPlace}`;
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/paws/${paw?.desertionNo}`;
+  const { title, text, url } = navigateShareContentGenerator({
+    kindCd: paw?.kindCd,
+    sexCd: paw?.sexCd,
+    orgNm: paw?.orgNm,
+    happenPlace: paw?.happenPlace,
+    desertionNo: paw?.desertionNo,
+  });
 
   return (
     <Dialog
