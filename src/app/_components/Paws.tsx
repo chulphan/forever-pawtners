@@ -65,9 +65,7 @@ export default function Paws({
       const totalPage =
         (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
           ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
-          : Math.floor(
-              (lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)
-            ) + 1;
+          : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)) + 1;
 
       const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
       if (hasNextPage) {
@@ -102,7 +100,7 @@ export default function Paws({
         .map((page) => page.items)
         .flatMap((item) => item.item)
         .filter((item) => item),
-    [dataUpdatedAt]
+    [dataUpdatedAt],
   );
 
   useIntersectionObserver({
@@ -138,9 +136,8 @@ export default function Paws({
       return (
         <>
           <ul
-            className={
-              'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'
-            }>
+            className={'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'}
+          >
             {pawListItem.map((paw) => (
               <motion.li
                 key={paw.desertionNo}
@@ -152,33 +149,28 @@ export default function Paws({
                   mutate({ paw });
                   router.push(`/paws/${paw.desertionNo}`);
                 }}
-                className={
-                  'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'
-                }>
+                className={'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'}
+              >
                 <div
                   className={`flex justify-between font-bold text-md ${getColorBy(
-                    paw.processState
-                  )} text-white p-2`}>
+                    paw.processState,
+                  )} text-white p-2`}
+                >
                   <span>
                     {paw.kindCd} / {paw.processState}
                   </span>
-                  <span className={'font-bold text-md'}>
-                    {paw.sexCd === 'F' ? '♀' : '♂'}
-                  </span>
+                  <span className={'font-bold text-md'}>{paw.sexCd === 'F' ? '♀' : '♂'}</span>
                 </div>
 
-                <div
-                  className={'h-[200px] rounded'}
-                  style={{ position: 'relative' }}>
+                <div className={'h-[200px] rounded'} style={{ position: 'relative' }}>
                   <Image
                     src={paw.popfile}
                     alt={`${paw.kindCd} 이미지`}
                     className={'w-full h-full rounded'}
                     fill
                     priority
-                    sizes={
-                      '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                    }
+                    sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+                    unoptimized
                   />
                 </div>
                 <div className={'flex flex-col gap-2 font-normal text-md'}>
@@ -192,14 +184,11 @@ export default function Paws({
               </motion.li>
             ))}
 
-            <li
-              ref={loadMoreRef}
-              className={!hasPawsNextPage ? 'hidden' : ''}
-            />
+            <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
           </ul>
           {isFetchingPaws && (
-            <div className='w-full flex justify-center'>
-              <Loader className='animate-spin' />
+            <div className="w-full flex justify-center">
+              <Loader className="animate-spin" />
             </div>
           )}
         </>
@@ -208,9 +197,7 @@ export default function Paws({
 
     return (
       <div className={'flex justify-center items-center w-full min-h-[300px]'}>
-        <span className={'font-bold text-5xl'}>
-          찾으시는 유기동물이 없어요ㅠㅠ
-        </span>
+        <span className={'font-bold text-5xl'}>찾으시는 유기동물이 없어요ㅠㅠ</span>
       </div>
     );
   };
