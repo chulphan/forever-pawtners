@@ -15,24 +15,14 @@ import {
  * 왜지??
  */
 const baseUrl = `${
-  typeof window === undefined
-    ? '/api'
-    : `${process.env.NEXT_PUBLIC_SITE_URL}/api`
+  typeof window === undefined ? '/api' : `${process.env.NEXT_PUBLIC_SITE_URL}/api`
 }`;
 
 export const getCities = async (): Promise<City[]> => {
   try {
-    const response = (await (
-      await fetch(baseUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          endpoint: 'sido',
-          queryParam: { numOfRows: 17 },
-        }),
-      })
-    ).json()) as ResponseBodyType<City>;
+    const sidoList = (await (await fetch(`${baseUrl}/administrative/sido`)).json()) as City[];
 
-    return response.items.item;
+    return sidoList;
   } catch (e) {
     console.log('getCities ', e);
     return [];
@@ -58,10 +48,7 @@ export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
   return response.items.item.filter((fullCity) => fullCity.orgCd !== '6119999');
 };
 
-export const getShelters = async (
-  cityCode: string,
-  fullCityCode: string
-): Promise<Shelter[]> => {
+export const getShelters = async (cityCode: string, fullCityCode: string): Promise<Shelter[]> => {
   if (!cityCode || !fullCityCode) {
     throw new Error('시도군구 코드 미제공');
   }
@@ -83,7 +70,7 @@ export const getShelters = async (
 };
 
 export const getPaws = async (
-  pawQuery: Omit<PawQuery, 'items'>
+  pawQuery: Omit<PawQuery, 'items'>,
 ): Promise<ResponseBodyType<Paw>> => {
   const response = (await (
     await fetch(baseUrl, {
