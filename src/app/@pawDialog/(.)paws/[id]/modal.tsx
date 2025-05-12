@@ -66,6 +66,7 @@ export default function Modal() {
                   }}
                   className={'w-full h-full'}
                   alt={`${paw?.kindCd} 이미지`}
+                  unoptimized
                 />
               </div>
               <div className="mt-2">
