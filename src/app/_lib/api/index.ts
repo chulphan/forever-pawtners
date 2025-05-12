@@ -33,19 +33,11 @@ export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
   if (!cityCode) {
     throw new Error('시도코드 미제공');
   }
-  const response = (await (
-    await fetch(baseUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        endpoint: 'sigungu',
-        queryParam: {
-          upr_cd: cityCode,
-        },
-      }),
-    })
-  ).json()) as ResponseBodyType<FullCity>;
+  const gunguList = (await (
+    await fetch(`${baseUrl}/administrative/gungu?sidoCode=${cityCode}`)
+  ).json()) as FullCity[];
 
-  return response.items.item.filter((fullCity) => fullCity.orgCd !== '6119999');
+  return gunguList.filter((fullCity) => fullCity.orgCd !== '6119999');
 };
 
 export const getShelters = async (cityCode: string, fullCityCode: string): Promise<Shelter[]> => {
