@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  defaultShouldDehydrateQuery,
   isServer,
   QueryClient,
   QueryClientProvider,
@@ -14,6 +15,10 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         staleTime: 1000 * 60,
+      },
+      dehydrate: {
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) || query.state.status === 'pending',
       },
     },
   });
@@ -32,11 +37,7 @@ function getQueryClient() {
   }
 }
 
-export default function ReactQueryProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function ReactQueryProvider({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
