@@ -17,11 +17,17 @@
 ##### 전반적인 것들
 
 - [x] api route 적용 (이제 SERVICE_KEY 를 외부에 노출하지 않을 수 있게 됨!)~~
-- [ ] 시도군구 (공공 데이터 포털로 가져오는 경우 간헐적으로 timeout error 가 남.)
+- [x] 시도군구 (공공 데이터 포털로 가져오는 경우 간헐적으로 timeout error 가 남.)
+
   - [x] 별도 api router 로 분리
-  - [ ] 시도군구 데이터 supabase database 에 저장
-    - [ ] 분리 한 api router 에서 DB 에 저장 된 정보 가져오기
-  - [ ] tanstack query 로 가져올 때 cache 전략 사용해보기
+  - [x] 시도군구 데이터 supabase database 에 저장
+    - [x] 분리 한 api router 에서 DB 에 저장 된 정보 가져오기
+  - ~~[ ] tanstack query 로 가져올 때 cache 전략 사용해보기~~
+
+- [ ] data fetching useQuery 적용
+  - [ ] 유기동물 리스트
+    - [ ] server side 도 적용
+  - [ ] 광역시/도, 시군구
 
 ##### 메인화면
 
