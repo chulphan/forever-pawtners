@@ -10,7 +10,7 @@ export default async function Home() {
   const queryClient = getQueryClient();
   const cities = (await getCities()) ?? [];
 
-  void queryClient.prefetchInfiniteQuery(pawsQueryOptions());
+  void queryClient.prefetchInfiniteQuery(pawsQueryOptions()());
 
   return (
     <Suspense>

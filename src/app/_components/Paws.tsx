@@ -4,7 +4,7 @@ import Image from 'next/image';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { usePawStore } from '../_lib/stores';
+import { usePawQueryStore, usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
@@ -19,6 +19,7 @@ const labelColorVariants = {
 
 export default function Paws() {
   const router = useRouter();
+  const pawQuery = usePawQueryStore((state) => state.query);
   const setSelectedPaw = usePawStore((state) => state.setPaw);
   const loadMoreRef = useRef<HTMLLIElement>(null);
 
@@ -31,7 +32,7 @@ export default function Paws() {
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
     dataUpdatedAt,
-  } = useSuspenseInfiniteQuery(pawsQueryOptions());
+  } = useSuspenseInfiniteQuery(pawsQueryOptions()(pawQuery));
 
   console.log('data ', data);
 

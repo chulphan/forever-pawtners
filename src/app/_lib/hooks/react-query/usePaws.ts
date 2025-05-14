@@ -18,38 +18,41 @@ export const pawsQueryOptions = ({
   numOfRows,
   totalCount,
 }: PawsQueryParamProps = pawsQueryDefaultParams) => {
-  return infiniteQueryOptions({
-    queryKey: ['paws'],
-    queryFn: async ({ pageParam }) => {
-      const { pageNo, numOfRows, totalCount } = pageParam;
+  return (pawsSearchParam?: PawsQueryParamProps) => {
+    return infiniteQueryOptions({
+      queryKey: ['paws', pawsSearchParam],
+      queryFn: async ({ pageParam }) => {
+        const { pageNo, numOfRows, totalCount } = pageParam;
 
-      return await getPaws({
+        return await getPaws({
+          pageNo,
+          numOfRows,
+          totalCount,
+          ...(pawsSearchParam ?? {}),
+        });
+      },
+      initialPageParam: {
         pageNo,
         numOfRows,
         totalCount,
-      });
-    },
-    initialPageParam: {
-      pageNo,
-      numOfRows,
-      totalCount,
-    },
-    getNextPageParam: (lastPage) => {
-      const totalPage =
-        (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
-          ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
-          : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)) + 1;
+      },
+      getNextPageParam: (lastPage) => {
+        const totalPage =
+          (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
+            ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
+            : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)) + 1;
 
-      const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
-      if (hasNextPage) {
-        return {
-          pageNo: (lastPage.pageNo ?? 1) + 1,
-          totalCount: lastPage.totalCount,
-          numOfRows: lastPage.numOfRows,
-        };
-      }
+        const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
+        if (hasNextPage) {
+          return {
+            pageNo: (lastPage.pageNo ?? 1) + 1,
+            totalCount: lastPage.totalCount,
+            numOfRows: lastPage.numOfRows,
+          };
+        }
 
-      return undefined;
-    },
-  });
+        return undefined;
+      },
+    });
+  };
 };
