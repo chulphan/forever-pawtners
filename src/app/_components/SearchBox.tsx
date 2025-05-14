@@ -84,8 +84,8 @@ export default function SearchBox() {
 
   const form = useForm<SearchState>();
 
-  const upr_cd = form.watch('upr_cd');
-  const fullCities = useFullCities(upr_cd);
+  const uprCd = form.watch('upr_cd');
+  const fullCities = useFullCities(uprCd);
 
   const upKind = form.watch('upkind');
   const { data: breeds, isLoading: isFetchBreedLoading } = useQuery({
@@ -188,7 +188,7 @@ export default function SearchBox() {
                     </FormItem>
                   )}
                 />
-                {upr_cd && fullCities[upr_cd] && (
+                {uprCd && fullCities[uprCd] && (
                   <FormField
                     control={form.control}
                     name="org_cd"
@@ -200,7 +200,7 @@ export default function SearchBox() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              {fullCities[upr_cd].map((city) => (
+                              {fullCities[uprCd].map((city) => (
                                 <SelectItem key={city.orgCd} value={city.orgCd}>
                                   {city.orgdownNm}
                                 </SelectItem>
