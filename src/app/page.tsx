@@ -13,13 +13,13 @@ export default async function Home() {
   void queryClient.prefetchInfiniteQuery(pawsQueryOptions()());
 
   return (
-    <Suspense>
-      <main className="flex min-h-screen flex-col items-center p-6 gap-4">
-        <SearchBox citiesParam={cities} />
+    <main className="flex min-h-screen flex-col items-center p-6 gap-4">
+      <SearchBox citiesParam={cities} />
+      <Suspense fallback={<div>Loading...</div>}>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Paws />
         </HydrationBoundary>
-      </main>
-    </Suspense>
+      </Suspense>
+    </main>
   );
 }
