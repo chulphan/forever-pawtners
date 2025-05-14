@@ -6,5 +6,6 @@ export const useSigungu = (uprCd?: string) => {
     queryKey: ['sigugu', uprCd],
     queryFn: () => getFullCities(uprCd),
     enabled: !!uprCd,
+    staleTime: Infinity,
   });
 };
