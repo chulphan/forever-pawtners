@@ -1,15 +1,15 @@
 'use client';
 import React, { useMemo, useRef } from 'react';
 import Image from 'next/image';
-import { Paw, ResponseBodyType } from '../_types';
 import useIntersectionObserver from '../_lib/hooks/useIntersectionObserver';
 import { getPaws } from '../_lib/api';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { usePawQueryStore, usePawStore } from '../_lib/stores';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { usePawStore } from '../_lib/stores';
 import { Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
 import { useWritePaw } from '../_lib/hooks/usePaw';
+import { pawsQueryOptions } from '../_lib/hooks/react-query/usePaws';
 
 const labelColorVariants = {
   protect: 'bg-protect',
@@ -17,82 +17,23 @@ const labelColorVariants = {
   notice: 'bg-notice',
 };
 
-export default function Paws({
-  pawsParam,
-  numOfRowsParam,
-  pageNoParam,
-  totalCountParam,
-}: {
-  pawsParam: Paw[];
-  numOfRowsParam: number;
-  pageNoParam: number;
-  totalCountParam: number;
-}) {
+export default function Paws() {
   const router = useRouter();
-  const pawQuery = usePawQueryStore((state) => state.query);
   const setSelectedPaw = usePawStore((state) => state.setPaw);
-  const resetPawState = usePawStore((state) => state.reset);
   const loadMoreRef = useRef<HTMLLIElement>(null);
 
   const { mutate } = useWritePaw();
 
   const {
     data,
+    isPending: isPendingPaws,
     isFetching: isFetchingPaws,
     fetchNextPage,
     hasNextPage: hasPawsNextPage,
     dataUpdatedAt,
-  } = useInfiniteQuery({
-    queryKey: ['pawList', pawQuery],
-    queryFn: async ({ pageParam }: { pageParam: ResponseBodyType<Paw> }) => {
-      const { numOfRows, pageNo, totalCount } = pageParam;
-      return await getPaws({
-        ...pawQuery,
-        numOfRows,
-        pageNo,
-        totalCount,
-      });
-    },
-    initialPageParam: {
-      items: {
-        item: pawsParam,
-      },
-      numOfRows: numOfRowsParam,
-      pageNo: pageNoParam,
-      totalCount: totalCountParam,
-    },
-    getNextPageParam: (lastPage) => {
-      const totalPage =
-        (lastPage.totalCount ?? 0 % (lastPage.numOfRows ?? 48) === 0)
-          ? Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48))
-          : Math.floor((lastPage.totalCount ?? 0) / (lastPage.numOfRows ?? 48)) + 1;
+  } = useSuspenseInfiniteQuery(pawsQueryOptions());
 
-      const hasNextPage = (lastPage.pageNo ?? 1) <= totalPage;
-      if (hasNextPage) {
-        return {
-          ...lastPage,
-          pageNo: (lastPage.pageNo ?? 1) + 1,
-        };
-      }
-
-      return undefined;
-    },
-    initialData: () => {
-      const initialData = {
-        items: {
-          item: pawsParam,
-        },
-        numOfRows: numOfRowsParam,
-        pageNo: pageNoParam,
-        totalCount: totalCountParam,
-      };
-
-      return {
-        pages: [initialData],
-        pageParams: [initialData],
-      };
-    },
-  });
+  console.log('data ', data);
 
   const pawListItem = useMemo(
     () =>
@@ -108,7 +49,10 @@ export default function Paws({
     target: loadMoreRef,
     threshold: 1,
     onIntersect: async () => {
-      if (!isFetchingPaws) {
+      console.log('isFetchingPaws ', isPendingPaws);
+      console.log('hasPawsNextPage ', hasPawsNextPage);
+      if (!isPendingPaws) {
+        console.log('????????');
         await fetchNextPage();
       }
     },
@@ -170,7 +114,6 @@ export default function Paws({
                     fill
                     priority
                     sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-                    unoptimized
                   />
                 </div>
                 <div className={'flex flex-col gap-2 font-normal text-md'}>
