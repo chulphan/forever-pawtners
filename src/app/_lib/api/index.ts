@@ -8,19 +8,25 @@ import {
   ANIMAL_KIND_CODE,
   Breed,
 } from '@/app/_types';
+import { isServer } from '@tanstack/react-query';
 
-/**
- * 서버사이드는 호출이 잘 되는데 클라이언트 사이드에서 호출이 안된다..
- * url/undefined/api..
- * 왜지??
- */
-const baseUrl = `${
-  typeof window === undefined ? '/api' : `${process.env.NEXT_PUBLIC_SITE_URL}/api`
-}`;
+const getBaseUrl = () => {
+  if (!isServer) {
+    return '';
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return 'http://localhost:3000';
+};
+
+const apiUrl = `${getBaseUrl()}/api`;
 
 export const getCities = async (): Promise<City[]> => {
   try {
-    const sidoList = (await (await fetch(`${baseUrl}/administrative/sido`)).json()) as City[];
+    const sidoList = (await (await fetch(`${apiUrl}/administrative/sido`)).json()) as City[];
 
     return sidoList;
   } catch (e) {
@@ -34,7 +40,7 @@ export const getFullCities = async (cityCode?: string): Promise<FullCity[]> => {
     throw new Error('시도코드 미제공');
   }
   const gunguList = (await (
-    await fetch(`${baseUrl}/administrative/gungu?sidoCode=${cityCode}`)
+    await fetch(`${apiUrl}/administrative/gungu?sidoCode=${cityCode}`)
   ).json()) as FullCity[];
 
   return gunguList.filter((fullCity) => fullCity.orgCd !== '6119999');
@@ -46,7 +52,7 @@ export const getShelters = async (cityCode: string, fullCityCode: string): Promi
   }
 
   const response = (await (
-    await fetch(baseUrl, {
+    await fetch(apiUrl, {
       method: 'POST',
       body: JSON.stringify({
         endpoint: 'shelter',
@@ -65,7 +71,7 @@ export const getPaws = async (
   pawQuery: Omit<PawQuery, 'items'>,
 ): Promise<ResponseBodyType<Paw>> => {
   const response = (await (
-    await fetch(baseUrl, {
+    await fetch(apiUrl, {
       cache: 'no-store',
       method: 'POST',
       body: JSON.stringify({
@@ -80,7 +86,7 @@ export const getPaws = async (
 
 export const getBreed = async (animalCode?: ANIMAL_KIND_CODE) => {
   const response = (await (
-    await fetch(baseUrl, {
+    await fetch(apiUrl, {
       method: 'POST',
       body: JSON.stringify({
         endpoint: 'kind',
