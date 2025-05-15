@@ -25,9 +25,10 @@
   - ~~[ ] tanstack query 로 가져올 때 cache 전략 사용해보기~~
 
 - [ ] data fetching useQuery 적용
-  - [ ] 유기동물 리스트
-    - [ ] server side 도 적용
-  - [ ] 광역시/도, 시군구
+  - [x] 유기동물 리스트
+    - [x] server side prefetch 적용
+  - [x] 광역시/도, 시군구
+    - [x] 광역시/도 server side prefetch 적용
 
 ##### 메인화면
 
