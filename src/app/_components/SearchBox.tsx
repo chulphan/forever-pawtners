@@ -26,6 +26,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useSido } from '../_lib/hooks/react-query/useSido';
 import { useSigungu } from '../_lib/hooks/react-query/useSigungu';
 import { LoaderIcon } from 'lucide-react';
+import { useBreed } from '../_lib/hooks/react-query/useBreed';
 
 type ValuePiece = Date | null | undefined;
 
@@ -90,14 +91,7 @@ export default function SearchBox() {
   const { data: fullCities, isPending: isSigunguPending } = useSigungu(uprCd);
 
   const upKind = form.watch('upkind');
-  const { data: breeds, isLoading: isFetchBreedLoading } = useQuery({
-    queryKey: ['breeds', upKind],
-    queryFn: () => getBreed(upKind),
-    enabled: !!upKind,
-    refetchOnWindowFocus: false,
-    retry: false,
-    staleTime: 60 * 1000,
-  });
+  const { data: breeds, isLoading: isFetchBreedLoading } = useBreed(upKind);
 
   const convertDate = (date?: ValuePiece) => {
     if (!date) {
