@@ -24,7 +24,7 @@
     - [x] 분리 한 api router 에서 DB 에 저장 된 정보 가져오기
   - ~~[ ] tanstack query 로 가져올 때 cache 전략 사용해보기~~
 
-- [ ] data fetching useQuery 적용
+- [x] data fetching useQuery 적용
   - [x] 유기동물 리스트
     - [x] server side prefetch 적용
   - [x] 광역시/도, 시군구
