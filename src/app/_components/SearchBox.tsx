@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { ANIMAL_KIND_CODE, City, PawQuery, SearchState } from '../_types';
 import { getBreed } from '../_lib/api';
 import useFullCities from '../_lib/hooks/useFullCities';
@@ -24,6 +24,8 @@ import { Form, FormField, FormItem } from '@/shadcn/components/Form';
 import { ToggleGroup, ToggleGroupItem } from '@/shadcn/components/ToggleGroup';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSido } from '../_lib/hooks/react-query/useSido';
+import { useSigungu } from '../_lib/hooks/react-query/useSigungu';
+import { LoaderIcon } from 'lucide-react';
 
 type ValuePiece = Date | null | undefined;
 
@@ -85,7 +87,7 @@ export default function SearchBox() {
   const form = useForm<SearchState>();
 
   const uprCd = form.watch('upr_cd');
-  const fullCities = useFullCities(uprCd);
+  const { data: fullCities, isPending: isSigunguPending } = useSigungu(uprCd);
 
   const upKind = form.watch('upkind');
   const { data: breeds, isLoading: isFetchBreedLoading } = useQuery({
@@ -159,7 +161,7 @@ export default function SearchBox() {
               className={`flex flex-col gap-4 w-full  overflow-hidden`}
               onSubmit={form.handleSubmit(onSearchBtnClick)}
             >
-              <div className={'flex flex-row gap-4'}>
+              <div className={'flex flex-row gap-4 items-center'}>
                 <FormField
                   control={form.control}
                   name="upr_cd"
@@ -188,30 +190,33 @@ export default function SearchBox() {
                     </FormItem>
                   )}
                 />
-                {uprCd && fullCities[uprCd] && (
-                  <FormField
-                    control={form.control}
-                    name="org_cd"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                          <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px]">
-                            <SelectValue placeholder="시/군/구" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {fullCities[uprCd].map((city) => (
-                                <SelectItem key={city.orgCd} value={city.orgCd}>
-                                  {city.orgdownNm}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormItem>
-                    )}
-                  />
-                )}
+                {uprCd &&
+                  (isSigunguPending ? (
+                    <LoaderIcon className="animate-spin" />
+                  ) : (
+                    <FormField
+                      control={form.control}
+                      name="org_cd"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                            <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px]">
+                              <SelectValue placeholder="시/군/구" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {fullCities?.map((city) => (
+                                  <SelectItem key={city.orgCd} value={city.orgCd}>
+                                    {city.orgdownNm}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  ))}
               </div>
               <div className={'flex gap-4'}>
                 <FormField
