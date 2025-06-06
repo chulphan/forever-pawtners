@@ -16,6 +16,8 @@ export async function loginWithKakao() {
     },
   });
 
+  console.log('dta.url ', data.url);
+
   if (data.url) {
     redirect(data.url);
   }
