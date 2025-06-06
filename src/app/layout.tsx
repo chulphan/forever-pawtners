@@ -4,7 +4,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import ReactQueryProvider from './_lib/providers/ReactQueryProvider';
-import Link from 'next/link';
+import Header from './_components/Header';
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -32,12 +32,10 @@ export default function RootLayout({
   pawDialog: React.ReactNode;
 }) {
   return (
-    <html lang='ko' className={pretendard.variable}>
+    <html lang="ko" className={pretendard.className}>
       <body className={pretendard.className}>
         <ReactQueryProvider>
-          <Link href='/' className='p-6 w-fit flex items-center'>
-            <span className='text-2xl font-bold'>Forever Pawtners</span>
-          </Link>
+          <Header />
           {children}
           {pawDialog}
         </ReactQueryProvider>
@@ -45,7 +43,7 @@ export default function RootLayout({
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_KAKAO_APP_KEY}&libraries=services,clusterer&autoload=false`}
         />
       </body>
-      <GoogleAnalytics gaId='G-GY6905JE57' />
+      <GoogleAnalytics gaId="G-GY6905JE57" />
     </html>
   );
 }

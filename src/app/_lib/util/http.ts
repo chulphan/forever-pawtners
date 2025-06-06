@@ -1,28 +1,20 @@
-import {
-  ResponseBodyType,
-  ResponseHeaderType,
-  ResponseType,
-} from '@/app/_types';
+import { ResponseBodyType, ResponseHeaderType, ResponseType } from '@/app/_types';
 
 export const httpGet = async <T>(
   endpoint: string,
-  params?: Record<string, any>
+  params?: Record<string, any>,
 ): Promise<ResponseBodyType<T> | ResponseHeaderType> => {
   const baseUrl = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc';
   const SERVICE_KEY = process.env.SERVICE_KEY;
 
-  const url = new URL(
-    `${baseUrl}/${endpoint}?serviceKey=${SERVICE_KEY}&_type=json`
-  );
+  const url = new URL(`${baseUrl}/${endpoint}?serviceKey=${SERVICE_KEY}&_type=json`);
 
   if (params) {
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key])
-    );
+    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(decodeURI(url.toString()), { method: 'GET' });
 
     if (response.ok) {
       const responseJson: ResponseType<T> = await response.json();

@@ -10,7 +10,7 @@ import {
 } from '@/app/_types';
 import { isServer } from '@tanstack/react-query';
 
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
   if (!isServer) {
     return '';
   }
