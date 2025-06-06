@@ -6,16 +6,17 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
   let next = searchParams.get('next') ?? '/';
 
-  console.log('origin ', origin);
-  console.log('ㄱ개시발');
-
   if (!next.startsWith('/')) {
     next = '/';
   }
 
+  console.log('hhhh');
+
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    console.log('error ', error);
 
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host');

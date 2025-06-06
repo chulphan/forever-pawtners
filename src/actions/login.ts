@@ -5,24 +5,22 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
 export async function loginWithKakao() {
-  try {
-    console.log('?????zzzzz');
-    const supabase = await createClient();
+  const supabase = await createClient();
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'kakao',
-      options: {
-        redirectTo: `${getBaseUrl()}/auth/callback?next=${getBaseUrl()}/`,
-      },
-    });
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'kakao',
+    options: {
+      redirectTo: `${getBaseUrl()}/auth/callback`,
+    },
+  });
 
-    if (data.url) {
-      await fetch(data.url);
-    }
-
-    console.log('data ', data);
-    console.log('error ', error);
-  } catch (e) {
-    console.error('kakao error ', e);
+  if (data.url) {
+    redirect(data.url);
   }
+}
+
+export async function logoutWithKakao() {
+  const supabase = await createClient();
+
+  await supabase.auth.signOut();
 }
