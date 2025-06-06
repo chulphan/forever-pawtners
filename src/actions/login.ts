@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation';
 export async function loginWithKakao() {
   const supabase = await createClient();
 
+  console.log('base url ', getBaseUrl());
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
