@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host');
-      const isLocalDev = process.env.VERCEL_ENV === 'development';
+      const isLocalDev = process.env.NODE_ENV === 'development';
 
       if (isLocalDev) {
         console.log('next ', next);
