@@ -34,8 +34,6 @@ export default function Paws() {
     dataUpdatedAt,
   } = useSuspenseInfiniteQuery(pawsQueryOptions()(pawQuery));
 
-  console.log('data ', data);
-
   const pawListItem = useMemo(
     () =>
       data?.pages
@@ -50,10 +48,7 @@ export default function Paws() {
     target: loadMoreRef,
     threshold: 1,
     onIntersect: async () => {
-      console.log('isFetchingPaws ', isPendingPaws);
-      console.log('hasPawsNextPage ', hasPawsNextPage);
       if (!isPendingPaws) {
-        console.log('????????');
         await fetchNextPage();
       }
     },

@@ -25,10 +25,10 @@ export const pawsQueryOptions = ({
         const { pageNo, numOfRows, totalCount } = pageParam;
 
         return await getPaws({
+          ...(pawsSearchParam ?? {}),
           pageNo,
           numOfRows,
           totalCount,
-          ...(pawsSearchParam ?? {}),
         });
       },
       initialPageParam: {
