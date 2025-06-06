@@ -1,7 +1,7 @@
-import Link from 'next/Link';
 import { Button } from '@/shadcn/components/Button';
 import { loginWithKakao, logoutWithKakao } from '@/actions/login';
 import { createClient } from '@/lib/supabase/server';
+import Link from 'next/link';
 
 export default async function Header() {
   const supabase = await createClient();
