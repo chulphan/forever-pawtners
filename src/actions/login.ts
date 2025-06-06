@@ -7,12 +7,10 @@ import { redirect } from 'next/navigation';
 export async function loginWithKakao() {
   const supabase = await createClient();
 
-  const url = process.env.VERCEL_URL ? process.env.VERCEL_URL : 'http://localhost:3000';
-
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: `${url}/auth/callback`,
+      redirectTo: `${getBaseUrl()}/auth/callback`,
     },
   });
 
