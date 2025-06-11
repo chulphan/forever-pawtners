@@ -7,11 +7,11 @@ export async function POST(request: NextRequest) {
   const paw = await request.json();
   const supabase = await createClient();
 
-  const { error } = await supabase.from('paw').insert([paw]);
+  const { error } = await supabase.from('paw_v2').insert([paw]);
 
   if (error) {
     if (error.code === DUPLICATE_ERROR_CODE) {
-      await supabase.from('paw').update([paw]);
+      await supabase.from('paw_v2').update([paw]);
       return NextResponse.json({
         result: 'ok',
         message: 'updated',
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       { result: 'error', error },
       {
         status: 500,
-      }
+      },
     );
   }
 
