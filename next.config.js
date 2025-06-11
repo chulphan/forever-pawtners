@@ -11,7 +11,7 @@ const nextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'openai.animal.go.kr',
+        hostname: 'openapi.animal.go.kr',
       },
     ],
   },
