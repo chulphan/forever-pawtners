@@ -51,7 +51,7 @@ export default function Modal() {
             <div className="flex flex-col w-full mt-3 text-left overflow-y-auto">
               <div className="flex justify-between items-center my-2">
                 <DialogTitle className="text-base font-semibold leading-6 text-gray-900">
-                  {paw?.kindCd}{' '}
+                  {paw?.kindFullNm}{' '}
                   <span className="font-bold">{paw?.sexCd === 'F' ? '♀' : '♂'}</span>
                 </DialogTitle>
                 <WebApiShareButton title={title} text={text} url={url} />
@@ -59,7 +59,7 @@ export default function Modal() {
               <DialogDescription />
               <div className="mt-2 relative h-[400px] xl:h-[500px]">
                 <Image
-                  src={paw?.popfile || ''}
+                  src={paw.popfile1}
                   fill
                   style={{
                     objectFit: 'fill',
@@ -122,14 +122,6 @@ export default function Modal() {
               <div className="mt-2">
                 <span className="font-bold">보호 장소</span>:<span>{paw?.careAddr}</span>
                 <MapDialog address={paw?.careAddr!} />
-              </div>
-              <div className="flex gap-4 mt-2">
-                <div>
-                  <span className="font-bold">담당자</span>:<span>{paw?.chargeNm}</span>
-                </div>
-                <div>
-                  <span className="font-bold">담당자 연락처</span>:<span>{paw?.officetel}</span>
-                </div>
               </div>
             </div>
           </div>
