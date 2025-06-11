@@ -27,7 +27,7 @@ export default function PawDetail({ id }: { id: string }) {
       <div className="grid lg:grid-cols-2 gap-2 lg:max-w-[900px]">
         <div className="relative h-[250px] lg:h-full">
           <Image
-            src={paw.popfile}
+            src={paw.popfile1}
             fill
             className="object-fit lg:w-full relative"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -38,7 +38,7 @@ export default function PawDetail({ id }: { id: string }) {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <h2 className="text-lg font-semibold leading-6 text-gray-900 self-start">
-              {paw.kindCd}
+              {paw.kindFullNm}
             </h2>
             <WebApiShareButton title={title} text={text} url={url} />
           </div>
@@ -97,14 +97,6 @@ export default function PawDetail({ id }: { id: string }) {
             <span className="font-bold">보호 장소: </span>
             <span>{paw.careAddr}</span>
             <MapDialog address={paw.careAddr} />
-          </div>
-          <div>
-            <span className="font-bold">담당자: </span>
-            <span>{paw.chargeNm}</span>
-          </div>
-          <div>
-            <span className="font-bold">담당자 연락처: </span>
-            <span>{paw.officetel}</span>
           </div>
         </div>
       </div>
