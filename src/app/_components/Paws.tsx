@@ -97,14 +97,14 @@ export default function Paws() {
                   )} text-white p-2`}
                 >
                   <span>
-                    {paw.kindCd} / {paw.processState}
+                    {paw.kindFullNm} / {paw.processState}
                   </span>
                   <span className={'font-bold text-md'}>{paw.sexCd === 'F' ? '♀' : '♂'}</span>
                 </div>
 
                 <div className={'h-[200px] rounded'} style={{ position: 'relative' }}>
                   <Image
-                    src={paw.popfile}
+                    src={paw.popfile1}
                     alt={`${paw.kindCd} 이미지`}
                     className={'w-full h-full rounded'}
                     fill
