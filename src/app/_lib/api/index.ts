@@ -75,7 +75,7 @@ export const getPaws = async (
       cache: 'no-store',
       method: 'POST',
       body: JSON.stringify({
-        endpoint: 'abandonmentPublic',
+        endpoint: 'abandonmentPublic_v2',
         queryParam: pawQuery,
       }),
     })

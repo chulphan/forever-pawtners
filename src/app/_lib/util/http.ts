@@ -4,7 +4,7 @@ export const httpGet = async <T>(
   endpoint: string,
   params?: Record<string, any>,
 ): Promise<ResponseBodyType<T> | ResponseHeaderType> => {
-  const baseUrl = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc';
+  const baseUrl = 'https://apis.data.go.kr/1543061/abandonmentPublicService_v2';
   const SERVICE_KEY = process.env.SERVICE_KEY;
 
   const url = new URL(`${baseUrl}/${endpoint}?serviceKey=${SERVICE_KEY}&_type=json`);
