@@ -27,7 +27,7 @@ export default function PawDetail({ id }: { id: string }) {
       <div className="grid lg:grid-cols-2 gap-2 lg:max-w-[900px]">
         <div className="relative h-[250px] lg:h-full">
           <Image
-            src={paw.popfile1}
+            src={`/api/image-proxy?url=${paw.popfile1}`}
             fill
             className="object-fit lg:w-full relative"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

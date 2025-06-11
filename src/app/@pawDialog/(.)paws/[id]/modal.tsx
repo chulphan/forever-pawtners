@@ -59,7 +59,7 @@ export default function Modal() {
               <DialogDescription />
               <div className="mt-2 relative h-[400px] xl:h-[500px]">
                 <Image
-                  src={paw.popfile1}
+                  src={`/api/image-proxy?url=${paw.popfile1}`}
                   fill
                   style={{
                     objectFit: 'fill',
