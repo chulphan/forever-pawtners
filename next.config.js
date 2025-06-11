@@ -12,6 +12,8 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'openapi.animal.go.kr',
+        pathname: '/openapi/service/rest/fileDownloadSrvc/files/**',
+        port: '',
       },
     ],
   },
