@@ -8,6 +8,10 @@ const nextConfig = {
         hostname: 'www.animal.go.kr',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.openai.animal.go.kr',
+      },
     ],
   },
 };
