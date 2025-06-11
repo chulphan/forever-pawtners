@@ -104,7 +104,7 @@ export default function Paws() {
 
                 <div className={'h-[200px] rounded'} style={{ position: 'relative' }}>
                   <Image
-                    src={paw.popfile1}
+                    src={`/api/image-proxy?url=${paw.popfile1}`}
                     alt={`${paw.kindCd} 이미지`}
                     className={'w-full h-full rounded'}
                     fill
