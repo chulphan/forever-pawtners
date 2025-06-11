@@ -256,7 +256,7 @@ export default function SearchBox() {
                             <SelectGroup>
                               {breeds?.items?.item?.map((breed) => (
                                 <SelectItem key={breed.kindCd} value={breed.kindCd}>
-                                  {breed.knm}
+                                  {breed.kindNm}
                                 </SelectItem>
                               ))}
                             </SelectGroup>

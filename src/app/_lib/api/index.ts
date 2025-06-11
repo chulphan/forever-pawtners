@@ -89,9 +89,10 @@ export const getBreed = async (animalCode?: ANIMAL_KIND_CODE) => {
     await fetch(apiUrl, {
       method: 'POST',
       body: JSON.stringify({
-        endpoint: 'kind',
+        endpoint: 'kind_v2',
         queryParam: {
           up_kind_cd: animalCode,
+          numOfRows: 1000,
         },
       }),
     })

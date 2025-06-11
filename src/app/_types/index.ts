@@ -41,10 +41,7 @@ export type PawQuery = {
   };
 };
 
-export type SearchState = Omit<
-  PawQuery,
-  'pageNo' | 'numOfRows' | 'totalCount' | 'items'
->;
+export type SearchState = Omit<PawQuery, 'pageNo' | 'numOfRows' | 'totalCount' | 'items'>;
 
 export type City = {
   orgCd: string;
@@ -96,5 +93,5 @@ export type ANIMAL_KIND_CODE =
 
 export type Breed = {
   kindCd: string;
-  knm: string;
+  kindNm: string;
 };
