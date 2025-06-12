@@ -69,8 +69,15 @@ export default function Modal() {
                   unoptimized
                 />
               </div>
-              <div className="mt-2">
-                <span className="font-bold">상태</span>: <span>{paw?.processState}</span>
+              <div className="mt-2 flex gap-4">
+                <div>
+                  <span className="font-bold">상태</span>: <span>{paw?.processState}</span>
+                </div>
+                {paw.endReason && (
+                  <div>
+                    <span className="font-bold">종료 사유</span>: <span>{paw.endReason}</span>
+                  </div>
+                )}
               </div>
               <div className="flex gap-4 mt-2">
                 <div>
@@ -110,7 +117,12 @@ export default function Modal() {
               </div>
               <div className="flex mt-2">
                 <span className="font-bold">특징: </span>
-                <p>{paw?.specialMark}</p>
+                <p>
+                  {paw?.specialMark}
+                  {paw.sfeSoci}
+                  {paw.sfeHealth}
+                  {paw.etcBigo}
+                </p>
               </div>
               <div className="flex gap-4 mt-2"></div>
               <div className="mt-2">

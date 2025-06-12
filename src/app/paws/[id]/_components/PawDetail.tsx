@@ -42,9 +42,17 @@ export default function PawDetail({ id }: { id: string }) {
             </h2>
             <WebApiShareButton title={title} text={text} url={url} />
           </div>
-          <div>
-            <span className="font-bold">상태: </span>
-            <span>{paw.processState}</span>
+          <div className="flex gap-4">
+            <div>
+              <span className="font-bold">상태: </span>
+              <span>{paw.processState}</span>
+            </div>
+            {paw.endReason && (
+              <div>
+                <span className="font-bold">종료 사유: </span>
+                <span>{paw.endReason}</span>
+              </div>
+            )}
           </div>
           <div>
             <span className="font-bold">발견장소: </span>
