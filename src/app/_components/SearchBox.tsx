@@ -91,7 +91,7 @@ export default function SearchBox() {
   const { data: fullCities, isPending: isSigunguPending } = useSigungu(uprCd);
 
   const upKind = form.watch('upkind');
-  const { data: breeds, isLoading: isFetchBreedLoading } = useBreed(upKind);
+  const { data: breeds } = useBreed(upKind);
 
   const convertDate = (date?: ValuePiece) => {
     if (!date) {
@@ -237,12 +237,8 @@ export default function SearchBox() {
                   )}
                 />
               </div>
-              {isFetchBreedLoading ? (
-                // <Loader className='animate-spin' />
-                <div className="animate-pulse w-[180px] h-9 bg-gray-400" />
-              ) : (
-                breeds?.items?.item &&
-                breeds?.items?.item?.length > 0 && (
+              <Suspense fallback={<div className="animate-pulse w-[180px] h-9 bg-gray-400" />}>
+                {breeds?.items?.item && breeds?.items?.item?.length > 0 && (
                   <FormField
                     control={form.control}
                     name="kind"
@@ -265,8 +261,8 @@ export default function SearchBox() {
                       </FormItem>
                     )}
                   />
-                )
-              )}
+                )}
+              </Suspense>
               <div className={'flex gap-4'}>
                 <FormField
                   control={form.control}

@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getFullCities } from '../../api';
 
 export const useSigungu = (uprCd?: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['sigugu', uprCd],
-    queryFn: () => getFullCities(uprCd),
-    enabled: !!uprCd,
+    queryFn: () => (uprCd ? getFullCities(uprCd) : null),
     staleTime: Infinity,
   });
 };
