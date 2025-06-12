@@ -13,19 +13,14 @@ const useWritePaw = () => {
       const result = await response.json();
 
       if (result.message === 'updated') {
-        queryClient.setQueryData(
-          ['paw', variable.paw.desertionNo],
-          variable.paw
-        );
+        queryClient.setQueryData(['paw', variable.paw.desertionNo], variable.paw);
       }
     },
   });
 };
 
 const fetchPawById = async (id: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/api/paws/${id}`
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/paws/${id}`);
 
   if (!response.ok) {
     return null;
