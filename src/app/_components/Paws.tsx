@@ -36,7 +36,7 @@ export default function Paws() {
 
   const pawListItem = useMemo(
     () =>
-      data?.pages
+      (data?.pages || [])
         .map((page) => page.items)
         .flatMap((item) => item.item)
         .filter((item) => item),
