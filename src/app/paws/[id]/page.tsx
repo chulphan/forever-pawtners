@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PawPageMetadataProps): Promis
   const paw = (await fetchPawById(id)) as Paw;
 
   return {
-    title: `유기동물, 내 평생 파트너 - ${paw.kindCd}`,
+    title: `유기동물, 내 평생 파트너 - ${paw.kindFullNm}`,
     description: `유기견/유기묘, 사지말고 입양하세요. 상태: ${paw.processState} 발견 장소: ${paw.orgNm} ${paw.happenPlace} 접수일자: ${paw.happenDt}`,
     openGraph: {
       images: [paw.popfile1],
