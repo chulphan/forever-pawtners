@@ -137,7 +137,7 @@ export default function SearchBox() {
     <>
       <div className={'flex self-end'}>
         <Button
-          className={'px-8 py-2 rounded bg-[#03A678] hover:opacity-80 text-white'}
+          className={'px-8 py-2 rounded-md bg-[#03A678] hover:opacity-80 text-white font-bold'}
           onClick={() => setIsSearchBoxOpen(!isSearchBoxOpen)}
         >
           검색
@@ -315,10 +315,14 @@ export default function SearchBox() {
                 />
               </div>
               <div className={'flex gap-4'}>
-                <Button type="submit" className="rounded bg-[#03A678] p-2 text-white">
+                <Button type="submit" className="rounded-md bg-[#03A678] p-2 text-white font-bold">
                   <span className="block w-12">찾기</span>
                 </Button>
-                <Button type="reset" className="rounded bg-gray-200 p-2" onClick={initialize}>
+                <Button
+                  type="reset"
+                  className="rounded-md bg-gray-200 p-2 font-bold"
+                  onClick={initialize}
+                >
                   <span className={'block w-12'}>초기화</span>
                 </Button>
               </div>
