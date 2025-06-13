@@ -168,7 +168,7 @@ export default function SearchBox() {
                           form.setValue('org_cd', '');
                         }}
                       >
-                        <SelectTrigger className="w-[180px] border-2 border-[#03A678] rounded">
+                        <SelectTrigger className="w-[180px] border-2 border-[#03A678] rounded-md">
                           <SelectValue placeholder="광역시/도" />
                         </SelectTrigger>
                         <SelectContent>
@@ -194,7 +194,7 @@ export default function SearchBox() {
                       render={({ field }) => (
                         <FormItem>
                           <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                            <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px]">
+                            <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px] rounded-md">
                               <SelectValue placeholder="시/군/구" />
                             </SelectTrigger>
                             <SelectContent>
@@ -245,7 +245,7 @@ export default function SearchBox() {
                     render={({ field }) => (
                       <FormItem>
                         <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                          <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px]">
+                          <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px] rounded-md">
                             <SelectValue placeholder="전체" />
                           </SelectTrigger>
                           <SelectContent>
@@ -269,7 +269,7 @@ export default function SearchBox() {
                   name="state"
                   render={({ field }) => (
                     <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                      <SelectTrigger className="border-2 border-[#03A678] rounded w-[100px]">
+                      <SelectTrigger className="border-2 border-[#03A678] rounded w-[100px] rounded-md">
                         <SelectValue placeholder="공고여부" />
                       </SelectTrigger>
                       <SelectContent>
@@ -290,7 +290,7 @@ export default function SearchBox() {
                   render={({ field }) => (
                     <FormItem>
                       <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                        <SelectTrigger className="border-2 border-[#03A678] rounded w-[120px]">
+                        <SelectTrigger className="border-2 border-[#03A678] rounded w-[120px] rounded-md">
                           <SelectValue placeholder="중성화여부" />
                         </SelectTrigger>
                         <SelectContent>
