@@ -89,10 +89,10 @@ export default function Paws() {
                   mutate({ paw });
                   router.push(`/paws/${paw.desertionNo}`);
                 }}
-                className={'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded cursor-pointer'}
+                className={'flex flex-col gap-4 bg-[#F2F2F2] p-4 rounded-lg cursor-pointer'}
               >
                 <div
-                  className={`flex justify-between font-bold text-md ${getColorBy(
+                  className={`flex justify-between font-bold text-md rounded-lg ${getColorBy(
                     paw.processState,
                   )} text-white p-2`}
                 >
@@ -102,11 +102,11 @@ export default function Paws() {
                   <span className={'font-bold text-md'}>{paw.sexCd === 'F' ? '♀' : '♂'}</span>
                 </div>
 
-                <div className={'h-[200px] rounded'} style={{ position: 'relative' }}>
+                <div className={'h-[200px] rounded-lg'} style={{ position: 'relative' }}>
                   <Image
                     src={`/api/image-proxy?url=${paw.popfile1}`}
                     alt={`${paw.kindCd} 이미지`}
-                    className={'w-full h-full rounded'}
+                    className={'w-full h-full rounded-lg'}
                     fill
                     priority
                     sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
