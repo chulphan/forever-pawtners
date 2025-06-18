@@ -79,7 +79,6 @@ const NEUTERS = [
 
 export default function SearchBox() {
   const [dateValue, onDateValueChange] = useState<Value>([undefined, undefined]);
-  const [searchState, setSearchState] = useState<SearchState>({});
   const setPawQuery = usePawQueryStore((state) => state.setQuery);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
 
@@ -129,7 +128,6 @@ export default function SearchBox() {
 
   const initialize = () => {
     form.reset({});
-    setSearchState({});
     onDateValueChange([undefined, undefined]);
   };
 
