@@ -32,10 +32,6 @@ type ValuePiece = Date | null | undefined;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-type SearchBoxProps = {
-  citiesParam: City[];
-};
-
 const ANIMAL_KINDS: Array<{ upkind: ANIMAL_KIND_CODE; label: string }> = [
   {
     upkind: '417000',
