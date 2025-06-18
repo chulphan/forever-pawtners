@@ -11,15 +11,7 @@ import {
 } from '@/shadcn/components/Select';
 import { FormField, FormItem } from '@/shadcn/components/Form';
 
-type SidoSelectProps = {
-  control: Control<SearchState>;
-};
-
-/**
- *
- */
-
-export default function SidoSelect({ control }: SidoSelectProps) {
+export default function SidoSelect() {
   const form = useFormContext();
   const { data: cities, isPending } = useSido();
 
@@ -29,7 +21,7 @@ export default function SidoSelect({ control }: SidoSelectProps) {
 
   return (
     <FormField
-      control={control}
+      control={form.control}
       name="upr_cd"
       render={({ field }) => (
         <FormItem>
