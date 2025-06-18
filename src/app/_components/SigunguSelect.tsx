@@ -1,5 +1,4 @@
-import { Control, useFormContext } from 'react-hook-form';
-import { SearchState } from '../_types';
+import { useFormContext } from 'react-hook-form';
 import { FormField, FormItem } from '@/shadcn/components/Form';
 import {
   Select,
