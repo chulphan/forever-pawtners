@@ -28,6 +28,7 @@ import { useSigungu } from '../_lib/hooks/react-query/useSigungu';
 import { LoaderIcon } from 'lucide-react';
 import { useBreed } from '../_lib/hooks/react-query/useBreed';
 import SidoSelect from './SidoSelect';
+import SigunguSelect from './SigunguSelect';
 
 type ValuePiece = Date | null | undefined;
 
@@ -82,7 +83,6 @@ export default function SearchBox() {
   const form = useForm<SearchState>();
 
   const uprCd = form.watch('upr_cd');
-  const { data: fullCities, isPending: isSigunguPending } = useSigungu(uprCd);
 
   const upKind = form.watch('upkind');
   const { data: breeds } = useBreed(upKind);
@@ -149,34 +149,8 @@ export default function SearchBox() {
               onSubmit={form.handleSubmit(onSearchBtnClick)}
             >
               <div className={'flex flex-row gap-4 items-center'}>
-                <SidoSelect control={form.control} />
-                {uprCd &&
-                  (isSigunguPending ? (
-                    <LoaderIcon className="animate-spin" />
-                  ) : (
-                    <FormField
-                      control={form.control}
-                      name="org_cd"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                            <SelectTrigger className="border-2 border-[#03A678] rounded w-[180px] rounded-md">
-                              <SelectValue placeholder="시/군/구" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {fullCities?.map((city) => (
-                                  <SelectItem key={city.orgCd} value={city.orgCd}>
-                                    {city.orgdownNm}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </FormItem>
-                      )}
-                    />
-                  ))}
+                <SidoSelect />
+                {uprCd && <SigunguSelect uprCd={uprCd} />}
               </div>
               <div className={'flex gap-4'}>
                 <FormField
