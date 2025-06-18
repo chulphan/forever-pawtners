@@ -27,6 +27,7 @@ import { useSido } from '../_lib/hooks/react-query/useSido';
 import { useSigungu } from '../_lib/hooks/react-query/useSigungu';
 import { LoaderIcon } from 'lucide-react';
 import { useBreed } from '../_lib/hooks/react-query/useBreed';
+import SidoSelect from './SidoSelect';
 
 type ValuePiece = Date | null | undefined;
 
@@ -77,8 +78,6 @@ export default function SearchBox() {
   const [dateValue, onDateValueChange] = useState<Value>([undefined, undefined]);
   const setPawQuery = usePawQueryStore((state) => state.setQuery);
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState(false);
-
-  const { data: cities } = useSido();
 
   const form = useForm<SearchState>();
 
@@ -150,34 +149,7 @@ export default function SearchBox() {
               onSubmit={form.handleSubmit(onSearchBtnClick)}
             >
               <div className={'flex flex-row gap-4 items-center'}>
-                <FormField
-                  control={form.control}
-                  name="upr_cd"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        value={field.value ?? ''}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          form.setValue('org_cd', '');
-                        }}
-                      >
-                        <SelectTrigger className="w-[180px] border-2 border-[#03A678] rounded-md">
-                          <SelectValue placeholder="광역시/도" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {cities?.map((city) => (
-                              <SelectItem key={city.orgCd} value={city.orgCd}>
-                                {city.orgdownNm}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
+                <SidoSelect control={form.control} />
                 {uprCd &&
                   (isSigunguPending ? (
                     <LoaderIcon className="animate-spin" />
