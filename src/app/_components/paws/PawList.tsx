@@ -3,6 +3,7 @@ import { Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Paw } from '../../_types/index';
 import PawListItem from './PawListItem';
+import LoadingPawListItem from './LoadingPawListItem';
 
 interface PawListProps {
   pawListItem: Paw[];
@@ -27,13 +28,14 @@ function PawList({
             <PawListItem paw={paw} onClick={() => onPawClick(paw)} />
           </motion.li>
         ))}
+        {isFetchingPaws &&
+          Array.from({ length: 4 }).map((_, idx) => (
+            <li key={`loading-scroll-${idx}`}>
+              <LoadingPawListItem />
+            </li>
+          ))}
         <li ref={loadMoreRef} className={!hasPawsNextPage ? 'hidden' : ''} />
       </ul>
-      {isFetchingPaws && (
-        <div className="w-full flex justify-center">
-          <Loader className="animate-spin" />
-        </div>
-      )}
     </>
   );
 }
