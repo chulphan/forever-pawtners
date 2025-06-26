@@ -1,10 +1,10 @@
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect } from 'react';
 
 export default function useIntersectionObserver({
   enabled = true,
   onIntersect,
   root,
-  rootMargin = "0px",
+  rootMargin = '0px',
   target,
   threshold = 0.1,
 }: {
