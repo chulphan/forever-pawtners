@@ -12,13 +12,13 @@ interface PawListProps {
   onPawClick: (paw: Paw) => void;
 }
 
-const PawList: React.FC<PawListProps> = ({
+function PawList({
   pawListItem,
   loadMoreRef,
   hasPawsNextPage,
   isFetchingPaws,
   onPawClick,
-}) => {
+}: PawListProps) {
   return (
     <>
       <ul className={'grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'}>
@@ -36,6 +36,6 @@ const PawList: React.FC<PawListProps> = ({
       )}
     </>
   );
-};
+}
 
 export default PawList;

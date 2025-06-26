@@ -26,7 +26,7 @@ interface PawListItemProps {
   onClick: () => void;
 }
 
-const PawListItem: React.FC<PawListItemProps> = ({ paw, onClick }) => {
+function PawListItem({ paw, onClick }: PawListItemProps) {
   return (
     <div
       onClick={onClick}
@@ -64,6 +64,6 @@ const PawListItem: React.FC<PawListItemProps> = ({ paw, onClick }) => {
       </div>
     </div>
   );
-};
+}
 
 export default PawListItem;
