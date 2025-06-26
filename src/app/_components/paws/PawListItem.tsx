@@ -44,14 +44,13 @@ function PawListItem({ paw, onClick }: PawListItemProps) {
       </div>
       <div className={'h-[200px] rounded-lg'} style={{ position: 'relative' }}>
         <Image
-          src={`${paw.popfile1}`}
+          src={`/api/image-proxy?url=${paw.popfile1}`}
           alt={`${paw.kindCd} 이미지`}
           className={'w-full h-full rounded-lg'}
           fill
           sizes={'(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
           unoptimized
           loading="lazy"
-          loader={({ src }) => `/api/image-proxy?url=${src}`}
         />
       </div>
       <div className={'flex flex-col gap-2 font-normal text-md'}>
