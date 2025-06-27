@@ -3,6 +3,8 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import PawDetail from './_components/PawDetail';
 import { Metadata } from 'next';
 import { Paw } from '@/app/_types';
+import { Suspense } from 'react';
+import PawDetailSkeleton from './_components/PawDetailSkeleton';
 
 type PawPageMetadataProps = {
   params: Promise<{ id: string }>;
@@ -39,7 +41,9 @@ export default async function PawsPage({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PawDetail id={id} />
+      <Suspense fallback={<PawDetailSkeleton />}>
+        <PawDetail id={id} />
+      </Suspense>
     </HydrationBoundary>
   );
 }
