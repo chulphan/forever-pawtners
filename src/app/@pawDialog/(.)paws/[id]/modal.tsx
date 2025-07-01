@@ -69,71 +69,72 @@ export default function Modal() {
                   unoptimized
                 />
               </div>
-              <div className="mt-2 flex gap-4">
-                <div>
-                  <span className="font-bold">상태</span>: <span>{paw?.processState}</span>
-                </div>
-                {paw.endReason && (
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-4">
                   <div>
-                    <span className="font-bold">종료 사유</span>: <span>{paw.endReason}</span>
+                    <span className="font-bold">상태</span>: <span>{paw?.processState}</span>
                   </div>
-                )}
-              </div>
-              <div className="flex gap-4 mt-2">
-                <div>
-                  <span className="font-bold">발견 장소</span>:
-                  <span>
-                    {paw?.orgNm} {paw?.happenPlace}
-                  </span>
-                  <MapDialog address={`${paw?.orgNm} ${paw?.happenPlace}`} />
+                  {paw.endReason && (
+                    <div>
+                      <span className="font-bold">종료 사유</span>: <span>{paw.endReason}</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="mt-2">
-                <span className="font-bold">접수 일자</span>:<span>{paw?.happenDt}</span>
-              </div>
-              <div className="flex gap-4 mt-2">
-                <div>
-                  <span className="font-bold">나이</span>:<span>{paw?.age}</span>
+                <div className="flex gap-4">
+                  <div>
+                    <span className="font-bold">발견 장소</span>:
+                    <span>
+                      {paw?.orgNm} {paw?.happenPlace}
+                    </span>
+                    <MapDialog address={`${paw?.orgNm} ${paw?.happenPlace}`} />
+                  </div>
                 </div>
                 <div>
-                  <span className="font-bold">색상</span>:<span>{paw?.colorCd}</span>
+                  <span className="font-bold">접수 일자</span>:<span>{paw?.happenDt}</span>
+                </div>
+                <div className="flex gap-4">
+                  <div>
+                    <span className="font-bold">나이</span>:<span>{paw?.age}</span>
+                  </div>
+                  <div>
+                    <span className="font-bold">색상</span>:<span>{paw?.colorCd}</span>
+                  </div>
+                  <div>
+                    <span className="font-bold">체중</span>:<span>{paw?.weight}</span>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div>
+                    <span className="font-bold">공고번호</span>:<span>{paw?.noticeNo}</span>
+                  </div>
                 </div>
                 <div>
-                  <span className="font-bold">체중</span>:<span>{paw?.weight}</span>
+                  <span className="font-bold">공고 시작일</span>:
+                  <span>{convertDate(paw?.noticeSdt!)}</span>
                 </div>
-              </div>
-              <div className="flex gap-4 mt-2">
                 <div>
-                  <span className="font-bold">공고번호</span>:<span>{paw?.noticeNo}</span>
+                  <span className="font-bold">공고 종료일</span>:
+                  <span>{convertDate(paw?.noticeEdt!)}</span>
                 </div>
-              </div>
-              <div className="mt-2">
-                <span className="font-bold">공고 시작일</span>:
-                <span>{convertDate(paw?.noticeSdt!)}</span>
-              </div>
-              <div className="mt-2">
-                <span className="font-bold">공고 종료일</span>:
-                <span>{convertDate(paw?.noticeEdt!)}</span>
-              </div>
-              <div className="flex mt-2">
-                <span className="font-bold">특징: </span>
-                <p>
-                  {paw?.specialMark}
-                  {paw.sfeSoci}
-                  {paw.sfeHealth}
-                  {paw.etcBigo}
-                </p>
-              </div>
-              <div className="flex gap-4 mt-2"></div>
-              <div className="mt-2">
-                <span className="font-bold">보호소 이름</span>:<span>{paw?.careNm}</span>
-              </div>
-              <div className="mt-2">
-                <span className="font-bold">보호소 전화번호</span>:<span>{paw?.careTel}</span>
-              </div>
-              <div className="mt-2">
-                <span className="font-bold">보호 장소</span>:<span>{paw?.careAddr}</span>
-                <MapDialog address={paw?.careAddr!} />
+                <div className="flex">
+                  <span className="font-bold">특징: </span>
+                  <p>
+                    {paw?.specialMark}
+                    {paw.sfeSoci}
+                    {paw.sfeHealth}
+                    {paw.etcBigo}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-bold">보호소 이름</span>:<span>{paw?.careNm}</span>
+                </div>
+                <div>
+                  <span className="font-bold">보호소 전화번호</span>:<span>{paw?.careTel}</span>
+                </div>
+                <div>
+                  <span className="font-bold">보호 장소</span>:<span>{paw?.careAddr}</span>
+                  <MapDialog address={paw?.careAddr!} />
+                </div>
               </div>
             </div>
           </div>
