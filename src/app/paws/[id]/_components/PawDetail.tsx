@@ -65,7 +65,7 @@ export default function PawDetail({ id }: { id: string }) {
             <span className="font-bold">접수일자: </span>
             <span>{paw.happenDt}</span>
           </div>
-          <div className="flex gap-4 lg:flex-col lg:gap-2">
+          <div className="flex flex-col gap-2 ">
             <div>
               <span className="font-bold">나이: </span>
               <span>{paw.age}</span>

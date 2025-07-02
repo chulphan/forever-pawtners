@@ -92,7 +92,7 @@ export default function Modal() {
                 <div>
                   <span className="font-bold">접수 일자</span>:<span>{paw?.happenDt}</span>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-2">
                   <div>
                     <span className="font-bold">나이</span>:<span>{paw?.age}</span>
                   </div>
