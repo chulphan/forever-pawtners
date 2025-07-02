@@ -65,17 +65,19 @@ export default function PawDetail({ id }: { id: string }) {
             <span className="font-bold">접수일자: </span>
             <span>{paw.happenDt}</span>
           </div>
-          <div>
-            <span className="font-bold">나이: </span>
-            <span>{paw.age}</span>
-          </div>
-          <div>
-            <span className="font-bold">색상: </span>
-            <span>{paw.colorCd}</span>
-          </div>
-          <div>
-            <span className="font-bold">체중: </span>
-            <span>{paw.weight}</span>
+          <div className="flex gap-4 lg:flex-col lg:gap-2">
+            <div>
+              <span className="font-bold">나이: </span>
+              <span>{paw.age}</span>
+            </div>
+            <div>
+              <span className="font-bold">색상: </span>
+              <span>{paw.colorCd}</span>
+            </div>
+            <div>
+              <span className="font-bold">체중: </span>
+              <span>{paw.weight}</span>
+            </div>
           </div>
           <div>
             <span className="font-bold">공고번호: </span>
