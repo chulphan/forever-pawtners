@@ -24,18 +24,12 @@ function MapContainer({ address }: MapDialogProps) {
 
         geocoder.addressSearch(address, (result: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            const coords = new window.kakao.maps.LatLng(
-              +result[0].y,
-              +result[0].x
-            );
+            const coords = new window.kakao.maps.LatLng(+result[0].y, +result[0].x);
 
-            const map = new window.kakao.maps.Map(
-              mapContainerRef.current as HTMLDivElement,
-              {
-                center: coords,
-                level: 3,
-              }
-            );
+            const map = new window.kakao.maps.Map(mapContainerRef.current as HTMLDivElement, {
+              center: coords,
+              level: 3,
+            });
 
             const marker = new window.kakao.maps.Marker({
               map,
@@ -57,16 +51,16 @@ function MapContainer({ address }: MapDialogProps) {
     }
   }, []);
 
-  return <div ref={mapContainerRef} className='w-full h-[400px]' />;
+  return <div ref={mapContainerRef} className="w-full h-[400px]" />;
 }
 
 export default function MapDialog({ address }: MapDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger className='ml-4 bg-protect text-white px-2 py-1'>
+      <DialogTrigger className="ml-4 bg-protect text-white px-2 py-1 rounded-md">
         지도보기
       </DialogTrigger>
-      <DialogContent className='bg-white'>
+      <DialogContent className="bg-white">
         <DialogDescription />
         <DialogTitle>{address}</DialogTitle>
         <MapContainer address={address} />
