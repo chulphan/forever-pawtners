@@ -58,7 +58,7 @@ export default function Paws() {
       onPawClick={(paw) => {
         setSelectedPaw(paw);
         mutate({ paw });
-        router.push(`/paws/${paw.desertionNo}`);
+        router.push(`/paws/${paw.desertionNo}`, { scroll: false });
       }}
     />
   );

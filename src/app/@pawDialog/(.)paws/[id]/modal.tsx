@@ -20,6 +20,7 @@ export default function Modal() {
   return (
     <Dialog
       defaultOpen={true}
+      modal={true}
       onOpenChange={(open) => {
         if (!open) {
           back();
