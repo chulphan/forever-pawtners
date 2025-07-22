@@ -44,8 +44,7 @@ export default function PawInfo({ paw, variant = 'page' }: PawInfoProps) {
       <div className="flex flex-col w-full mt-3 text-left overflow-y-auto">
         <div className="flex justify-between items-center my-2">
           <h2 className="text-base font-semibold leading-6 text-gray-900">
-            {paw.kindFullNm}{' '}
-            <span className="font-bold">{paw.sexCd === 'F' ? '♀' : '♂'}</span>
+            {paw.kindFullNm} <span className="font-bold">{paw.sexCd === 'F' ? '♀' : '♂'}</span>
           </h2>
           <WebApiShareButton title={title} text={text} url={url} />
         </div>
@@ -101,12 +100,10 @@ export default function PawInfo({ paw, variant = 'page' }: PawInfoProps) {
             </div>
           </div>
           <div>
-            <span className="font-bold">공고 시작일</span>:
-            <span>{formatDate(paw.noticeSdt)}</span>
+            <span className="font-bold">공고 시작일</span>:<span>{formatDate(paw.noticeSdt)}</span>
           </div>
           <div>
-            <span className="font-bold">공고 종료일</span>:
-            <span>{formatDate(paw.noticeEdt)}</span>
+            <span className="font-bold">공고 종료일</span>:<span>{formatDate(paw.noticeEdt)}</span>
           </div>
           <div className="flex">
             <span className="font-bold">특징: </span>
@@ -211,7 +208,7 @@ export default function PawInfo({ paw, variant = 'page' }: PawInfoProps) {
           <div>
             <span className="font-bold">보호 장소: </span>
             <span>{paw.careAddr}</span>
-            <MapDialog address={paw.careAddr} />
+            <MapDialog address={paw.careAddr!} />
           </div>
         </div>
       </div>
